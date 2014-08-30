@@ -1,0 +1,16 @@
+[
+{
+  "modid": "physis",
+  "name": "Shadows Of Physis",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/ttftcuts",
+  "updateUrl": "https://github.com/ttftcuts",
+  "authorList": ["TTFTCUTS", "Arheo"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

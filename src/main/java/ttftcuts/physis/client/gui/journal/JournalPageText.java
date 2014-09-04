@@ -5,7 +5,7 @@ import ttftcuts.physis.client.gui.GuiJournal;
 
 public class JournalPageText extends JournalPage {
 
-	String pageText;
+	public String pageText;
 	
 	public JournalPageText(String text) {
 		super();
@@ -19,8 +19,10 @@ public class JournalPageText extends JournalPage {
 		boolean unicode = renderer.getUnicodeFlag();
 		renderer.setUnicodeFlag(true);
 		
-		renderer.drawString(pageText, x, y, 0);
-		
+		String text = pageText.replace("@r", "@r@0").replace('@', '\u00a7');
+
+		renderer.drawSplitString(text, x, y, GuiJournal.pageWidth, 0x000000);
+
 		renderer.setUnicodeFlag(unicode);
 	}
 }

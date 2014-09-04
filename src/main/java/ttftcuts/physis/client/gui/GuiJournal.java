@@ -17,8 +17,8 @@ public class GuiJournal extends GuiScreen {
 
 	public static final int bookWidth = 350;
 	public static final int bookHeight = 240;
-	private int left;
-	private int top;
+	protected int left;
+	protected int top;
 	
 	public static final ResourceLocation bookTextureLeft = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_left.png");
 	public static final ResourceLocation bookTextureRight = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_right.png");
@@ -33,8 +33,8 @@ public class GuiJournal extends GuiScreen {
 	public List<JournalPage> pages;
 	public int currentPage = 0;
 	
-	private GuiButtonJournal buttonForward;
-	private GuiButtonJournal buttonBack;
+	protected GuiButtonJournal buttonForward;
+	protected GuiButtonJournal buttonBack;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -42,8 +42,8 @@ public class GuiJournal extends GuiScreen {
 		super.initGui();
 		
 		pages = new ArrayList<JournalPage>();
-		pages.add(new JournalPageText("Page 1"));
-		pages.add(new JournalPageText("Page 2"));
+		pages.add(new JournalPageTitle("Article Title", "Page 1 @5blah@r blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah"));
+		pages.add(new JournalPageText("Page 2 blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah"));
 		pages.add(new JournalPageText("Page 3"));
 		pages.add(new JournalPageText("Page 4"));
 		pages.add(new JournalPageText("Page 5"));
@@ -79,7 +79,7 @@ public class GuiJournal extends GuiScreen {
 		this.updateButtons();
 	}
 	
-	private void updateButtons() {
+	protected void updateButtons() {
 		
 		if (currentPage == 0 || pages.size() <= 2) {
 			buttonBack.enabled = false;
@@ -98,7 +98,7 @@ public class GuiJournal extends GuiScreen {
 		}
 	}
 	
-	@Override
+	/*@Override
 	protected void keyTyped(char par1, int par2) {
 		if(mc.gameSettings.keyBindInventory.getKeyCode() == par2) {
 			mc.displayGuiScreen(null);
@@ -106,7 +106,7 @@ public class GuiJournal extends GuiScreen {
 		}
 
 		super.keyTyped(par1, par2);
-	}
+	}*/
 	
 	@Override
 	public boolean doesGuiPauseGame() {

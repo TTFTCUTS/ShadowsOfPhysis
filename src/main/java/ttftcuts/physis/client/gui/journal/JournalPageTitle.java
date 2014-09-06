@@ -19,6 +19,8 @@ public class JournalPageTitle extends JournalPageText {
 		FontRenderer renderer = journal.mc.fontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();
 		
+		renderer.setUnicodeFlag(false);
+		
 		String title = titleText.replace("@r", "@r@0").replace('@', '\u00a7');
 		renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
 		

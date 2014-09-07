@@ -7,21 +7,25 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.journal.buttons.GuiButtonInvisible;
+import ttftcuts.physis.utils.NaturalOrderComparator;
 
 public class JournalPageSubIndex extends JournalPage {
 
 	public static final int articlesPerPage = 24;
 	public static final int articlesPerRow = 4;
 	public static final int iconsize = 16; // fixed, or the shadow will be bork
-	public static final int iconspacing = 15;
-	public static final int iconsleft = 12;
-	public static final int iconstop = 10;
+	public static final int iconspacing = 16;
+	public static final int iconsleft = 14;
+	public static final int iconstop = 7;
 	
 	boolean setup = false;
 	PageDefs.Category category;
@@ -33,6 +37,7 @@ public class JournalPageSubIndex extends JournalPage {
 		this.offset = offset;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui(GuiJournal journal) {
 		if (!setup) {
@@ -43,11 +48,14 @@ public class JournalPageSubIndex extends JournalPage {
 			
 			articles.addAll(articleset);
 			Collections.sort(articles, new Comparator<JournalArticle>() {
+				NaturalOrderComparator comp = new NaturalOrderComparator();
+				
 				@Override
 				public int compare(JournalArticle o1, JournalArticle o2) {
 					String t1 = o1.title;
 					String t2 = o2.title;
-					return t1.compareTo(t2);
+					//return t1.compareTo(t2);
+					return comp.compare(t1, t2);
 				}
 			});
 			
@@ -89,21 +97,55 @@ public class JournalPageSubIndex extends JournalPage {
 	}
 	
 	@Override
-	public void drawPage(GuiJournal journal, int x, int y) {
+	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 
 		for(int i=0; i<articles.size(); i++) {
+			JournalArticle article = articles.get(i);
+			
 			int posx = i % articlesPerRow;
 			int posy = (int) Math.floor(i / articlesPerRow);
 			
 			int iconx = x + iconsleft + posx * (iconspacing + iconsize);
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
+			if (mousex >= iconx - 2 && mousex < iconx + iconsize + 2 && mousey >= icony - 2 && mousey < icony + iconsize + 2) {
+				journal.setTooltip(article.title);
+			}
+			
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			journal.mc.renderEngine.bindTexture(GuiJournal.bookTextureRight);
 			
 			journal.drawTexturedModalRect(iconx-2, icony-2, 350,50, iconsize+4, iconsize+4);
+			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			
+			if (article.iconstack != null) {
+				// render item stack as icon
+				RenderItem render = new RenderItem();
+				GL11.glPushMatrix();
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				RenderHelper.enableGUIStandardItemLighting();
+				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+				GL11.glEnable(GL11.GL_DEPTH_TEST);
+				render.renderItemAndEffectIntoGUI(journal.mc.fontRenderer, journal.mc.getTextureManager(), article.iconstack, iconx, icony);
+				render.renderItemOverlayIntoGUI(journal.mc.fontRenderer, journal.mc.getTextureManager(), article.iconstack, iconx, icony);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glPopMatrix();
+				
+			} else if (article.icontexture != null) {
+				// render texture icon
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+				journal.mc.renderEngine.bindTexture(article.icontexture);
+				journal.drawTexturedModalRect(iconx, icony, 0,0, iconsize, iconsize);
+				
+			} else {
+				// render default icon
+			}
 		}
 	}
 }

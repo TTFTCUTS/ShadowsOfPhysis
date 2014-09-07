@@ -14,7 +14,7 @@ public class JournalPageText extends JournalPage {
 	}
 	
 	@Override
-	public void drawPage(GuiJournal journal, int x, int y) {
+	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		FontRenderer renderer = journal.mc.fontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();
 		renderer.setUnicodeFlag(true);

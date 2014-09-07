@@ -1,5 +1,10 @@
 package ttftcuts.physis.client.gui.journal;
 
+import ttftcuts.physis.Physis;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.collect.HashMultimap;
 
 public class PageDefs {
@@ -8,7 +13,6 @@ public class PageDefs {
 	public static JournalArticle test;
 	
 	public static JournalArticle index;
-	public static JournalArticle category_items;
 	
 	public static void init() {
 		articleMap = HashMultimap.create();
@@ -19,23 +23,31 @@ public class PageDefs {
 		);
 		
 		
-		test = new JournalArticle("Item Test", Category.ITEM, new JournalPageTitle("YAY", "IT WORKED?"));
+		test = new JournalArticle("Item Test", Category.ITEM, new JournalPageTitle("YAY", "IT WORKED?"))
+			.setStack(new ItemStack(Items.apple));
 		
 		for (int i=0; i<100; i++) {
-			new JournalArticle("Item Test "+(i+2), Category.ITEM, new JournalPageTitle("YAY", "IT WORKED?"));
+			new JournalArticle("Item Test "+(i+2), Category.ITEM, new JournalPageTitle("YAY", "IT WORKED?"))
+				.setStack(new ItemStack(Blocks.bookshelf));
 		}
 		
-		// these should be last really
+		// these should be last - any articles after here won't be indexed!
 		index = new JournalArticle("Index", null,
 			new JournalPageText("Some index junk"),
 			new JournalPageIndex(0)
 		);
 		
-		category_items = new JournalArticle("Items", null,
-			new JournalPageTitle("Items","Some stuff"),
-			new JournalPageSubIndex(Category.ITEM, 0)
-		);
-		Category.ITEM.sectionMenu = category_items;
+		// category pages
+		for(Category category: Category.values()) {
+			JournalArticle cat = new JournalArticle(category.name, null,
+				new JournalPageTitle(category.name,category.description)
+			);
+			int p = (int)Math.ceil(articleMap.get(category).size() / (double)JournalPageSubIndex.articlesPerPage);
+			for (int i=0; i<p; i++) {
+				cat.pages.add(new JournalPageSubIndex(category, i));
+			}
+			category.sectionMenu = cat;
+		}
 		
 	}
 	

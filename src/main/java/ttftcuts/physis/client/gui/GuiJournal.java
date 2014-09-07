@@ -9,7 +9,6 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.*;
 import ttftcuts.physis.client.gui.journal.buttons.*;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -42,6 +41,8 @@ public class GuiJournal extends GuiScreen {
 	
 	protected boolean isIndex = false;
 	protected JournalArticle article;
+	
+	protected List<String> tooltip = new ArrayList<String>();
 	
 	public GuiJournal() {}
 	
@@ -112,7 +113,7 @@ public class GuiJournal extends GuiScreen {
 		
 		buttonBack.enabled = buttonBack.visible = !(currentPage == 0 || pages.size() <= 2);
 		
-		buttonForward.enabled = buttonForward.visible = !(currentPage >= pages.size()-1 || pages.size() <= 2);
+		buttonForward.enabled = buttonForward.visible = !(currentPage >= pages.size()-2 || pages.size() <= 2);
 		
 		if ( pages.size() >= currentPage + 1 ) {
 			addPageButtons(currentPage, bIdOffsetLeft, pageXLeft);
@@ -151,6 +152,7 @@ public class GuiJournal extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
+		this.tooltip.clear();
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		mc.renderEngine.bindTexture(bookTextureLeft);
 		drawTexturedModalRect(left, top, 0, 0, 256, bookHeight);
@@ -159,14 +161,34 @@ public class GuiJournal extends GuiScreen {
 		
 		if ( pages.size() >= currentPage + 1 ) {
 			// render left page
-			pages.get(currentPage).drawPage(this, this.left + pageXLeft, this.top + pageY);
+			pages.get(currentPage).drawPage(this, this.left + pageXLeft, this.top + pageY, par1, par2);
 		}
 		if ( pages.size() >= currentPage + 2 ) {
 			// render right page
-			pages.get(currentPage + 1).drawPage(this, this.left + pageXRight, this.top + pageY);
+			pages.get(currentPage + 1).drawPage(this, this.left + pageXRight, this.top + pageY, par1, par2);
 		}
 		
 		super.drawScreen(par1, par2, par3);
+		
+		if (tooltip.size() > 0) {
+			this.drawCustomTooltip(par1, par2, tooltip);
+		}
+	}
+	
+	public void setTooltip(List<String> lines) {
+		this.tooltip = lines;
+	}
+	
+	public void setTooltip(String... args) {
+		List<String> lines = new ArrayList<String>();
+		for(String line:args) {
+			lines.add(line);
+		}
+		this.setTooltip(lines);
+	}
+	
+	public void drawCustomTooltip(int x, int y, List<String> lines) {
+		this.drawHoveringText(lines, x, y, mc.fontRenderer);
 	}
 	
 	public void drawCustomTooltip(int x, int y, String... args) {
@@ -174,6 +196,6 @@ public class GuiJournal extends GuiScreen {
 		for(String line:args) {
 			lines.add(line);
 		}
-		this.drawHoveringText(lines, x, y, mc.fontRenderer);
+		this.drawCustomTooltip(x, y, lines);
 	}
 }

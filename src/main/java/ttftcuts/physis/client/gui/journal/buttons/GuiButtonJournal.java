@@ -24,6 +24,8 @@ public class GuiButtonJournal extends GuiButton {
 		if (!this.visible) { return; }
 		par1Minecraft.renderEngine.bindTexture(GuiJournal.bookTextureRight);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		drawTexturedModalRect(xPosition, yPosition, textureX, textureY, width, height);
 	}
 }

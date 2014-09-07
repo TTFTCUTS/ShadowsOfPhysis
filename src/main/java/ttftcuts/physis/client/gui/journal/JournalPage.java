@@ -16,6 +16,6 @@ public abstract class JournalPage {
 	
 	public void actionPerformed(GuiJournal journal, int id, GuiButton button) {}
 	
-	public void drawPage(GuiJournal journal, int x, int y) {}
+	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {}
 	
 }

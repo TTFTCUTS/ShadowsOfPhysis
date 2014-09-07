@@ -7,11 +7,13 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs.Category;
 
 public class JournalArticle {
+	public String title;
 	public Category category;
 	public List<JournalPage> pages = new ArrayList<JournalPage>();
 	
-	public JournalArticle(Category cat, JournalPage... args) {
-		category = cat;
+	public JournalArticle(String title, Category cat, JournalPage... args) {
+		this.title = title;
+		this.category = cat;
 		for(JournalPage page : args) {
 			pages.add(page);
 		}

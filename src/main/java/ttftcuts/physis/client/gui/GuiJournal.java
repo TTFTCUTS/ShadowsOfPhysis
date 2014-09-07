@@ -9,6 +9,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.*;
 import ttftcuts.physis.client.gui.journal.buttons.*;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -39,6 +40,9 @@ public class GuiJournal extends GuiScreen {
 	protected GuiButtonJournal buttonForward;
 	protected GuiButtonJournal buttonBack;
 	
+	protected boolean isIndex = false;
+	protected JournalArticle article;
+	
 	public GuiJournal() {}
 	
 	public GuiJournal(JournalPage... args) {
@@ -48,6 +52,10 @@ public class GuiJournal extends GuiScreen {
 	}
 	
 	public GuiJournal(JournalArticle article) {
+		this.article = article;
+		if (article == PageDefs.index) {
+			this.isIndex = true;
+		}
 		for (JournalPage page : article.pages) {
 			pages.add(page);
 		}
@@ -128,6 +136,20 @@ public class GuiJournal extends GuiScreen {
 	}
 	
 	@Override
+	protected void keyTyped(char par1, int par2) {
+		if(!isIndex && par2 == 1) { // keycode for escape
+			if (this.article != null && this.article.category != null) {
+				mc.displayGuiScreen(new GuiJournal(this.article.category.sectionMenu));
+			} else {
+				mc.displayGuiScreen(new GuiJournal(PageDefs.index));
+			}
+			return;
+		}
+
+		super.keyTyped(par1, par2);
+	}
+	
+	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		mc.renderEngine.bindTexture(bookTextureLeft);
@@ -145,5 +167,13 @@ public class GuiJournal extends GuiScreen {
 		}
 		
 		super.drawScreen(par1, par2, par3);
+	}
+	
+	public void drawCustomTooltip(int x, int y, String... args) {
+		List<String> lines = new ArrayList<String>();
+		for(String line:args) {
+			lines.add(line);
+		}
+		this.drawHoveringText(lines, x, y, mc.fontRenderer);
 	}
 }

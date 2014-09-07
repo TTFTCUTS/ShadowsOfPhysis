@@ -19,6 +19,7 @@ public class JournalPageIndex extends JournalPage {
 	private static final int buttonTop = 30;
 	
 	private List<PageDefs.Category> categories = new ArrayList<PageDefs.Category>();
+	private boolean setup = false;
 	
 	public JournalPageIndex(int offset) {
 		
@@ -26,20 +27,22 @@ public class JournalPageIndex extends JournalPage {
 	
 	@Override
 	public void initGui(GuiJournal journal) {
-		categories.clear();
-		
-		for(PageDefs.Category cat : PageDefs.Category.values()) {
-			categories.add(cat);
+		if (!setup) {
+			categories.clear();
+			for(PageDefs.Category cat : PageDefs.Category.values()) {
+				categories.add(cat);
+			}
 		}
 	}
 	
 	@Override
 	public void actionPerformed(GuiJournal journal, int id, GuiButton button) {
-		//int bid = button.id - id;
+		int bid = button.id - id;
 		
-		//if (bid == 0) {
-			journal.mc.displayGuiScreen(new GuiJournal(PageDefs.introduction));
-		//}
+		JournalArticle article = categories.get(bid).sectionMenu;
+		if (article != null) {
+			journal.mc.displayGuiScreen(new GuiJournal(article));
+		}
 	}
 	
 	@Override

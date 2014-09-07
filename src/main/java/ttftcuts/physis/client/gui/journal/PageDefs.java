@@ -32,7 +32,7 @@ public class PageDefs {
 		
 		// these should be last - any articles after here won't be indexed!
 		index = new JournalArticle("Index", null,
-			new JournalPageText("Here, friend, I will keep an index of all the wonders you have discovered. \n\nMany of my pages, as you will see are still @oencrypted@. Knowledge is a dangerous thing, and much work must be done before unlocking my greatest and... darkest secrets."),
+			new JournalPageText("Here, friend, I will keep an index of all the wonders you have discovered. \n\nMany of my pages, as you will see are still @oencrypted@r. Knowledge is a dangerous thing, and much work must be done before unlocking my greatest and... darkest secrets."),
 			new JournalPageIndex(0)
 		);
 		

@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.journal.buttons.GuiButtonInvisible;
 
@@ -65,7 +66,7 @@ public class JournalPageIndex extends JournalPage {
 		
 		for(int i=0; i<categories.size(); i++) {
 			String categoryname = categories.get(i).name;
-			String text = categoryname.replace("@r", "@r@0").replace('@', '\u00a7');
+			String text = Physis.text.translate(Physis.text.categoryPrefix + categoryname);
 			renderer.drawString(text, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(text) / 2), y + buttonTop + 3 + (buttonHeight+buttonSpacing)*i, 0x000000);
 			
 			GL11.glColor4f(1F, 1F, 1F, 1F);

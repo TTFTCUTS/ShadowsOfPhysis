@@ -3,6 +3,7 @@ package ttftcuts.physis.client.gui.journal;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.FontRenderer;
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 
 public class JournalPageTitle extends JournalPageText {
@@ -21,7 +22,7 @@ public class JournalPageTitle extends JournalPageText {
 		
 		renderer.setUnicodeFlag(false);
 		
-		String title = titleText.replace("@r", "@r@0").replace('@', '\u00a7');
+		String title = Physis.text.translate(Physis.text.titlePrefix + titleText);
 		renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
 		
 		GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -36,7 +37,7 @@ public class JournalPageTitle extends JournalPageText {
 		
 		renderer.setUnicodeFlag(true);
 		
-		String text = pageText.replace("@r", "@r@0").replace('@', '\u00a7');
+		String text = Physis.text.translate(Physis.text.articlePrefix + pageText);
 		renderer.drawSplitString(text, x, y + 27, GuiJournal.pageWidth, 0x000000);
 
 		renderer.setUnicodeFlag(unicode);

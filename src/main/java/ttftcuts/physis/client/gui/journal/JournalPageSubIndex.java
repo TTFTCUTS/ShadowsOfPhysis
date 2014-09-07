@@ -23,6 +23,7 @@ public class JournalPageSubIndex extends JournalPage {
 	public static final int articlesPerPage = 24;
 	public static final int articlesPerRow = 4;
 	public static final int iconsize = 16; // fixed, or the shadow will be bork
+	public static final int shadowborder = 4;
 	public static final int iconspacing = 16;
 	public static final int iconsleft = 14;
 	public static final int iconstop = 7;
@@ -57,13 +58,9 @@ public class JournalPageSubIndex extends JournalPage {
 					return comp.compare(t1, t2);
 				}
 			});
-			
-			Physis.logger.info(articles.size());
-			
+
 			// and now trim to the page...
 			articles = articles.subList(offset * articlesPerPage, Math.min(articles.size(), (offset+1) * articlesPerPage));
-			
-			Physis.logger.info(articles.size());
 		}
 	}
 	
@@ -107,8 +104,8 @@ public class JournalPageSubIndex extends JournalPage {
 			int iconx = x + iconsleft + posx * (iconspacing + iconsize);
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
-			if (mousex >= iconx - 2 && mousex < iconx + iconsize + 2 && mousey >= icony - 2 && mousey < icony + iconsize + 2) {
-				journal.setTooltip(article.title);
+			if (mousex >= iconx - shadowborder && mousex < iconx + iconsize + shadowborder && mousey >= icony - shadowborder && mousey < icony + iconsize + shadowborder) {
+				journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
 			}
 			
 			GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -117,7 +114,7 @@ public class JournalPageSubIndex extends JournalPage {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			journal.mc.renderEngine.bindTexture(GuiJournal.bookTextureRight);
 			
-			journal.drawTexturedModalRect(iconx-2, icony-2, 350,50, iconsize+4, iconsize+4);
+			journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			

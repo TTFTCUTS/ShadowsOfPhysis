@@ -12,6 +12,7 @@ import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.PhysisCreativeTab;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.handler.GuiHandler;
+import ttftcuts.physis.common.helper.LocalizationHelper;
 
 @Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$version", dependencies = "")
 public class Physis {
@@ -25,9 +26,12 @@ public class Physis {
     @Mod.Instance
     public static Physis instance;
     
+    public static LocalizationHelper text;
+    
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab();
     	
     	PhysisItems.init();

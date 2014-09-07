@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs.Category;
 
 public class JournalArticle {
@@ -23,7 +22,6 @@ public class JournalArticle {
 			pages.add(page);
 		}
 		if (cat != null) {
-			Physis.logger.info("cat: "+cat+", this: "+this+", articleMap: "+PageDefs.articleMap);
 			PageDefs.articleMap.put(cat, this);
 		}
 	}

@@ -1,6 +1,7 @@
 package ttftcuts.physis.client.gui.journal;
 
 import net.minecraft.client.gui.FontRenderer;
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 
 public class JournalPageText extends JournalPage {
@@ -19,7 +20,7 @@ public class JournalPageText extends JournalPage {
 		boolean unicode = renderer.getUnicodeFlag();
 		renderer.setUnicodeFlag(true);
 		
-		String text = pageText.replace("@r", "@r@0").replace('@', '\u00a7');
+		String text = Physis.text.translate(Physis.text.articlePrefix + pageText);
 
 		renderer.drawSplitString(text, x, y, GuiJournal.pageWidth, 0x000000);
 

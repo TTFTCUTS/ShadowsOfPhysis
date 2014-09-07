@@ -1,6 +1,5 @@
 package ttftcuts.physis.client.gui.journal;
 
-import ttftcuts.physis.Physis;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -40,7 +39,7 @@ public class PageDefs {
 		// category pages
 		for(Category category: Category.values()) {
 			JournalArticle cat = new JournalArticle(category.name, null,
-				new JournalPageTitle(category.name,category.description)
+				new JournalPageTitle(category.name, category.description)
 			);
 			int p = (int)Math.ceil(articleMap.get(category).size() / (double)JournalPageSubIndex.articlesPerPage);
 			for (int i=0; i<p; i++) {

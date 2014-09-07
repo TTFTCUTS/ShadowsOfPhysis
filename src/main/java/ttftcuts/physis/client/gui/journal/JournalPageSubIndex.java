@@ -37,7 +37,6 @@ public class JournalPageSubIndex extends JournalPage {
 		this.offset = offset;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui(GuiJournal journal) {
 		if (!setup) {

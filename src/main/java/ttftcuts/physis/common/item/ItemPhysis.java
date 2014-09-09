@@ -13,6 +13,6 @@ public class ItemPhysis extends Item {
 	
 	@Override
 	public String getUnlocalizedNameInefficiently(ItemStack par1ItemStack) {
-		return super.getUnlocalizedNameInefficiently(par1ItemStack).replaceAll("item\\.", "item." + Physis.MOD_ID +":");
+		return super.getUnlocalizedNameInefficiently(par1ItemStack).replaceAll("item.", "item." + Physis.MOD_ID +":");
 	}
 }

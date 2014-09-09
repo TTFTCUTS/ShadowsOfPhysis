@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.PhysisCreativeTab;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.handler.GuiHandler;
@@ -35,6 +36,7 @@ public class Physis {
     	creativeTab = new PhysisCreativeTab();
     	
     	PhysisItems.init();
+    	PhysisBlocks.init();
     	
     	PageDefs.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

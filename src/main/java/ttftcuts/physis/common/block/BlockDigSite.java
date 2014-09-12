@@ -2,10 +2,16 @@ package ttftcuts.physis.common.block;
 
 import java.util.List;
 
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.texture.DigSiteAtlasSprite;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -16,12 +22,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockDigSite extends BlockContainerPhysis {
 
 	public static final String LEVELTAG = "physisdiglevel";
+	
+	public IIcon testicon;
 	
 	public BlockDigSite() {
 		super(Material.rock);
@@ -68,7 +77,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 	@SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-		TileEntity tile = world.getTileEntity(x, y, z);
+		/*TileEntity tile = world.getTileEntity(x, y, z);
 		
 		if (tile != null && tile instanceof TileEntityDigSite) {
 			int i = ((TileEntityDigSite)tile).level;
@@ -81,8 +90,29 @@ public class BlockDigSite extends BlockContainerPhysis {
 				return Blocks.diamond_block.getBlockTextureFromSide(side);
 			}
 		}
-        return this.getIcon(side, 0);
+        return this.getIcon(side, 0);*/
+		return testicon;
     }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register) {
+		if (register instanceof TextureMap) {
+			TextureMap map = (TextureMap) register;
+			
+			String name = DigSiteAtlasSprite.getDerivedName("digsite", "dirt", new String[]{"journal"});
+			
+			Physis.logger.info(name);
+			
+			TextureAtlasSprite texture = map.getTextureExtry(name);
+			if (texture == null) {
+				texture = new DigSiteAtlasSprite("digsite", "dirt", new String[]{"journal"}, new ResourceLocation[]{new ResourceLocation("physis", "textures/items/journal.png")});
+				map.setTextureEntry(name, texture);
+			}
+			
+			testicon = map.getTextureExtry(name);
+		}
+	}
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) 

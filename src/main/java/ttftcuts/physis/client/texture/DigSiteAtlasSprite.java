@@ -2,12 +2,13 @@ package ttftcuts.physis.client.texture;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.block.BlockDigSite;
+import ttftcuts.physis.common.helper.TextureHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public class DigSiteAtlasSprite extends TextureAtlasSprite {
 	
 	public static String getDerivedName(String name, String base, String[] names) {
 		StringBuilder b = new StringBuilder(Physis.MOD_ID);
-		b.append(":").append(name).append("|").append(base).append("|");
+		b.append(":").append(name).append("|").append(base != null ? base : "none").append("|");
 		
 		for(int i=0; i<names.length; i++) {
 			if (i!=0) {
@@ -69,15 +70,14 @@ public class DigSiteAtlasSprite extends TextureAtlasSprite {
 		int w = 0;
 		
 		try {
-			ResourceLocation baseresource = getBlockResource(base);
+			ResourceLocation baseresource = base != null ? getBlockResource(base) : BlockDigSite.blankTexture;
 			IResource baseiresource = manager.getResource(baseresource);
 			basetexture = ImageIO.read(baseiresource.getInputStream());
 
 			animation = (AnimationMetadataSection) baseiresource.getMetadata("animation");
 			
 			for (int i=0; i<this.layers.length; i++) {
-				InputStream layer = manager.getResource(this.resources[i]).getInputStream();
-				layertextures[i] = ImageIO.read(layer);
+				layertextures[i] = TextureHelper.getImageForResource(resources[i]);
 			}
 			
 			w = layertextures[0].getWidth();

@@ -105,7 +105,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 		
 		if (tile != null && tile instanceof TileEntityDigSite) {
 			int i = ((TileEntityDigSite)tile).level;
-			i = Math.min(i, DigStripTexture.numFrames);
+			i = Math.min(i, DigStripTexture.numFrames - 1);
 			
 			return locales[meta].icons.get("testobject")[i];
 		}

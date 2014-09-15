@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.block.tile.DigSiteLocale;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +33,6 @@ import net.minecraft.world.World;
 
 public class BlockDigSite extends BlockContainerPhysis {
 
-	public static final String LEVELTAG = "physisdiglevel";
 	public static ResourceLocation blankTexture = new ResourceLocation(Physis.MOD_ID, "textures/items/journal.png");
 	public static DigSiteLocale[] locales = new DigSiteLocale[]
 	{
@@ -50,13 +51,23 @@ public class BlockDigSite extends BlockContainerPhysis {
 		digtextures.put("dig", new ResourceLocation(Physis.MOD_ID, "textures/blocks/digsite/testdig.png"));
 	}
 	
-	public IIcon[] testicon;
+	public IIcon testicon;
 	
 	public BlockDigSite() {
 		super(Material.rock);
 		this.setHardness(4.0F);
 		this.setResistance(10.0F);
 		this.setBlockName("digsite");
+	}
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return RenderDigSite.renderid;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -75,7 +86,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 	       		NBTTagList lore = new NBTTagList();
 	       		lore.appendTag(new NBTTagString("Level "+(i+1)));
 	       		display.setTag("Lore", lore);
-	        	tag.setInteger(LEVELTAG, i);
+	        	tag.setInteger(TileEntityDigSite.LEVELTAG, i);
 	        	
 	        	stack.setTagCompound(tag);
 	        	
@@ -100,17 +111,43 @@ public class BlockDigSite extends BlockContainerPhysis {
 	@SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity btile = world.getTileEntity(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		
-		if (tile != null && tile instanceof TileEntityDigSite) {
-			int i = ((TileEntityDigSite)tile).level;
-			i = Math.min(i, DigStripTexture.numFrames - 1);
+		if (btile != null && btile instanceof TileEntityDigSite) 
+		{
+			TileEntityDigSite tile = (TileEntityDigSite)btile;
+			int renderlayer = tile.renderlayer;
 			
-			return locales[meta].icons.get("testobject")[i];
+			if (renderlayer == 0) {
+				int i = tile.getDigFrame();
+				
+				return locales[meta].icons.get("testobject")[i];
+			} else {
+				// some fancy-ass rendering selection here
+				return testicon;
+			}
 		}
         return this.getIcon(side, 0);
     }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int colorMultiplier(IBlockAccess world, int x, int y, int z)
+	{
+		TileEntity btile = world.getTileEntity(x, y, z);
+		
+		if (btile != null && btile instanceof TileEntityDigSite) {
+			TileEntityDigSite tile = (TileEntityDigSite)btile;
+			int renderlayer = tile.renderlayer;
+			
+			if (renderlayer != 0) {
+				// some fancy-ass rendering selection here
+				return 0xFF0000;
+			}
+		}
+        return 0xFFFFFF;
+	}
 	
 	public static String getDigTextureName(String dig, String dug) {
 		return "physis_digsite_dig_" + dig + "_" + dug;
@@ -118,7 +155,8 @@ public class BlockDigSite extends BlockContainerPhysis {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
+	public void registerBlockIcons(IIconRegister register) 
+	{
 		if (register instanceof TextureMap) {
 			TextureMap map = (TextureMap) register;
 			
@@ -149,6 +187,8 @@ public class BlockDigSite extends BlockContainerPhysis {
 				}
 			}
 		}
+		
+		testicon = register.registerIcon("physis:digsite/testmarking");
 	}
 	
 	@Override
@@ -159,10 +199,27 @@ public class BlockDigSite extends BlockContainerPhysis {
 		if (tile != null && tile instanceof TileEntityDigSite) {
 			if(stack.hasTagCompound()) {
 				NBTTagCompound tag = stack.getTagCompound();
-				if (tag.hasKey(LEVELTAG)) {
-					((TileEntityDigSite)tile).level = tag.getInteger(LEVELTAG);
+				if (tag.hasKey(TileEntityDigSite.LEVELTAG)) {
+					((TileEntityDigSite)tile).onPlaced(tag.getInteger(TileEntityDigSite.LEVELTAG));
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz)
+	{
+		ItemStack held = player.getHeldItem();
+		TileEntity btile = world.getTileEntity(x, y, z);
+		
+		if (held == null) {
+			if (btile != null && btile instanceof TileEntityDigSite) {
+				TileEntityDigSite tile = (TileEntityDigSite)btile;
+				
+				return tile.onActivation(world, player, side);
+			}
+		}
+		
+		return false;
 	}
 }

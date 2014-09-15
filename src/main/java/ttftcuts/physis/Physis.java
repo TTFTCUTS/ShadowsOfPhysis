@@ -2,13 +2,17 @@ package ttftcuts.physis;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ttftcuts.physis.client.ClientProxy;
 import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.common.CommonProxy;
 import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.PhysisCreativeTab;
 import ttftcuts.physis.common.PhysisItems;
@@ -27,6 +31,9 @@ public class Physis {
     @Mod.Instance
     public static Physis instance;
     
+    @SidedProxy(serverSide="ttftcuts.physis.common.CommonProxy", clientSide="ttftcuts.physis.client.ClientProxy")
+    public static CommonProxy proxy;
+    
     public static LocalizationHelper text;
     
     @EventHandler
@@ -35,10 +42,11 @@ public class Physis {
     	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab();
     	
-    	PhysisItems.init();
-    	PhysisBlocks.init();
-    	
-    	PageDefs.init();
-    	NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+    	proxy.preInit(event);
+    }
+    
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+    	proxy.init(event);
     }
 }

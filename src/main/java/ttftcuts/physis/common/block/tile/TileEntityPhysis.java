@@ -38,4 +38,11 @@ public class TileEntityPhysis extends TileEntity {
 		super.onDataPacket(net, packet);
 		readCustomNBT(packet.func_148857_g());
 	}
+	
+	public void markTileForUpdate() {
+		this.markDirty();
+		if (this.worldObj != null) {
+			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+	}
 }

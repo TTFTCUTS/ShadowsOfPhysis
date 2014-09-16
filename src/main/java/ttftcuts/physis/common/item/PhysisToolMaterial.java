@@ -32,11 +32,12 @@ public class PhysisToolMaterial {
 	
 	public ItemPickaxe pickitem;
 	
+	public Item.ToolMaterial toolmaterial;
+	
 	public int maxdamage;
-	public int harvestlevel;
 	
 	public PhysisToolMaterial(String orename, ItemStack ingot, ItemStack stick, ItemStack pick) {
-		Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
+		//Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
 		
 		this.orename = orename;
 		this.orematerial = orename.replaceFirst("[^A-Z]*(?=[A-Z])", "");
@@ -45,8 +46,9 @@ public class PhysisToolMaterial {
 		this.pick = pick;
 		this.pickitem = (ItemPickaxe)(pick.getItem());
 		
-		this.maxdamage = pickitem.getMaxDamage(pick);
-		this.harvestlevel = pickitem.getHarvestLevel(pick, "pickaxe");
+		this.toolmaterial = Item.ToolMaterial.valueOf(pickitem.getToolMaterialName());
+		
+		this.maxdamage = this.toolmaterial.getMaxUses();
 	}
 	
 	public String getMaterialName() {
@@ -55,7 +57,7 @@ public class PhysisToolMaterial {
 	
 	@SuppressWarnings("unchecked")
 	public static void buildMaterials() {
-		//Physis.logger.info("Building tool material list");
+		Physis.logger.info("Building tool material list");
 		materials = new HashMap<String, PhysisToolMaterial>();
 		
 		//Physis.logger.info("Getting Ingots");

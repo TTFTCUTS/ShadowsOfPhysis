@@ -22,5 +22,7 @@ physis.journal.text.index=Here, friend, I will keep an index of all the wonders 
 physis.journal.title.testitem=Test Item
 physis.journal.text.testitem=Text for the test item?
 
+item.physis:trowel.name=Trowel
+item.physis:trowel.regex=(^\w*)(?=\sPickaxe)
 
 tile.physis:digsite.name=Buried Artifact

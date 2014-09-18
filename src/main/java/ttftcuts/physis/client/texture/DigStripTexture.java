@@ -15,14 +15,14 @@ public class DigStripTexture extends PhysisAbstractTexture {
 
 	public static final int numFrames = 8;
 	
-	public String namespace;
 	public String name;
 	private ResourceLocation digstrip;
 	private ResourceLocation uncovered;
 	private int frame;
 	
-	public DigStripTexture(String namespace, String name, ResourceLocation digstrip, ResourceLocation uncovered, int frame) {
-		this.namespace = namespace;
+	public DigStripTexture(String name, ResourceLocation digstrip, ResourceLocation uncovered, int frame) {
+		super();
+		
 		this.name = name;
 		this.digstrip = digstrip;
 		this.uncovered = uncovered;

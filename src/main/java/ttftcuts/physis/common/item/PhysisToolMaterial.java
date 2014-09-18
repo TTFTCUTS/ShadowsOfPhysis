@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ttftcuts.physis.Physis;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -21,7 +22,11 @@ public class PhysisToolMaterial {
 	
 	public static final String MATERIALTAG = "physisMaterial";
 	
+	public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
+	
 	public static Map<String,PhysisToolMaterial> materials;
+	
+	public static boolean generated = false;
 	
 	public String orename;
 	public String orematerial;
@@ -56,7 +61,7 @@ public class PhysisToolMaterial {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static void buildMaterials() {
+	public static void buildMaterials() {		
 		Physis.logger.info("Building tool material list");
 		materials = new HashMap<String, PhysisToolMaterial>();
 		
@@ -155,7 +160,7 @@ public class PhysisToolMaterial {
 				}
 			}
 		}
-		
+		generated = true;
 		
 		//Physis.logger.info("Finished tool material list");
 	}

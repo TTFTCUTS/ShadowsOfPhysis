@@ -5,18 +5,12 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ttftcuts.physis.client.ClientProxy;
-import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.CommonProxy;
-import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.PhysisCreativeTab;
-import ttftcuts.physis.common.PhysisItems;
-import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 
 @Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$version", dependencies = "")

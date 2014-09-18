@@ -176,7 +176,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 					for (int i=0; i<n; i++) {
 						String name = getDigTextureName(dig.getKey(), art.getKey()) + "_" + i;
 						
-						digtex[i] = TextureHelper.loadTexture(name, new DigStripTexture(Physis.MOD_ID, name, dig.getValue(), art.getValue(), i));
+						digtex[i] = TextureHelper.loadTexture(name, new DigStripTexture(name, dig.getValue(), art.getValue(), i));
 					}
 				}
 				

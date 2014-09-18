@@ -2,6 +2,7 @@ package ttftcuts.physis.common.block.tile;
 
 import java.util.HashMap;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.block.BlockDigSite;
 import ttftcuts.physis.common.helper.TextureHelper;
@@ -32,7 +33,7 @@ public class DigSiteLocale {
 		
 		for (int i=0; i<n; i++) {
 			String framename = texname + "_" + i;
-			ResourceLocation frame = new ResourceLocation(framename);
+			ResourceLocation frame = new ResourceLocation(Physis.MOD_ID, framename);
 			set[i] = TextureHelper.buildDigSprite(map, "digsite_"+name, base, new String[]{maskname+i}, new ResourceLocation[]{frame});
 		}
 		

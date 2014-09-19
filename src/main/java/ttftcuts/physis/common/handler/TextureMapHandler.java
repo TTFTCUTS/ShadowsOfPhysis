@@ -15,9 +15,11 @@ public class TextureMapHandler {
 	
 	@SubscribeEvent
 	public void onStitch(TextureStitchEvent.Pre event) {
-		for (Entry<String, TextureAtlasSprite> entry : TextureHelper.addedIcons.entrySet()) {
-			Physis.logger.info("Adding "+entry.getKey()+" to the map");
-			event.map.setTextureEntry(entry.getKey(), entry.getValue());
+		if (TextureHelper.addedIcons != null) {
+			for (Entry<String, TextureAtlasSprite> entry : TextureHelper.addedIcons.entrySet()) {
+				Physis.logger.info("Adding "+entry.getKey()+" to the map");
+				event.map.setTextureEntry(entry.getKey(), entry.getValue());
+			}
 		}
 	}
 }

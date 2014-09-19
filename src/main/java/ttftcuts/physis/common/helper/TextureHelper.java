@@ -2,13 +2,14 @@ package ttftcuts.physis.common.helper;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -24,7 +25,6 @@ import ttftcuts.physis.client.texture.PhysisAtlasSprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -167,5 +167,89 @@ public class TextureHelper {
 	    g.drawImage(original, 0, 0, newWidth, newHeight, 0, 0, original.getWidth(), original.getHeight(), null);
 	    g.dispose();
 	    return resized;
+	}
+	
+	public static List<Integer> getImageColourRange(BufferedImage image) {
+		
+		List<Integer> collist = new ArrayList<Integer>();
+		
+		int w = image.getWidth();
+		int h = image.getHeight();
+		int len = w*h;
+		int[] data = new int[len];
+		image.getRGB(0, 0, w, h, data, 0, w);
+		
+		int col, a;
+		
+		for(int i=0; i<len; i++) {
+			col = data[i];
+			a = alpha(col);
+			
+			if (a > 0) {
+				collist.add(col);
+			}
+		}
+		
+		Collections.sort(collist, new ColourBrightnessComparator());
+		
+		return collist;
+	}
+	
+	public static int getAverageColour(List<Integer> colours) {
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		int col;
+		
+		int count = colours.size();
+		
+		for (int i=0; i<count; i++) {
+			col = colours.get(i);
+			r += red(col);
+			g += green(col);
+			b += blue(col);
+		}
+		
+		return compose(r / count, g / count, b / count, 255);
+	}
+	
+	public static int getPerceptualBrightness(int col) {
+		double r = red(col) / 255.0;
+		double g = green(col) / 255.0;
+		double b = blue(col) / 255.0;
+		
+		double brightness = Math.sqrt(0.241 * r*r + 0.691 * g*g + 0.068 * b*b);
+		
+		return (int)(brightness*255);
+	}
+	
+	// Bitwise colour ops!
+	
+	protected static int compose(int r, int g, int b, int a) {
+		int rgb = a;
+		rgb = (rgb << 8) + r;
+		rgb = (rgb << 8) + g;
+		rgb = (rgb << 8) + b;
+		return rgb;
+	}
+
+	protected static int alpha(int c) {
+		return (c >> 24) & 0xFF;
+	}
+
+	protected static int red(int c) {
+		return (c >> 16) & 0xFF;
+	}
+
+	protected static int green(int c) {
+		return (c >> 8) & 0xFF;
+	}
+
+	protected static int blue(int c) {
+		return (c) & 0xFF;
+	}
+	
+	protected static int mult(int c1, int c2) {
+		return (int)(c1 * (c2/255.0));
 	}
 }

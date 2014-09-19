@@ -1,12 +1,18 @@
 package ttftcuts.physis.common.item;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.helper.TextureHelper;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
@@ -40,6 +46,10 @@ public class PhysisToolMaterial {
 	public Item.ToolMaterial toolmaterial;
 	
 	public int maxdamage;
+	
+	public boolean hastint = false;
+	public int[] tints;
+	public int shafttint;
 	
 	public PhysisToolMaterial(String orename, ItemStack ingot, ItemStack stick, ItemStack pick) {
 		//Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
@@ -115,17 +125,17 @@ public class PhysisToolMaterial {
 						
 						if (comp[0] != null && comp[1] != null && comp[2] != null && comp[4] != null && comp[7] != null) {
 							// looks pick shaped to me!
-							ItemStack stickitem = (ItemStack)(((List<ItemStack>)(comp[4])).get(0));
-							ItemStack otherstick = (ItemStack)(((List<ItemStack>)(comp[7])).get(0));
+							ItemStack stickitem = getRecipeCompStack(comp[4]);
+							ItemStack otherstick = getRecipeCompStack(comp[7]);
 							if (!stickitem.equals(otherstick)) {
 								// but the sticks don't match
 								continue;
 							}
 							
 							ItemStack[] head = {
-								(ItemStack)(((List<ItemStack>)(comp[0])).get(0)), 
-								(ItemStack)(((List<ItemStack>)(comp[1])).get(0)), 
-								(ItemStack)(((List<ItemStack>)(comp[2])).get(0))
+								getRecipeCompStack(comp[0]), 
+								getRecipeCompStack(comp[1]), 
+								getRecipeCompStack(comp[2])
 							};
 							
 							String orename = "";
@@ -163,6 +173,46 @@ public class PhysisToolMaterial {
 		generated = true;
 		
 		//Physis.logger.info("Finished tool material list");
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static ItemStack getRecipeCompStack(Object o) {
+		if (o instanceof ItemStack) { return (ItemStack)o; }
+		if (o instanceof List) { return ((List<ItemStack>)o).get(0); }
+		return null;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void buildTintData(int tintcount) {
+		for(Entry<String, PhysisToolMaterial> entry : materials.entrySet()) { 
+			PhysisToolMaterial mat = entry.getValue();
+			
+			if (!mat.hastint) {
+				mat.tints = new int[tintcount];
+				
+				BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
+				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
+				
+				mat.tints[0] = colours.remove(0);
+				mat.tints[tintcount-1] = colours.remove(colours.size()-1);
+				
+				int avetints = tintcount-2;
+				float dper = colours.size() / (float)avetints;
+				
+				for(int i=0; i<avetints; i++) {
+					int lower = Math.round(dper*i);
+					int upper = Math.round(dper*(i+1));
+					
+					int tint = TextureHelper.getAverageColour(colours.subList(lower, upper));
+					mat.tints[i+1] = tint;
+				}
+				
+				BufferedImage stickimage = TextureHelper.getItemStackImage(mat.stick);
+				mat.shafttint = TextureHelper.getAverageColour(TextureHelper.getImageColourRange(stickimage));
+				
+				mat.hastint = true;
+			}
+		}
 	}
 	
 	public static PhysisToolMaterial getMaterialFromItemStack(ItemStack stack) {

@@ -20,10 +20,10 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent event) {
-		PhysisToolMaterial.buildMaterials();
+		
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
-		
+		PhysisToolMaterial.buildMaterials();
 	}
 }

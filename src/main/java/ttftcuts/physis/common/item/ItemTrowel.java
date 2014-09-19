@@ -1,7 +1,6 @@
 package ttftcuts.physis.common.item;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -12,15 +11,19 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.PhysisItems;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemPhysis {
 
@@ -41,9 +44,7 @@ public class ItemTrowel extends ItemPhysis {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List types) {
-		Iterator<Entry<String,PhysisToolMaterial>> iter = PhysisToolMaterial.materials.entrySet().iterator();
-		while (iter.hasNext()) {
-			Entry<String, PhysisToolMaterial> entry = iter.next();
+		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
 			ItemStack stack = new ItemStack(this, 1, 0);
 			PhysisToolMaterial.writeMaterialToStack(mat, stack);
@@ -99,6 +100,25 @@ public class ItemTrowel extends ItemPhysis {
 
         return trowel;
     }
+	
+	@SuppressWarnings("unchecked")
+	public static void buildRecipes() {
+		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
+			PhysisToolMaterial mat = entry.getValue();
+			
+			ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, 0);
+			
+			PhysisToolMaterial.writeMaterialToStack(mat, trowel);
+			
+			IRecipe recipe = new ShapedOreRecipe(trowel,
+				"HH ", "HS ", "  S",
+				'H', mat.orename,
+				'S', mat.stick
+			);
+			
+			CraftingManager.getInstance().getRecipeList().add(recipe);
+		}
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)

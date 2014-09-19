@@ -3,6 +3,7 @@ package ttftcuts.physis.common;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.handler.GuiHandler;
+import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.PhysisToolMaterial;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -25,5 +26,6 @@ public class CommonProxy {
 	
 	public void postInit(FMLPostInitializationEvent event) {
 		PhysisToolMaterial.buildMaterials();
+		ItemTrowel.buildRecipes();
 	}
 }

@@ -161,13 +161,14 @@ public class PhysisToolMaterial {
 							};
 							
 							String orename = "";
-							int ingotid = -1;
+							//int ingotid = -1;
+							List<ItemStack> candidates = new ArrayList<ItemStack>();
 							
-							headloop:
+							//headloop:
 							for(int i=0; i<3; i++) {
 								ItemStack h = head[i];
 								int[] oreids = OreDictionary.getOreIDs(h);
-								for(int j=0; j<orenames.length; j++) {
+								/*for(int j=0; j<orenames.length; j++) {
 									for (int k=0; k<oreids.length; k++) {
 										if (OreDictionary.getOreName(oreids[k]).equals(orenames[j])) {
 											// match!
@@ -176,11 +177,32 @@ public class PhysisToolMaterial {
 											break headloop;
 										}
 									}
+								}*/
+								if (oreids.length > 0) {
+									candidates.add(h);
 								}
 							}
 							
-							if (orename.isEmpty()) {
-								Physis.logger.info("Head item has no ore entry, aborting");
+							ItemStack oreitem = null;
+							if (candidates.size() == 0) {
+								continue;
+							} else { 
+								if (candidates.contains(head[1])) {
+									if (candidates.size() == 3) {
+										if (compareStacks(head[0], head[2])) {
+											oreitem = head[0];
+										} else {
+											oreitem = head[1];
+										}
+									}
+								} else {
+									oreitem = candidates.get(0);
+								}
+							}
+							
+							if (oreitem != null) {
+								orename = OreDictionary.getOreName(OreDictionary.getOreIDs(oreitem)[0]);
+							} else {
 								continue;
 							}
 							
@@ -191,7 +213,7 @@ public class PhysisToolMaterial {
 							}
 							if(!materials.containsKey(orename)) {
 								Physis.logger.info("Adding material");
-								materials.put(orename, new PhysisToolMaterial(orename, head[ingotid], stickorename, stickitem, output));
+								materials.put(orename, new PhysisToolMaterial(orename, oreitem, stickorename, stickitem, output));
 							}
 						}
 					}

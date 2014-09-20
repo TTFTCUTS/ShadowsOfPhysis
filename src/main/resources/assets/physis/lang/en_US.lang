@@ -23,6 +23,6 @@ physis.journal.title.testitem=Test Item
 physis.journal.text.testitem=Text for the test item?
 
 item.physis:trowel.name=Trowel
-item.physis:trowel.regex=(^\w*)(?=\sPickaxe)
+item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
 
 tile.physis:digsite.name=Buried Artifact

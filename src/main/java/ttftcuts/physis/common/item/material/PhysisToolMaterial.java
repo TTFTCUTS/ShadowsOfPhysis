@@ -1,4 +1,4 @@
-package ttftcuts.physis.common.item;
+package ttftcuts.physis.common.item.material;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class PhysisToolMaterial {
 	
@@ -31,11 +30,13 @@ public class PhysisToolMaterial {
 	public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
 	
 	public static Map<String,PhysisToolMaterial> materials;
+	public static Map<Class<? extends IRecipe>, IRecipeComponentTranslator> handlers = new HashMap<Class<? extends IRecipe>, IRecipeComponentTranslator>();
 	
 	public static boolean generated = false;
 	
 	public String orename;
 	public String orematerial;
+	public String stickorename;
 	
 	public ItemStack ingot;
 	public ItemStack stick;
@@ -51,13 +52,14 @@ public class PhysisToolMaterial {
 	public int[] tints;
 	public int shafttint;
 	
-	public PhysisToolMaterial(String orename, ItemStack ingot, ItemStack stick, ItemStack pick) {
+	public PhysisToolMaterial(String orename, ItemStack ingot, String stickorename, ItemStack stick, ItemStack pick) {
 		//Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
 		
 		this.orename = orename;
 		this.orematerial = orename.replaceFirst("[^A-Z]*(?=[A-Z])", "");
 		this.ingot = ingot;
 		this.stick = stick;
+		this.stickorename = stickorename;
 		this.pick = pick;
 		this.pickitem = (ItemPickaxe)(pick.getItem());
 		
@@ -117,25 +119,45 @@ public class PhysisToolMaterial {
 			
 			for(ItemPickaxe pick : picks) {
 				if (out == pick) {
-					//Physis.logger.info("Recipe for "+pick.getUnlocalizedName());
-					if (recipe instanceof ShapedOreRecipe) {
-						ShapedOreRecipe r = (ShapedOreRecipe)recipe;
-						
-						Object[] comp = r.getInput();
-						
+					ItemStack[] comp = null;
+					boolean stickore = false;
+					for(Entry<Class<? extends IRecipe>, IRecipeComponentTranslator> entry : handlers.entrySet()) {
+						if (entry.getKey().isInstance(recipe)) {
+							IRecipeComponentTranslator trans = entry.getValue();
+							comp = trans.getRecipeComponents(recipe);
+							stickore = trans.hasOreDictStick();
+							break;
+						}
+					}
+					
+					if (comp != null && comp.length == 9) {
+						Physis.logger.info("Checking recipe for validity");
 						if (comp[0] != null && comp[1] != null && comp[2] != null && comp[4] != null && comp[7] != null) {
 							// looks pick shaped to me!
-							ItemStack stickitem = getRecipeCompStack(comp[4]);
-							ItemStack otherstick = getRecipeCompStack(comp[7]);
-							if (!stickitem.equals(otherstick)) {
+							Physis.logger.info("Looks pick shaped");
+							ItemStack stickitem = comp[4];
+							ItemStack otherstick = comp[7];
+							if (!compareStacks(stickitem, otherstick)) {
 								// but the sticks don't match
 								continue;
 							}
+							Physis.logger.info("Sticks match");
 							
+							// stick processing
+							String stickorename = null;
+							
+							if (stickore) {
+								int[] stickoreids = OreDictionary.getOreIDs(stickitem);
+								if (stickoreids.length > 0) {
+									stickorename = OreDictionary.getOreName(stickoreids[0]);
+								}
+							}
+							
+							// head processing
 							ItemStack[] head = {
-								getRecipeCompStack(comp[0]), 
-								getRecipeCompStack(comp[1]), 
-								getRecipeCompStack(comp[2])
+								comp[0], 
+								comp[1], 
+								comp[2]
 							};
 							
 							String orename = "";
@@ -149,7 +171,6 @@ public class PhysisToolMaterial {
 									for (int k=0; k<oreids.length; k++) {
 										if (OreDictionary.getOreName(oreids[k]).equals(orenames[j])) {
 											// match!
-											//Physis.logger.info("Matched component "+h+" to oredict: "+orenames[j]);
 											orename = orenames[j];
 											ingotid = i;
 											break headloop;
@@ -159,11 +180,18 @@ public class PhysisToolMaterial {
 							}
 							
 							if (orename.isEmpty()) {
+								Physis.logger.info("Head item has no ore entry, aborting");
 								continue;
 							}
 							
+							if(materials.containsKey(orename)) {
+								if (materials.get(orename).stickorename == null && stickorename != null) {
+									materials.remove(orename);
+								}
+							}
 							if(!materials.containsKey(orename)) {
-								materials.put(orename, new PhysisToolMaterial(orename, head[ingotid], stickitem, output));
+								Physis.logger.info("Adding material");
+								materials.put(orename, new PhysisToolMaterial(orename, head[ingotid], stickorename, stickitem, output));
 							}
 						}
 					}
@@ -175,8 +203,14 @@ public class PhysisToolMaterial {
 		//Physis.logger.info("Finished tool material list");
 	}
 	
+	public static void addRecipeComponentTranslator(Class<? extends IRecipe> clazz, IRecipeComponentTranslator trans) {
+		if (!handlers.containsKey(clazz)) {
+			handlers.put(clazz, trans);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
-	private static ItemStack getRecipeCompStack(Object o) {
+	public static ItemStack getRecipeCompStack(Object o) {
 		if (o instanceof ItemStack) { return (ItemStack)o; }
 		if (o instanceof List) { return ((List<ItemStack>)o).get(0); }
 		return null;
@@ -213,6 +247,27 @@ public class PhysisToolMaterial {
 				mat.hastint = true;
 			}
 		}
+	}
+	
+	public static boolean compareStacks(ItemStack stack1, ItemStack stack2) {
+		if (stack1 != null || stack2 != null)
+        {
+            if (stack2 == null && stack1 != null || stack2 != null && stack1 == null)
+            {
+                return false;
+            }
+
+            if (stack1.getItem() != stack2.getItem())
+            {
+                return false;
+            }
+
+            if (stack1.getItemDamage() != 32767 && stack1.getItemDamage() != stack2.getItemDamage())
+            {
+                return false;
+            }
+        }
+		return true;
 	}
 	
 	public static PhysisToolMaterial getMaterialFromItemStack(ItemStack stack) {

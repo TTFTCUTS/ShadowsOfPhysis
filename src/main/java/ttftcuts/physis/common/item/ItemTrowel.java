@@ -1,5 +1,6 @@
 package ttftcuts.physis.common.item;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -12,10 +13,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.PhysisItems;
+import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -27,6 +31,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemPhysis {
 
+	public static final String HANDLETAG = "physisTrowelHandle" ;
+	
 	public IIcon handle;
 	public IIcon shaft;
 	public IIcon fallbackicon;
@@ -73,7 +79,7 @@ public class ItemTrowel extends ItemPhysis {
         
         if (regex.equals("item.physis:trowel.regex")) {
         	Physis.logger.warn("Trowel regex localisation failure, setting to default");
-        	regex = "(^\\w*)(?=\\sPickaxe)";
+        	regex = "(^\\w*)(?=\\sPick(axe)?)";
         }
         
         Pattern p;
@@ -81,7 +87,7 @@ public class ItemTrowel extends ItemPhysis {
         	p = Pattern.compile(regex);
         } catch (PatternSyntaxException e) {
         	Physis.logger.warn("Trowel regex compilation failure, falling back", e);
-        	p = Pattern.compile("(^\\w*)(?=\\sPickaxe)");
+        	p = Pattern.compile("(^\\w*)(?=\\sPick(axe)?)");
         }
         
         PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
@@ -95,6 +101,8 @@ public class ItemTrowel extends ItemPhysis {
         		String pickmat = m.group(1);
         		
         		return pickmat +" "+ trowel;
+        	} else if (mat.orematerial != null) {
+        		return mat.orematerial +" "+ trowel;
         	}
         }
 
@@ -105,18 +113,27 @@ public class ItemTrowel extends ItemPhysis {
 	public static void buildRecipes() {
 		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
+
+			for (int wool = 0; wool<16; wool++) {
+				
+				ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, 0);
+				
+				PhysisToolMaterial.writeMaterialToStack(mat, trowel);
+				
+				trowel.stackTagCompound.setInteger(HANDLETAG, wool);
+				
+				Object stick = mat.stickorename == null ? mat.stick : mat.stickorename;
+				
+				IRecipe recipe = new ShapedOreRecipe(trowel,
+					"HH ", "HS ", "  W",
+					'H', mat.orename,
+					'S', stick,
+					'W', new ItemStack(Blocks.wool, 1, wool)
+				);
+				CraftingManager.getInstance().getRecipeList().add(recipe);
+			}
 			
-			ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, 0);
 			
-			PhysisToolMaterial.writeMaterialToStack(mat, trowel);
-			
-			IRecipe recipe = new ShapedOreRecipe(trowel,
-				"HH ", "HS ", "  S",
-				'H', mat.orename,
-				'S', mat.stick
-			);
-			
-			CraftingManager.getInstance().getRecipeList().add(recipe);
 		}
 	}
 	
@@ -160,7 +177,19 @@ public class ItemTrowel extends ItemPhysis {
     {
 		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
 		if (mat != null && mat.hastint) {
-	        if (pass == 1) {
+			if (pass == 0) {
+				if (stack.stackTagCompound.hasKey(HANDLETAG)) {
+					int woolcol = stack.stackTagCompound.getInteger(HANDLETAG);
+					
+					if (woolcol < EntitySheep.fleeceColorTable.length && woolcol >= 0) {
+						float[] col = EntitySheep.fleeceColorTable[woolcol];
+						
+						return new Color(col[0], col[1], col[2]).getRGB();
+					}
+				}
+				return 0x6B6B6B;
+			}
+			else if (pass == 1) {
 	        	return mat.shafttint;
 	        }
 	        else if (pass == 2) {

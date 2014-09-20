@@ -7,7 +7,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.common.CommonProxy;
 import ttftcuts.physis.common.handler.TextureMapHandler;
-import ttftcuts.physis.common.item.PhysisToolMaterial;
+import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 public class ClientProxy extends CommonProxy {
 

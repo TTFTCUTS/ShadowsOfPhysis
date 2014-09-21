@@ -24,5 +24,6 @@ physis.journal.text.testitem=Text for the test item?
 
 item.physis:trowel.name=Trowel
 item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
+item.physis:trowel.leveltooltip=Maximum dig site level
 
 tile.physis:digsite.name=Buried Artifact

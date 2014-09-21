@@ -1,13 +1,15 @@
 package ttftcuts.physis.common.block.tile;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.texture.DigStripTexture;
+import ttftcuts.physis.common.helper.EffectHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -58,10 +60,24 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	}
 	
 	public boolean onActivation(World world, EntityPlayer player, int side) {
-		Physis.logger.info("CLICK");
+		ItemStack held = player.getHeldItem();
+		if (!(held.getItem() instanceof ITrowel)) {
+			return false;
+		}
+		ITrowel trowel = (ITrowel)(held.getItem());
+		
 		if (this.currentlayer + 1 >= this.numlayers) {
 			// destroy! dispense loot!
+			EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
 			
+			// drop loot here
+
+			world.setBlockToAir(xCoord, yCoord, zCoord);
+			this.invalidate();
+			this.markTileForUpdate();
+			
+			trowel.onUseTrowel(held, player, true);
+			return false;
 		} else {
 			Physis.logger.info("++");
 			this.currentlayer++;
@@ -69,9 +85,11 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			this.buildRenderData();
 			
 			this.markTileForUpdate();
-			return true;
+			
 		}
-		return false;
+		trowel.onUseTrowel(held, player, true);
+		
+		return true;
 	}
 	
 	@Override

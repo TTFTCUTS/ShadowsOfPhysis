@@ -1,6 +1,8 @@
-package ttftcuts.physis.common.helper;
+package ttftcuts.physis.utils;
 
 import java.util.Comparator;
+
+import ttftcuts.physis.common.helper.TextureHelper;
 
 public class ColourBrightnessComparator implements Comparator<Integer> {
 

@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -63,7 +62,7 @@ public class PhysisToolMaterial {
 		this.pick = pick;
 		this.pickitem = (ItemPickaxe)(pick.getItem());
 		
-		this.toolmaterial = Item.ToolMaterial.valueOf(pickitem.getToolMaterialName());
+		this.toolmaterial = this.pickitem.func_150913_i();
 		
 		this.maxdamage = this.toolmaterial.getMaxUses();
 	}
@@ -74,12 +73,12 @@ public class PhysisToolMaterial {
 	
 	@SuppressWarnings("unchecked")
 	public static void buildMaterials() {		
-		Physis.logger.info("Building tool material list");
+		//Physis.logger.info("Building tool material list");
 		materials = new HashMap<String, PhysisToolMaterial>();
 		
 		//Physis.logger.info("Getting Ingots");
 		
-		String[] orenames = OreDictionary.getOreNames();
+		//String[] orenames = OreDictionary.getOreNames();
 		
 		/*List<String> ingottypes = new ArrayList<String>();
 		
@@ -131,17 +130,14 @@ public class PhysisToolMaterial {
 					}
 					
 					if (comp != null && comp.length == 9) {
-						Physis.logger.info("Checking recipe for validity");
 						if (comp[0] != null && comp[1] != null && comp[2] != null && comp[4] != null && comp[7] != null) {
 							// looks pick shaped to me!
-							Physis.logger.info("Looks pick shaped");
 							ItemStack stickitem = comp[4];
 							ItemStack otherstick = comp[7];
 							if (!compareStacks(stickitem, otherstick)) {
 								// but the sticks don't match
 								continue;
 							}
-							Physis.logger.info("Sticks match");
 							
 							// stick processing
 							String stickorename = null;
@@ -161,23 +157,11 @@ public class PhysisToolMaterial {
 							};
 							
 							String orename = "";
-							//int ingotid = -1;
 							List<ItemStack> candidates = new ArrayList<ItemStack>();
 							
-							//headloop:
 							for(int i=0; i<3; i++) {
 								ItemStack h = head[i];
 								int[] oreids = OreDictionary.getOreIDs(h);
-								/*for(int j=0; j<orenames.length; j++) {
-									for (int k=0; k<oreids.length; k++) {
-										if (OreDictionary.getOreName(oreids[k]).equals(orenames[j])) {
-											// match!
-											orename = orenames[j];
-											ingotid = i;
-											break headloop;
-										}
-									}
-								}*/
 								if (oreids.length > 0) {
 									candidates.add(h);
 								}
@@ -212,7 +196,6 @@ public class PhysisToolMaterial {
 								}
 							}
 							if(!materials.containsKey(orename)) {
-								Physis.logger.info("Adding material");
 								materials.put(orename, new PhysisToolMaterial(orename, oreitem, stickorename, stickitem, output));
 							}
 						}

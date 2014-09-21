@@ -7,15 +7,18 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.block.BlockDigSite;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.item.block.ItemBlockPhysis;
-import ttftcuts.physis.common.item.block.ItemBlockPhysisWithMetadata;
+//import ttftcuts.physis.common.item.block.ItemBlockPhysisWithMetadata;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-
 public final class PhysisBlocks {
-	public static Block digSite;
+	public static Block digSiteDirt;
+	public static Block digSiteSand;
+	public static Block digSiteClay;
 	
 	public static void init() {
-		digSite = registerBlock(new BlockDigSite(), ItemBlockPhysisWithMetadata.class);
+		digSiteDirt = registerBlock(new BlockDigSite("dirt"));
+		digSiteSand = registerBlock(new BlockDigSite("sand"));
+		digSiteClay = registerBlock(new BlockDigSite("clay"));
 		registerTile(TileEntityDigSite.class, "digsite");
 	}
 	
@@ -24,7 +27,6 @@ public final class PhysisBlocks {
 		return block;
 	}
 	
-	@SuppressWarnings("unused")
 	private static Block registerBlock(Block block) {
 		return registerBlock(block, ItemBlockPhysis.class);
 	}

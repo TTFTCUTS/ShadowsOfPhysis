@@ -7,6 +7,8 @@ import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.block.BlockDigSite;
 import ttftcuts.physis.common.helper.TextureHelper;
 
+import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -16,12 +18,18 @@ public class DigSiteLocale {
 	public String base;
 	public String maskname;
 	
+	public Material material;
+	public SoundType sounds;
+	
 	public HashMap<String,IIcon[]> icons;
 	
-	public DigSiteLocale(String name, String base, String maskname) {
+	public DigSiteLocale(String name, String base, String maskname, Material mat, SoundType sound) {
 		this.name = name;
 		this.base = base;
 		this.maskname = maskname;
+		
+		this.material = mat;
+		this.sounds = sound;
 		
 		this.icons = new HashMap<String,IIcon[]>();
 	}

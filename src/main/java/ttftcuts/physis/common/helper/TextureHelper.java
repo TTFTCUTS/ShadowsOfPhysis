@@ -22,6 +22,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.texture.DigSiteAtlasSprite;
 import ttftcuts.physis.client.texture.PhysisAbstractTexture;
 import ttftcuts.physis.client.texture.PhysisAtlasSprite;
+import ttftcuts.physis.utils.ColourBrightnessComparator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;

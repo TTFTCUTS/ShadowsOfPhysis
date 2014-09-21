@@ -1,12 +1,12 @@
 package ttftcuts.physis.common.block;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.block.tile.DigSiteLocale;
@@ -14,6 +14,7 @@ import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.helper.TextureHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -34,12 +35,13 @@ import net.minecraft.world.World;
 public class BlockDigSite extends BlockContainerPhysis {
 
 	public static ResourceLocation blankTexture = new ResourceLocation(Physis.MOD_ID, "textures/items/journal.png");
-	public static DigSiteLocale[] locales = new DigSiteLocale[]
-	{
-		new DigSiteLocale("dirt", "dirt", "dig"),
-		new DigSiteLocale("sand", "sand", "dig"),
-		new DigSiteLocale("clay", "clay", "dig"),
-	};
+	public static Map<String, DigSiteLocale> locales;
+	static {
+		locales = new HashMap<String, DigSiteLocale>();
+		locales.put("dirt", new DigSiteLocale("dirt", "dirt", "dig", Material.ground, Block.soundTypeGravel));
+		locales.put("sand", new DigSiteLocale("sand", "sand", "dig", Material.sand, Block.soundTypeSand));
+		locales.put("clay", new DigSiteLocale("clay", "clay", "dig", Material.ground, Block.soundTypeGravel));
+	}
 	public static Map<String,ResourceLocation> artifacts;
 	static {
 		artifacts = new HashMap<String,ResourceLocation>();
@@ -52,12 +54,15 @@ public class BlockDigSite extends BlockContainerPhysis {
 	}
 	
 	public IIcon testicon;
+	public final DigSiteLocale locale;
 	
-	public BlockDigSite() {
-		super(Material.rock);
+	public BlockDigSite(String localename) {
+		super(locales.get(localename).material);
+		this.locale = locales.get(localename);
+		this.setStepSound(locale.sounds);
 		this.setHardness(4.0F);
 		this.setResistance(10.0F);
-		this.setBlockName("digsite");
+		this.setBlockName("digsite."+locale.name);
 	}
 	
 	@Override
@@ -75,10 +80,10 @@ public class BlockDigSite extends BlockContainerPhysis {
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List subtypes)
     {
-		for (int meta = 0; meta < locales.length; meta++) {
+		//for (int meta = 0; meta < locales.length; meta++) {
 	        for (int i = 0; i < 10; ++i)
 	        {
-	        	ItemStack stack = new ItemStack(this, 1, meta);
+	        	ItemStack stack = new ItemStack(this, 1, 0);
 	        	
 	        	NBTTagCompound tag = new NBTTagCompound();
 	        	NBTTagCompound display = new NBTTagCompound();
@@ -92,7 +97,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 	        	
 	            subtypes.add(stack);
 	        }
-		}
+		//}
     }
 	
 	@Override
@@ -103,8 +108,8 @@ public class BlockDigSite extends BlockContainerPhysis {
 	@Override
 	@SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-		meta = Math.min(meta, locales.length-1);
-		return locales[meta].icons.get("testobject")[0];
+		//meta = Math.min(meta, locales.length-1);
+		return this.locale.icons.get("testobject")[0];
 	}
 	
 	@Override
@@ -112,7 +117,7 @@ public class BlockDigSite extends BlockContainerPhysis {
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
 		TileEntity btile = world.getTileEntity(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
+		//int meta = world.getBlockMetadata(x, y, z);
 		
 		if (btile != null && btile instanceof TileEntityDigSite) 
 		{
@@ -122,7 +127,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 			if (renderlayer == 0) {
 				int i = tile.getDigFrame();
 				
-				return locales[meta].icons.get("testobject")[i];
+				return this.locale.icons.get("testobject")[i];
 			} else {
 				// some fancy-ass rendering selection here
 				return testicon;
@@ -162,16 +167,8 @@ public class BlockDigSite extends BlockContainerPhysis {
 			
 			int n = DigStripTexture.numFrames;
 			
-			Iterator<Entry<String, ResourceLocation>> artit = artifacts.entrySet().iterator();
-			while(artit.hasNext()) {
-			
-				Map.Entry<String, ResourceLocation> art = (Map.Entry<String, ResourceLocation>)artit.next();
-				
-				Iterator<Entry<String, ResourceLocation>> digit = digtextures.entrySet().iterator();
-				while(digit.hasNext()) {
-				
-					Map.Entry<String, ResourceLocation> dig = (Map.Entry<String, ResourceLocation>)digit.next();
-	
+			for (Entry<String, ResourceLocation> art : artifacts.entrySet()) {
+				for (Entry<String, ResourceLocation> dig : digtextures.entrySet()) {
 					ResourceLocation[] digtex = new ResourceLocation[n];
 					for (int i=0; i<n; i++) {
 						String name = getDigTextureName(dig.getKey(), art.getKey()) + "_" + i;
@@ -180,8 +177,8 @@ public class BlockDigSite extends BlockContainerPhysis {
 					}
 				}
 				
-				for(int l = 0; l<locales.length; l++) {
-					DigSiteLocale locale = locales[l];
+				for(Entry<String,DigSiteLocale> entry : locales.entrySet()) {
+					DigSiteLocale locale = entry.getValue();
 					
 					locale.addIconSet(map, art.getKey());
 				}
@@ -212,7 +209,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 		ItemStack held = player.getHeldItem();
 		TileEntity btile = world.getTileEntity(x, y, z);
 		
-		if (held == null) {
+		if (held != null && held.getItem() instanceof ITrowel) {
 			if (btile != null && btile instanceof TileEntityDigSite) {
 				TileEntityDigSite tile = (TileEntityDigSite)btile;
 				

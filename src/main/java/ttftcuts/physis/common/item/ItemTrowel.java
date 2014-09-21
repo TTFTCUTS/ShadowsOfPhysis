@@ -2,24 +2,33 @@ package ttftcuts.physis.common.item;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import com.google.common.collect.Multimap;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -29,7 +38,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class ItemTrowel extends ItemPhysis {
+public class ItemTrowel extends ItemPhysis implements ITrowel {
 
 	public static final String HANDLETAG = "physisTrowelHandle" ;
 	
@@ -45,18 +54,43 @@ public class ItemTrowel extends ItemPhysis {
 		this.setUnlocalizedName("trowel");
 		this.setTextureName(Physis.MOD_ID+":trowel");
 		this.setMaxDamage(5);
+		this.setNoRepair();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List types) {
+		List<ItemStack> trowels = new ArrayList<ItemStack>();
+		
 		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
 			ItemStack stack = new ItemStack(this, 1, 0);
 			PhysisToolMaterial.writeMaterialToStack(mat, stack);
 
-			types.add(stack);
+			trowels.add(stack);
 		}
+		
+		Collections.sort(trowels, new Comparator<ItemStack>() {
+			@Override
+			public int compare(ItemStack s1, ItemStack s2) {
+				int t1 = getTrowelLevel(s1);
+				int d1 = s1.getMaxDamage();
+				int e1 = PhysisToolMaterial.getMaterialFromItemStack(s1).toolmaterial.getEnchantability();
+				
+				int t2 = getTrowelLevel(s2);
+				int d2 = s2.getMaxDamage();
+				int e2 = PhysisToolMaterial.getMaterialFromItemStack(s2).toolmaterial.getEnchantability();
+				
+				if (t1 == t2) {
+					double v1 = d1 + 10 * e1;
+					double v2 = d2 + 10 * e2;
+					return v1 < v2 ? -1 : 1;
+				}
+				return t1 < t2 ? -1 : 1;
+			}
+		});
+		
+		types.addAll(trowels);
 	}
 
 	
@@ -65,12 +99,13 @@ public class ItemTrowel extends ItemPhysis {
 		if (stack.getItem() == this) {
 			PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
 			if (mat != null) {
-				return mat.maxdamage;
+				return Math.max(1, Math.round(mat.maxdamage / 5));
 			}
 		}
 		return this.getMaxDamage();
 	}
 	
+	@Override
 	public String getItemStackDisplayName(ItemStack stack)
     {
         String trowel = ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
@@ -107,6 +142,95 @@ public class ItemTrowel extends ItemPhysis {
         }
 
         return trowel;
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public static String getTrowelLevelString(ItemStack stack) {
+		String t = null;
+		if (stack.getItem() instanceof ITrowel) {
+			int trowellevel = ((ITrowel)(stack.getItem())).getTrowelLevel(stack);
+			t = new StringBuilder().append("\u00A78").append(StatCollector.translateToLocal("item.physis:trowel.leveltooltip")).append(": ").append(trowellevel).toString();
+		}
+		return t;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation (ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		String info = getTrowelLevelString(stack);
+		if (info != null) {
+			list.add(info);
+		}
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack)
+    {
+		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+		if (mat != null) {
+			return mat.pickitem.getRarity(mat.pick);
+		}
+		
+        return super.getRarity(stack);
+    }
+	
+	/*@Override
+	public int getItemEnchantability(ItemStack stack)
+    {
+    	PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+    	if (mat != null) {
+    		return mat.toolmaterial.getEnchantability();
+    	}
+    	
+        return super.getItemEnchantability(stack);
+    }*/
+
+	@Override
+    public boolean getIsRepairable(ItemStack stack, ItemStack repairstack)
+    {
+    	PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+    	if (mat != null) {
+    		return mat.toolmaterial.func_150995_f() == repairstack.getItem() ? true : false;
+    	}
+        
+        return false;
+    }
+	
+	public int getTrowelLevel(ItemStack stack) {
+		int level = 0;
+		
+		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+		if (mat != null) {
+			level =	Math.min(10, mat.toolmaterial.getHarvestLevel() * 3 + 1);
+		}
+		
+		return level;
+	}
+	
+	public void onUseTrowel(ItemStack stack, EntityLivingBase user, boolean success) {
+		if (success) {
+			stack.damageItem(1, user);
+		} else {
+			stack.damageItem(3, user);
+		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Multimap getAttributeModifiers(ItemStack stack)
+    {
+		float damage = 1.0f;
+		
+		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+		
+		if (mat != null) {
+			damage += mat.toolmaterial.getDamageVsEntity();
+		}
+
+		Multimap multimap = super.getAttributeModifiers(stack);
+        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Tool modifier", (double)damage, 0));
+        return multimap;
     }
 	
 	@SuppressWarnings("unchecked")
@@ -234,9 +358,9 @@ public class ItemTrowel extends ItemPhysis {
         }
 	}
 	
-	@Override
+	/*@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		stack.damageItem(1, player);
 		return stack;
-	}
+	}*/
 }

@@ -10,8 +10,10 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.common.CommonProxy;
 import ttftcuts.physis.common.PhysisCreativeTab;
+import ttftcuts.physis.common.artifact.ArtifactHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 
 @Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$version", dependencies = "")
@@ -36,6 +38,8 @@ public class Physis {
     {
     	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab();
+    	
+    	PhysisAPI.artifactHandler = new ArtifactHandler();
     	
     	proxy.preInit(event);
     }

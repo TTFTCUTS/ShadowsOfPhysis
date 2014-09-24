@@ -18,6 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.common.PhysisItems;
+import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,6 +29,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,7 +37,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemPhysis implements ITrowel {
@@ -91,6 +92,17 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		});
 		
 		types.addAll(trowels);
+		
+		ItemStack testsword = new ItemStack(Items.diamond_sword); 
+		PhysisArtifacts.addSocketToItem(testsword);
+		PhysisArtifacts.addSocketToItem(testsword);
+		PhysisArtifacts.addSocketToItem(testsword);
+		
+		PhysisArtifacts.addItemToSocket(testsword, new ItemStack(Items.golden_apple, 1, 1), 0);
+		PhysisArtifacts.addItemToSocket(testsword, new ItemStack(Items.cake), 1);
+
+		
+		types.add(testsword);
 	}
 
 	

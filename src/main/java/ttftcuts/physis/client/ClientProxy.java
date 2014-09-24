@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.common.CommonProxy;
 import ttftcuts.physis.common.handler.TextureMapHandler;
+import ttftcuts.physis.common.handler.TooltipHandler;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 public class ClientProxy extends CommonProxy {
@@ -17,6 +18,7 @@ public class ClientProxy extends CommonProxy {
 
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());
 		//MinecraftForge.EVENT_BUS.register(new HudHandler());
+		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
 		
 		RenderingRegistry.registerBlockHandler(new RenderDigSite(RenderingRegistry.getNextAvailableRenderId()));
 	}

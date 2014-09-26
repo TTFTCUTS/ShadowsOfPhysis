@@ -4,6 +4,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.common.crafting.AddSocketRecipe;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
@@ -13,6 +14,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 
@@ -36,5 +38,6 @@ public class CommonProxy {
 		PhysisToolMaterial.buildMaterials();
 		
 		ItemTrowel.buildRecipes();
+		GameRegistry.addRecipe(new AddSocketRecipe());
 	}
 }

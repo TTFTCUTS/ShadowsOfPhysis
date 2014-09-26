@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandom;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 
@@ -129,6 +128,19 @@ public final class PhysisArtifacts {
 		writeSocketablesToStack(stack, tags);
 	}
 
+	public static int getSocketCount(ItemStack stack) {
+		if (stack.stackTagCompound != null) {
+			if (stack.stackTagCompound.hasKey(ARTIFACTTAG)) {
+				NBTTagCompound data = stack.stackTagCompound.getCompoundTag(ARTIFACTTAG);
+				
+				if (data.hasKey(SOCKETCOUNTTAG)) {
+					return data.getInteger(SOCKETCOUNTTAG);
+				}
+			}
+		}
+		return 0;
+	}
+	
 	public static IArtifactTrigger getTriggerFromSocketable(NBTTagCompound tag) {
 		if (tag.hasKey("tag")) {
 			return getTriggerFromNBT(tag.getCompoundTag("tag"));

@@ -80,24 +80,22 @@ public class BlockDigSite extends BlockContainerPhysis {
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List subtypes)
     {
-		//for (int meta = 0; meta < locales.length; meta++) {
-	        for (int i = 0; i < 10; ++i)
-	        {
-	        	ItemStack stack = new ItemStack(this, 1, 0);
-	        	
-	        	NBTTagCompound tag = new NBTTagCompound();
-	        	NBTTagCompound display = new NBTTagCompound();
-	       		tag.setTag("display", display);
-	       		NBTTagList lore = new NBTTagList();
-	       		lore.appendTag(new NBTTagString("Level "+(i+1)));
-	       		display.setTag("Lore", lore);
-	        	tag.setInteger(TileEntityDigSite.LEVELTAG, i);
-	        	
-	        	stack.setTagCompound(tag);
-	        	
-	            subtypes.add(stack);
-	        }
-		//}
+        for (int i = 0; i < 10; ++i)
+        {
+        	ItemStack stack = new ItemStack(this, 1, 0);
+        	
+        	NBTTagCompound tag = new NBTTagCompound();
+        	NBTTagCompound display = new NBTTagCompound();
+       		tag.setTag("display", display);
+       		NBTTagList lore = new NBTTagList();
+       		lore.appendTag(new NBTTagString("Level "+(i+1)));
+       		display.setTag("Lore", lore);
+        	tag.setInteger(TileEntityDigSite.LEVELTAG, i);
+        	
+        	stack.setTagCompound(tag);
+        	
+            subtypes.add(stack);
+        }
     }
 	
 	@Override

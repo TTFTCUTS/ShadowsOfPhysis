@@ -1,5 +1,12 @@
 package ttftcuts.physis.common.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import scala.actors.threadpool.Arrays;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.StatCollector;
 
 public class LocalizationHelper {
@@ -19,5 +26,18 @@ public class LocalizationHelper {
 		output = output.replace("\\n", "\n").replace("@r", "@r@0").replace('@', '\u00a7');
 		
 		return output;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> wrapText(String input, int width) {
+		FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+		
+		List<String> output = fr.listFormattedStringToWidth(input, width);
+
+		return output;
+	}
+	
+	public List<String> translateAndWrap(String input, int width) {
+		return wrapText(translate(input), width);
 	}
 }

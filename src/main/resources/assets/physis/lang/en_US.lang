@@ -26,4 +26,7 @@ item.physis:trowel.name=Trowel
 item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
 item.physis:trowel.leveltooltip=Maximum dig site level
 
+item.physis:addsocket.name=(PH) Add Socket
+item.physis:addsocket.tooltip=Craft this with any item which has a maximum stack size of one to add a socket, up to a limit of two.\n\n@oThis item is consumed in the process.
+
 tile.physis:digsite.name=Buried Artifact

@@ -32,7 +32,7 @@ public class Physis {
     @Mod.Instance
     public static Physis instance;
     
-    @SidedProxy(serverSide="ttftcuts.physis.common.ServerProxy", clientSide="ttftcuts.physis.client.ClientProxy")
+    @SidedProxy(serverSide="ttftcuts.physis.common.CommonProxy", clientSide="ttftcuts.physis.client.ClientProxy")
     public static CommonProxy proxy;
     
     public static LocalizationHelper text;
@@ -40,31 +40,39 @@ public class Physis {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	Physis.logger.info("PreInit event");
     	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab();
     	
     	PhysisAPI.artifactHandler = new ArtifactHandler();
     	
     	proxy.preInit(event);
+    	proxy.initOddOneOutSolver(event);
     }
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
+    	Physis.logger.info("Init event");
     	proxy.init(event);
     }
     
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+    	Physis.logger.info("PostInit event");
     	proxy.postInit(event);
     }
     
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
+    	Physis.logger.info("ServerStarting event");
     	proxy.serverStarting(event);
+    	proxy.startOddOneOutSolver(event);
     }
     
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
+    	Physis.logger.info("ServerStopped event");
     	proxy.serverStopped(event);
+    	proxy.stopOddOneOutSolver(event);
     }
 }

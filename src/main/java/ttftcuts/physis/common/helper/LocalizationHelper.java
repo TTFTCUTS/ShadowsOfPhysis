@@ -1,9 +1,6 @@
 package ttftcuts.physis.common.helper;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import scala.actors.threadpool.Arrays;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

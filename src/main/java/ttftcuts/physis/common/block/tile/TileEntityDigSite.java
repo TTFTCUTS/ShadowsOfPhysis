@@ -84,6 +84,8 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			
 			EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
 			
+			Physis.logger.info(Physis.proxy.getClass());
+			
 			Physis.proxy.requestOddOneOutPuzzle(this.level, this);
 			
 			this.buildRenderData();

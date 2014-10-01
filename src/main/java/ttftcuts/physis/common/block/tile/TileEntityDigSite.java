@@ -7,6 +7,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.helper.EffectHelper;
+import ttftcuts.physis.puzzle.oddoneout.OddOneOutPuzzle;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,8 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public int currentlayer = 0;
 	public int numlayers = 0;
 	
+	public boolean loadRequestPuzzle = true;
+	
 	public List<DigSiteLayer> layerlist = new ArrayList<DigSiteLayer>();
 	public List<DigSiteRenderLayer> renderdata = new ArrayList<DigSiteRenderLayer>();
 	
@@ -41,7 +44,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	
 	private void buildLayerList() {
 		this.layerlist.clear();
-		
+
 		for (int i=0; i<8; i++) {
 			this.layerlist.add( new DigSiteLayer() );
 		}
@@ -65,6 +68,11 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			return false;
 		}
 		ITrowel trowel = (ITrowel)(held.getItem());
+		DigSiteLayer layer = this.layerlist.get(this.currentlayer);
+		if (!layer.built) { 
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+			return false; 
+		}
 		
 		if (this.currentlayer + 1 >= this.numlayers) {
 			// destroy! dispense loot!
@@ -77,7 +85,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			this.markTileForUpdate();
 			
 			trowel.onUseTrowel(held, player, true);
-			return false;
+			//return false;
 		} else {
 			Physis.logger.info("++");
 			this.currentlayer++;
@@ -86,7 +94,8 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			
 			Physis.logger.info(Physis.proxy.getClass());
 			
-			Physis.proxy.requestOddOneOutPuzzle(this.level, this);
+			loadRequestPuzzle = false;
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
 			
 			this.buildRenderData();
 			
@@ -96,6 +105,13 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		trowel.onUseTrowel(held, player, true);
 		
 		return true;
+	}
+	
+	@Override
+	public void updateEntity() {
+		if (loadRequestPuzzle && !layerlist.get(currentlayer).built) {
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+		}
 	}
 	
 	@Override
@@ -130,5 +146,12 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		
 		this.buildRenderData();
 		this.markTileForUpdate();
+	}
+	
+	public void setLayerPuzzle(int layerid, OddOneOutPuzzle puzzle) {
+		loadRequestPuzzle = false;
+		if (layerid < this.numlayers) {
+			this.layerlist.get(layerid).setPuzzle(puzzle);
+		}
 	}
 }

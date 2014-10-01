@@ -1,7 +1,6 @@
 package ttftcuts.physis;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -17,7 +16,7 @@ import ttftcuts.physis.common.CommonProxy;
 import ttftcuts.physis.common.PhysisCreativeTab;
 import ttftcuts.physis.common.artifact.ArtifactHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
-import ttftcuts.physis.puzzle.OddOneOutBuilder;
+import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 
 @Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$version", dependencies = "")
 public class Physis {
@@ -37,42 +36,34 @@ public class Physis {
     
     public static LocalizationHelper text;
     
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	Physis.logger.info("PreInit event");
     	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab();
     	
     	PhysisAPI.artifactHandler = new ArtifactHandler();
     	
     	proxy.preInit(event);
-    	proxy.initOddOneOutSolver(event);
     }
     
-    @EventHandler
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-    	Physis.logger.info("Init event");
     	proxy.init(event);
     }
     
-    @EventHandler
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-    	Physis.logger.info("PostInit event");
     	proxy.postInit(event);
     }
     
-    @EventHandler
+    @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-    	Physis.logger.info("ServerStarting event");
     	proxy.serverStarting(event);
-    	proxy.startOddOneOutSolver(event);
     }
     
-    @EventHandler
+    @Mod.EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-    	Physis.logger.info("ServerStopped event");
     	proxy.serverStopped(event);
-    	proxy.stopOddOneOutSolver(event);
     }
 }

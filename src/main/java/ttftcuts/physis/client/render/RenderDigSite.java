@@ -1,5 +1,7 @@
 package ttftcuts.physis.client.render;
 
+import org.lwjgl.opengl.GL11;
+
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import net.minecraft.block.Block;
@@ -35,6 +37,8 @@ public class RenderDigSite implements ISimpleBlockRenderingHandler {
 			tile.renderlayer = 0;
 			renderer.renderStandardBlock(block, x, y, z);
 			
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			
 			// symbol layers
 			int extralayers = tile.renderdata.size();
 			for (int i=0; i<extralayers; i++) {
@@ -43,6 +47,7 @@ public class RenderDigSite implements ISimpleBlockRenderingHandler {
 			}
 			
 			// reset
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			tile.renderlayer = 0;
 			
 		} else {

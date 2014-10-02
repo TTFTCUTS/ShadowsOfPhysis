@@ -10,6 +10,7 @@ import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.block.tile.DigSiteLocale;
+import ttftcuts.physis.common.block.tile.DigSiteRenderLayer;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.helper.TextureHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -38,9 +39,12 @@ public class BlockDigSite extends BlockContainerPhysis {
 	public static Map<String, DigSiteLocale> locales;
 	static {
 		locales = new HashMap<String, DigSiteLocale>();
-		locales.put("dirt", new DigSiteLocale("dirt", "dirt", "dig", Material.ground, Block.soundTypeGravel));
-		locales.put("sand", new DigSiteLocale("sand", "sand", "dig", Material.sand, Block.soundTypeSand));
-		locales.put("clay", new DigSiteLocale("clay", "clay", "dig", Material.ground, Block.soundTypeGravel));
+		locales.put("dirt", new DigSiteLocale("dirt", "dirt", "dig", Material.ground, Block.soundTypeGravel, 
+				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
+		locales.put("sand", new DigSiteLocale("sand", "sand", "dig", Material.sand, Block.soundTypeSand, 
+				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
+		locales.put("clay", new DigSiteLocale("clay", "clay", "dig", Material.ground, Block.soundTypeGravel, 
+				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
 	}
 	public static Map<String,ResourceLocation> artifacts;
 	static {
@@ -127,7 +131,11 @@ public class BlockDigSite extends BlockContainerPhysis {
 				
 				return this.locale.icons.get("testobject")[i];
 			} else {
-				// some fancy-ass rendering selection here
+				DigSiteRenderLayer r = tile.renderdata.get(renderlayer-1);
+				if ( r != null) {
+					return this.locale.shapes[r.shapes[side]][r.positions[side]];
+				}
+				
 				return testicon;
 			}
 		}
@@ -145,8 +153,10 @@ public class BlockDigSite extends BlockContainerPhysis {
 			int renderlayer = tile.renderlayer;
 			
 			if (renderlayer != 0) {
-				// some fancy-ass rendering selection here
-				return 0xFF0000;
+				DigSiteRenderLayer r = tile.renderdata.get(renderlayer-1);
+				if ( r != null) {
+					return this.locale.colours[r.colour];
+				}
 			}
 		}
         return 0xFFFFFF;
@@ -175,11 +185,28 @@ public class BlockDigSite extends BlockContainerPhysis {
 					}
 				}
 				
+				
 				for(Entry<String,DigSiteLocale> entry : locales.entrySet()) {
 					DigSiteLocale locale = entry.getValue();
 					
 					locale.addIconSet(map, art.getKey());
 				}
+			}
+			
+			String shapepath = Physis.MOD_ID+":digsite/shapes/";
+			for(Entry<String,DigSiteLocale> entry : locales.entrySet()) {
+				DigSiteLocale locale = entry.getValue();
+				
+				IIcon[] s1 = new IIcon[8];
+				IIcon[] s2 = new IIcon[8]; 
+				IIcon[] s3 = new IIcon[8]; 
+				for(int i=0; i<8; i++) {
+					s1[i] = register.registerIcon(shapepath+locale.shapename1+i);
+					s2[i] = register.registerIcon(shapepath+locale.shapename2+i);
+					s3[i] = register.registerIcon(shapepath+locale.shapename3+i);
+				}
+				IIcon[][] s = {s1,s2,s3};
+				locale.shapes = s;
 			}
 		}
 		

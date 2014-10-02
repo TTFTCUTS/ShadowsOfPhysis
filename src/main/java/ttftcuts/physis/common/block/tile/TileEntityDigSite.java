@@ -53,7 +53,9 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	}
 	
 	private void buildRenderData() {
-		
+		this.renderdata.clear();
+		this.layerlist.get(this.currentlayer).buildRenderData(this.renderdata, this);
+		this.markTileForUpdate();
 	}
 	
 	public int getDigFrame() {
@@ -74,42 +76,52 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			return false; 
 		}
 		
-		if (this.currentlayer + 1 >= this.numlayers) {
-			// destroy! dispense loot!
-			EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
-			
-			// drop loot here
-
-			world.setBlockToAir(xCoord, yCoord, zCoord);
-			this.invalidate();
-			this.markTileForUpdate();
-			
-			trowel.onUseTrowel(held, player, true);
-			//return false;
-		} else {
-			Physis.logger.info("++");
-			this.currentlayer++;
-			
-			EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
-			
-			Physis.logger.info(Physis.proxy.getClass());
-			
-			loadRequestPuzzle = false;
-			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
-			
-			this.buildRenderData();
-			
-			this.markTileForUpdate();
-			
-		}
-		trowel.onUseTrowel(held, player, true);
+		OddOneOutPuzzle puzzle = this.layerlist.get(this.currentlayer).puzzle;
+		if (puzzle != null) {
+			if (side == puzzle.solution) {
+				if (this.currentlayer + 1 >= this.numlayers) {
+					// destroy! dispense loot!
+					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
+					
+					// drop loot here
 		
+					world.setBlockToAir(xCoord, yCoord, zCoord);
+					this.invalidate();
+					this.markTileForUpdate();
+
+				} else {
+					Physis.logger.info("++");
+					this.currentlayer++;
+					
+					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
+					
+					Physis.logger.info(Physis.proxy.getClass());
+					
+					loadRequestPuzzle = false;
+					Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+					
+					this.buildRenderData();
+					
+					this.markTileForUpdate();
+				}
+				trowel.onUseTrowel(held, player, true);
+			} else {
+				if (this.level > 0 && world.rand.nextBoolean()) {
+					this.level--;
+					// STUFF BREAK NOISE
+				} else {
+					// fail noise
+				}
+				
+				trowel.onUseTrowel(held, player, false);
+			}
+		}
 		return true;
 	}
 	
 	@Override
 	public void updateEntity() {
-		if (loadRequestPuzzle && !layerlist.get(currentlayer).built) {
+		if (loadRequestPuzzle && layerlist.size() > 0 && !layerlist.get(currentlayer).built) {
 			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
 		}
 	}
@@ -152,6 +164,9 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		loadRequestPuzzle = false;
 		if (layerid < this.numlayers) {
 			this.layerlist.get(layerid).setPuzzle(puzzle);
+		}
+		if (layerid == this.currentlayer) {
+			this.buildRenderData();
 		}
 	}
 }

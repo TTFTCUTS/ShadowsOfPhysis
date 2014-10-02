@@ -18,12 +18,18 @@ public class DigSiteLocale {
 	public String base;
 	public String maskname;
 	
+	public String shapename1;
+	public String shapename2;
+	public String shapename3;
+	
 	public Material material;
 	public SoundType sounds;
 	
 	public HashMap<String,IIcon[]> icons;
+	public IIcon[][] shapes;
+	public int[] colours;
 	
-	public DigSiteLocale(String name, String base, String maskname, Material mat, SoundType sound) {
+	public DigSiteLocale(String name, String base, String maskname, Material mat, SoundType sound, String shapename1, String shapename2, String shapename3, int colour1, int colour2, int colour3) {
 		this.name = name;
 		this.base = base;
 		this.maskname = maskname;
@@ -31,7 +37,13 @@ public class DigSiteLocale {
 		this.material = mat;
 		this.sounds = sound;
 		
+		this.shapename1 = shapename1;
+		this.shapename2 = shapename2;
+		this.shapename3 = shapename3;
+		
 		this.icons = new HashMap<String,IIcon[]>();
+		int[] c = {colour1, colour2, colour3};
+		this.colours = c;
 	}
 	
 	public void addIconSet(TextureMap map, String artifactname) {

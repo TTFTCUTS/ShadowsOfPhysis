@@ -108,6 +108,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			} else {
 				if (this.level > 0 && world.rand.nextBoolean()) {
 					this.level--;
+					this.markTileForUpdate();
 					// STUFF BREAK NOISE
 				} else {
 					// fail noise

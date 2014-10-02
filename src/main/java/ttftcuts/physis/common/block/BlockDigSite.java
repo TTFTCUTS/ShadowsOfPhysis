@@ -58,6 +58,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 	}
 	
 	public IIcon testicon;
+	public IIcon transparent;
 	public final DigSiteLocale locale;
 	
 	public BlockDigSite(String localename) {
@@ -133,6 +134,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 			} else {
 				DigSiteRenderLayer r = tile.renderdata.get(renderlayer-1);
 				if ( r != null) {
+					if (r.shapes[side] == -1) { return transparent; }
 					return this.locale.shapes[r.shapes[side]][r.positions[side]];
 				}
 				
@@ -211,6 +213,7 @@ public class BlockDigSite extends BlockContainerPhysis {
 		}
 		
 		testicon = register.registerIcon("physis:digsite/testmarking");
+		transparent = register.registerIcon("physis:transparent");
 	}
 	
 	@Override

@@ -72,7 +72,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		ITrowel trowel = (ITrowel)(held.getItem());
 		DigSiteLayer layer = this.layerlist.get(this.currentlayer);
 		if (!layer.built) { 
-			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, world.rand.nextInt());
 			return false; 
 		}
 		
@@ -98,7 +98,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 					Physis.logger.info(Physis.proxy.getClass());
 					
 					loadRequestPuzzle = false;
-					Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+					Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, world.rand.nextInt());
 					
 					this.buildRenderData();
 					
@@ -122,8 +122,8 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	
 	@Override
 	public void updateEntity() {
-		if (loadRequestPuzzle && layerlist.size() > 0 && !layerlist.get(currentlayer).built) {
-			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer);
+		if (loadRequestPuzzle && layerlist.size() > 0 && !layerlist.get(currentlayer).built && this.getWorldObj() != null) {
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, this.getWorldObj().rand.nextInt());
 		}
 	}
 	

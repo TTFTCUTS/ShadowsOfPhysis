@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutOption;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutPuzzle;
 import ttftcuts.physis.utils.TPair;
@@ -18,9 +17,7 @@ public class DigSiteLayer {
 	
 	public OddOneOutPuzzle puzzle;
 	
-	public DigSiteLayer() {
-		
-	}
+	public DigSiteLayer() {}
 	
 	public DigSiteLayer(NBTTagCompound tag) {
 		this();
@@ -60,7 +57,7 @@ public class DigSiteLayer {
 			}
 		}
 		
-		Physis.logger.info(renderlayers);
+		//Physis.logger.info(renderlayers);
 	}
 	
 	private int getSlotPos(Random rand, List<DigSiteRenderLayer> data, int slot) {
@@ -160,7 +157,7 @@ public class DigSiteLayer {
 	}
 	
 	public void setPuzzle(OddOneOutPuzzle puzzle) {
-		Physis.logger.info("Layer receieved puzzle: "+puzzle);
+		//Physis.logger.info("Layer receieved puzzle: "+puzzle);
 		this.puzzle = puzzle;
 		this.built = true;
 	}

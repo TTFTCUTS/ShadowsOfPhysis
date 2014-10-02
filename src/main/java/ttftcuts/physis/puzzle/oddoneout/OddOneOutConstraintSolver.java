@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import ttftcuts.physis.utils.TPair;
@@ -46,8 +45,8 @@ public class OddOneOutConstraintSolver {
 		}
 	}
 	
-	public static OddOneOutPuzzle buildPuzzle(int difficulty) {
-		Random rand = new Random(); // add a seed!
+	public static OddOneOutPuzzle buildPuzzle(int difficulty, int seed) {
+		Random rand = new Random(seed); // add a seed!
 		
 		List<Integer> variables = new ArrayList<Integer>();		
 		Map<Integer, List<OddOneOutOption>> domains = new HashMap<Integer, List<OddOneOutOption>>();
@@ -197,6 +196,7 @@ public class OddOneOutConstraintSolver {
 	private static boolean isConsistent(int variable, OddOneOutOption value, Map<Integer, OddOneOutOption> assignment, CSP csp) {
 		Map<Integer, OddOneOutOption> tempAssignment = new HashMap<Integer, OddOneOutOption>();
 		tempAssignment.putAll(assignment);
+		tempAssignment.put(variable, value);
 		
 		return csp.constraint.isSatisfied(tempAssignment);
 	}

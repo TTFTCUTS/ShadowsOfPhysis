@@ -18,7 +18,7 @@ public class OddOneOutBuilder {
 	private Set<Request> waitingRoom;
 	private Builder builder;
 	
-	private final Request poison = new Request(-1, null, 0);
+	private final Request poison = new Request(-1, null, 0, 0);
 	
 	public OddOneOutBuilder() {
 		queue = new LinkedBlockingQueue<Request>();
@@ -29,13 +29,13 @@ public class OddOneOutBuilder {
 		OddOneOutConstraintSolver.makePermutationList();
 	}
 	
-	public void requestPuzzle(int difficulty, TileEntity tile, int layerid) {
+	public void requestPuzzle(int difficulty, TileEntity tile, int layerid, int seed) {
 		World world = tile.getWorldObj();
 		if (world.isRemote) { return; }
 		
 		if (queue != null) {
 			try {
-				Request req = new Request(difficulty, tile, layerid);
+				Request req = new Request(difficulty, tile, layerid, seed);
 				if (!waitingRoom.contains(req)) {
 					queue.put(req);
 					waitingRoom.add(req);
@@ -72,7 +72,7 @@ public class OddOneOutBuilder {
 	public void update() {
 		Request r = finishedQueue.poll();
 		if (r != null) {
-			Physis.logger.info("Received finished puzzle for tile at "+r.x+","+r.y+","+r.z+" in "+r.world+" with difficulty "+r.difficulty);
+			//Physis.logger.info("Received finished puzzle for tile at "+r.x+","+r.y+","+r.z+" in "+r.world+" with difficulty "+r.difficulty);
 			waitingRoom.remove(r);
 			
 			if (r.world != null) {
@@ -94,18 +94,20 @@ public class OddOneOutBuilder {
 		public final int z;
 		public final int difficulty;
 		public final int layerid;
+		public final int seed;
 		
 		public boolean finished = false;
 		public OddOneOutPuzzle puzzle;
 		//public
 		
-		public Request(int difficulty, TileEntity tile, int layerid) {
+		public Request(int difficulty, TileEntity tile, int layerid, int seed) {
 			this.difficulty = difficulty;
 			this.world = tile == null ? null : tile.getWorldObj();
 			this.x = tile == null ? 0 : tile.xCoord;
 			this.y = tile == null ? 0 : tile.yCoord;
 			this.z = tile == null ? 0 : tile.zCoord;
 			this.layerid = layerid;
+			this.seed = seed;
 		}
 		
 		@Override
@@ -118,7 +120,8 @@ public class OddOneOutBuilder {
 						&& this.y == or.y
 						&& this.z == or.z
 						&& this.difficulty == or.difficulty
-						&& this.layerid == or.layerid) {
+						&& this.layerid == or.layerid
+						&& this.seed == or.seed) {
 					return true;
 				}
 			}
@@ -133,7 +136,8 @@ public class OddOneOutBuilder {
 					+ this.y * 10312007 
 					+ this.z * 60686069 
 					+ this.difficulty * 23010067
-					+ this.layerid * 37171397;
+					+ this.layerid * 37171397
+					+ this.seed; // big random number anyway
 		}
 	}
 	
@@ -163,10 +167,10 @@ public class OddOneOutBuilder {
 		}
 		
 		private void process(Request r) {
-			Physis.logger.info("Took request by tile at "+r.x+","+r.y+","+r.z+" in "+r.world+" with difficulty "+r.difficulty);
+			//Physis.logger.info("Took request by tile at "+r.x+","+r.y+","+r.z+" in "+r.world+" with difficulty "+r.difficulty);
 
 			r.finished = true;
-			r.puzzle = OddOneOutConstraintSolver.buildPuzzle(r.difficulty);
+			r.puzzle = OddOneOutConstraintSolver.buildPuzzle(r.difficulty, r.seed);
 			
 			finishedQueue.add(r);
 		}

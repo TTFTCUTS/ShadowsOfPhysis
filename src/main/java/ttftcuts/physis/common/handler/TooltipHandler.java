@@ -2,6 +2,7 @@ package ttftcuts.physis.common.handler;
 
 import java.util.List;
 
+import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.InputHelper;
 
@@ -46,11 +47,16 @@ public class TooltipHandler {
 				
 				List<String> stt = socketed.getTooltip(player, false);
 				String format = socketed.getItem().getRarity(socketed).rarityColor.toString();
+				int socketColour = 3;
+				if (socketed.getItem() instanceof ISocketable) {
+					socketColour = ((ISocketable)socketed.getItem()).getSocketColour(socketed);
+				}
+				socketColour = Math.max(Math.min(15, socketColour), 0);
 				
 				if (InputHelper.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode())) {
 					for(int j=0; j<stt.size(); j++) {
 						if (j == 0) {
-							stt.set(j, " \u00A73\u25a0\u00A7r  "+format+stt.get(j));
+							stt.set(j, " \u00A7"+socketColour+"\u25a0\u00A7r  "+format+stt.get(j));
 						} else {
 							stt.set(j, "     "+stt.get(j));
 						}
@@ -58,7 +64,7 @@ public class TooltipHandler {
 					lines.addAll(index+i, stt);
 				} else {
 					String name = socketed.getDisplayName();
-					lines.add(index+i, " \u00A73\u25a0\u00A7r  "+format+name+ (stt.size() > 1 ? " \u00A78+" : ""));
+					lines.add(index+i, " \u00A7"+socketColour+"\u25a0\u00A7r  "+format+name+ (stt.size() > 1 ? " \u00A78+" : ""));
 				}
 			} else {
 				lines.add(index+i, " \u00A78\u25a0  Empty socket");

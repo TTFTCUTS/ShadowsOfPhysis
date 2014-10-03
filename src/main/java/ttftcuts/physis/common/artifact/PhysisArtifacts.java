@@ -18,6 +18,7 @@ public final class PhysisArtifacts {
 	public static final String ARTIFACTTAG = "physisArtifact";
 	public static final String TRIGGERTAG = "trigger";
 	public static final String EFFECTTAG = "effect";
+	public static final String SOCKETEDTAG = "physisSocketed";
 	public static final String SOCKETTAG = "socket";
 	public static final String SOCKETCOUNTTAG = "count";
 	public static final String SOCKETFIXED = "socketFixed";
@@ -75,8 +76,8 @@ public final class PhysisArtifacts {
 	
 	public static NBTTagCompound[] getSocketablesFromStack(ItemStack stack) {
 		if (stack.stackTagCompound != null) {
-			if (stack.stackTagCompound.hasKey(ARTIFACTTAG)) {
-				NBTTagCompound data = stack.stackTagCompound.getCompoundTag(ARTIFACTTAG);
+			if (stack.stackTagCompound.hasKey(SOCKETEDTAG)) {
+				NBTTagCompound data = stack.stackTagCompound.getCompoundTag(SOCKETEDTAG);
 				
 				if (data.hasKey(SOCKETCOUNTTAG)) {
 					int count = data.getInteger(SOCKETCOUNTTAG);
@@ -111,7 +112,7 @@ public final class PhysisArtifacts {
 			}
 		}
 		
-		stack.stackTagCompound.setTag(ARTIFACTTAG, data);
+		stack.stackTagCompound.setTag(SOCKETEDTAG, data);
 	}
 	
 	public static void writeSocketablesToStack(ItemStack stack, ItemStack[] socketables) {
@@ -130,8 +131,8 @@ public final class PhysisArtifacts {
 
 	public static int getSocketCount(ItemStack stack) {
 		if (stack.stackTagCompound != null) {
-			if (stack.stackTagCompound.hasKey(ARTIFACTTAG)) {
-				NBTTagCompound data = stack.stackTagCompound.getCompoundTag(ARTIFACTTAG);
+			if (stack.stackTagCompound.hasKey(SOCKETEDTAG)) {
+				NBTTagCompound data = stack.stackTagCompound.getCompoundTag(SOCKETEDTAG);
 				
 				if (data.hasKey(SOCKETCOUNTTAG)) {
 					return data.getInteger(SOCKETCOUNTTAG);
@@ -187,16 +188,24 @@ public final class PhysisArtifacts {
 		return null;
 	}
 	
+	public static void doEffectCooldownTick(NBTTagCompound tag) {
+		if (tag.hasKey(ARTIFACTTAG)) {
+			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
+				// NYI
+			}
+		}
+	}
+	
 	public static void addSocketToItem(ItemStack stack) {
 		if (stack.stackSize == 1) {
 			if (stack.stackTagCompound == null) {
 				stack.stackTagCompound = new NBTTagCompound();
 			}
 			NBTTagCompound tag = stack.stackTagCompound;
-			if (!tag.hasKey(ARTIFACTTAG)) {
-				tag.setTag(ARTIFACTTAG, new NBTTagCompound());
+			if (!tag.hasKey(SOCKETEDTAG)) {
+				tag.setTag(SOCKETEDTAG, new NBTTagCompound());
 			}
-			tag = tag.getCompoundTag(ARTIFACTTAG);
+			tag = tag.getCompoundTag(SOCKETEDTAG);
 			if (tag.hasKey(SOCKETCOUNTTAG)) {
 				tag.setInteger(SOCKETCOUNTTAG, tag.getInteger(SOCKETCOUNTTAG) +1);
 			} else {
@@ -208,10 +217,10 @@ public final class PhysisArtifacts {
 	public static void addItemToSocket(ItemStack stack, ItemStack socketable, int socket) {
 		if (stack.stackSize != 1 
 				|| stack.stackTagCompound == null 
-				|| !stack.stackTagCompound.hasKey(ARTIFACTTAG)) {
+				|| !stack.stackTagCompound.hasKey(SOCKETEDTAG)) {
 			return;
 		}
-		NBTTagCompound data = stack.stackTagCompound.getCompoundTag(ARTIFACTTAG);
+		NBTTagCompound data = stack.stackTagCompound.getCompoundTag(SOCKETEDTAG);
 			
 		if (data.hasKey(SOCKETCOUNTTAG)) {
 			int sockets = data.getInteger(SOCKETCOUNTTAG);

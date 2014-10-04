@@ -10,6 +10,9 @@ import net.minecraft.util.WeightedRandom;
 
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
+import ttftcuts.physis.common.artifact.effect.EffectPoison;
+import ttftcuts.physis.common.artifact.trigger.TriggerOnUpdate;
+import ttftcuts.physis.common.file.ServerData;
 
 public final class PhysisArtifacts {
 
@@ -18,6 +21,7 @@ public final class PhysisArtifacts {
 	public static final String ARTIFACTTAG = "physisArtifact";
 	public static final String TRIGGERTAG = "trigger";
 	public static final String EFFECTTAG = "effect";
+	public static final String COOLDOWNTAG = "cooldown";
 	public static final String SOCKETEDTAG = "physisSocketed";
 	public static final String SOCKETTAG = "socket";
 	public static final String SOCKETCOUNTTAG = "count";
@@ -26,13 +30,22 @@ public final class PhysisArtifacts {
 	private static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
 	private static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
 
+	public static IArtifactTrigger triggerOnUpdate;
+	
+	public static IArtifactEffect effectPoison;
+	
 	public static void init() {
 		instance = new PhysisArtifacts();
+		
+		triggerOnUpdate = registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 100);
+		
+		effectPoison = registerPhysisEffect(new EffectPoison("Poison"), 100);
 	}
 	
 	// ################### registration ###################
 	
-	public static boolean registerTrigger(String name, IArtifactTrigger trigger, int weight) {
+	public static boolean registerTrigger(IArtifactTrigger trigger, int weight) {
+		String name = trigger.getName();
 		if (!triggers.containsKey(name)) {
 			triggers.put(name, instance.new WeightedTrigger(weight, trigger));
 			return true;
@@ -40,12 +53,23 @@ public final class PhysisArtifacts {
 		return false;
 	}
 	
-	public static boolean registerEffect(String name, IArtifactEffect effect, int weight) {
+	public static boolean registerEffect(IArtifactEffect effect, int weight) {
+		String name = effect.getName();
 		if (!effects.containsKey(name)) {
 			effects.put(name, instance.new WeightedEffect(weight, effect));
 			return true;
 		}
 		return false;
+	}
+	
+	private static IArtifactTrigger registerPhysisTrigger(IArtifactTrigger trigger, int weight) {
+		registerTrigger(trigger, weight);
+		return trigger;
+	}
+	
+	private static IArtifactEffect registerPhysisEffect(IArtifactEffect effect, int weight) {
+		registerEffect(effect, weight);
+		return effect;
 	}
 	
 	// ################### getters ###################
@@ -158,8 +182,10 @@ public final class PhysisArtifacts {
 	
 	private static IArtifactTrigger getTriggerFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				return triggers.get(tag.getString(TRIGGERTAG)).theTrigger;
+				IArtifactTrigger trigger = triggers.get(tag.getString(TRIGGERTAG)).theTrigger;
+				return trigger;
 			}
 		}
 		return null;
@@ -181,6 +207,7 @@ public final class PhysisArtifacts {
 	
 	private static IArtifactEffect getEffectFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
 				return effects.get(tag.getString(EFFECTTAG)).theEffect;
 			}
@@ -189,9 +216,52 @@ public final class PhysisArtifacts {
 	}
 	
 	public static void doEffectCooldownTick(NBTTagCompound tag) {
+		if (tag.hasKey("tag")) {
+			doEffectCooldownTick(tag.getCompoundTag("tag"));
+			return;
+		}
 		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				// NYI
+				int cooldown = tag.getInteger(COOLDOWNTAG);
+				if (cooldown > 0) {
+					tag.setInteger(COOLDOWNTAG, cooldown - 1);
+				}
+			}
+		}
+	}
+	
+	public static long getEffectCooldown(NBTTagCompound tag) {
+		if (tag.hasKey("tag")) {
+			return getEffectCooldown(tag.getCompoundTag("tag"));
+		}
+		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
+			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
+				return Math.max(0, tag.getLong(COOLDOWNTAG) - ServerData.instance.serverTick);
+			}
+		}
+		return 0;
+	}
+	
+	public static long getEffectCooldown(ItemStack stack) {
+		if (stack.stackTagCompound != null) {
+			return getEffectCooldown(stack.stackTagCompound);
+		}
+		return 0;
+	}
+	
+	public static void setEffectCooldown(NBTTagCompound tag, int cooldown) {
+		if (tag.hasKey("tag")) {
+			setEffectCooldown(tag.getCompoundTag("tag"), cooldown);
+			return;
+		}
+		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
+			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
+				if (cooldown >= 0 && ServerData.instance != null) {
+					tag.setLong(COOLDOWNTAG, cooldown + ServerData.instance.serverTick);
+				}
 			}
 		}
 	}
@@ -233,6 +303,26 @@ public final class PhysisArtifacts {
 			
 			data.setTag(SOCKETTAG + socket, itemnbt);
 		}
+	}
+	
+	public static void addTriggerAndEffectToItem(ItemStack stack, IArtifactTrigger trigger, IArtifactEffect effect) {
+		if (stack.stackSize == 1) {
+			if (stack.stackTagCompound == null) {
+				stack.stackTagCompound = new NBTTagCompound();
+			}
+			NBTTagCompound tag = stack.stackTagCompound;
+			if (!tag.hasKey(ARTIFACTTAG)) {
+				tag.setTag(ARTIFACTTAG, new NBTTagCompound());
+			}
+			tag = tag.getCompoundTag(ARTIFACTTAG);
+			
+			tag.setString(TRIGGERTAG, trigger.getName());
+			tag.setString(EFFECTTAG, effect.getName());
+		}		
+	}
+	
+	public static void addRandomTriggerAndEffectToItem(ItemStack stack, Random rand) {
+		addTriggerAndEffectToItem(stack, getRandomTrigger(rand), getRandomEffect(rand));
 	}
 	
 	// ################### internal classes ###################

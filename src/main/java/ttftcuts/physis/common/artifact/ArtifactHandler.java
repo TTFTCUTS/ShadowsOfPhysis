@@ -10,13 +10,13 @@ import ttftcuts.physis.api.internal.IArtifactHandler;
 public class ArtifactHandler implements IArtifactHandler {
 	
 	@Override
-	public boolean registerArtifactTrigger(String name, IArtifactTrigger trigger, int weight) {
-		return PhysisArtifacts.registerTrigger(name, trigger, weight);
+	public boolean registerArtifactTrigger(IArtifactTrigger trigger, int weight) {
+		return PhysisArtifacts.registerTrigger(trigger, weight);
 	}
 
 	@Override
-	public boolean registerArtifactEffect(String name, IArtifactEffect effect, int weight) {
-		return PhysisArtifacts.registerEffect(name, effect, weight);
+	public boolean registerArtifactEffect(IArtifactEffect effect, int weight) {
+		return PhysisArtifacts.registerEffect(effect, weight);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class ArtifactHandler implements IArtifactHandler {
 		if (sockets != null) {
 			if (sockets[id] != null) {
 				IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(sockets[id]);
-				effect.doEffect(target, source, cooldown);
+				effect.doEffect(stack, target, source, id, cooldown);
 			}
 		}
 		return false;

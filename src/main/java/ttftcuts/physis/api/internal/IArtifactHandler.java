@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 
 public interface IArtifactHandler {
 
-	public boolean registerArtifactTrigger(String name, IArtifactTrigger trigger, int weight);
+	public boolean registerArtifactTrigger(IArtifactTrigger trigger, int weight);
 	
-	public boolean registerArtifactEffect(String name, IArtifactEffect effect, int weight);
+	public boolean registerArtifactEffect(IArtifactEffect effect, int weight);
 	
 	public boolean triggerArtifactEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldown);
 	

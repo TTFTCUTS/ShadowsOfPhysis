@@ -95,11 +95,11 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		
 		ItemStack testsword = new ItemStack(Items.diamond_sword); 
 		PhysisArtifacts.addSocketToItem(testsword);
-		PhysisArtifacts.addSocketToItem(testsword);
-		PhysisArtifacts.addSocketToItem(testsword);
 		
-		PhysisArtifacts.addItemToSocket(testsword, new ItemStack(Items.golden_apple, 1, 1), 0);
-		PhysisArtifacts.addItemToSocket(testsword, new ItemStack(Items.cake), 1);
+		ItemStack poisonApple = new ItemStack(Items.golden_apple, 1, 1);
+		PhysisArtifacts.addTriggerAndEffectToItem(poisonApple, PhysisArtifacts.triggerOnUpdate, PhysisArtifacts.effectPoison);
+		
+		PhysisArtifacts.addItemToSocket(testsword, poisonApple, 0);
 
 		
 		types.add(testsword);

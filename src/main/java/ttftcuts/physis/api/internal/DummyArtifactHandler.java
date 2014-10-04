@@ -8,12 +8,12 @@ import ttftcuts.physis.api.artifact.IArtifactTrigger;
 public class DummyArtifactHandler implements IArtifactHandler {
 	
 	@Override
-	public boolean registerArtifactTrigger(String name, IArtifactTrigger trigger, int weight) {
+	public boolean registerArtifactTrigger(IArtifactTrigger trigger, int weight) {
 		return false;
 	}
 
 	@Override
-	public boolean registerArtifactEffect(String name, IArtifactEffect effect, int weight) {
+	public boolean registerArtifactEffect(IArtifactEffect effect, int weight) {
 		return false;
 	}
 	

@@ -1,10 +1,14 @@
 package ttftcuts.physis.common;
 
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.crafting.AddSocketRecipe;
+import ttftcuts.physis.common.file.ServerData;
+import ttftcuts.physis.common.handler.ArtifactEventHandler;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
 import ttftcuts.physis.common.item.ItemTrowel;
@@ -24,12 +28,16 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
+		ServerData.init();
+		
     	PhysisItems.init();
     	PhysisBlocks.init();
+    	PhysisArtifacts.init();
     	
     	PageDefs.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
+    	MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
 	}

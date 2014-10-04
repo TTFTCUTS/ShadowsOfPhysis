@@ -17,18 +17,26 @@ public class TooltipHandler {
 
 	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent event) {
-		if (event.itemStack.stackTagCompound != null && event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
-			int index = -1;
-			for(int i=0; i<event.toolTip.size(); i++) {
-				if (event.toolTip.get(i).isEmpty()) {
-					index = i;
+		if (event.itemStack.stackTagCompound != null){
+			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.SOCKETEDTAG)) {
+				int index = -1;
+				for(int i=0; i<event.toolTip.size(); i++) {
+					if (event.toolTip.get(i).isEmpty()) {
+						index = i;
+					}
+				}
+				
+				if (index != -1) {
+					addSocketTooltip(event.entityPlayer, event.itemStack, event.toolTip, index);
+				} else {
+					addSocketTooltip(event.entityPlayer, event.itemStack, event.toolTip, event.toolTip.size());
 				}
 			}
 			
-			if (index != -1) {
-				addSocketTooltip(event.entityPlayer, event.itemStack, event.toolTip, index);
-			} else {
-				addSocketTooltip(event.entityPlayer, event.itemStack, event.toolTip, event.toolTip.size());
+			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
+				long cd = PhysisArtifacts.getEffectCooldown(event.itemStack);
+				
+				event.toolTip.add("Cooldown: "+cd+"t");
 			}
 		}
 	}

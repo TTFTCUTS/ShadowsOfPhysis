@@ -22,7 +22,7 @@ group= "ttftcuts.physis" // http://maven.apache.org/guides/mini/guide-naming-con
 archivesBaseName = "ShadowsOfPhysis"
 
 minecraft {
-    version = "1.7.10-10.13.0.1180"
+    version = "1.7.10-10.13.1.1217"
 }
 processResources {
     // replace stuff in mcmod.info, nothing else
@@ -36,6 +36,11 @@ processResources {
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.info'
+    }
+}
+jar {
+        manifest {
+        attributes 'FMLAT': 'physis_at.cfg'
     }
 }
 

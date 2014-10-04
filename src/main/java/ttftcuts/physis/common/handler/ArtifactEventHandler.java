@@ -4,10 +4,13 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -23,7 +26,27 @@ public class ArtifactEventHandler {
 			for(ItemStack stack : player.inventory.mainInventory) {
 				if (stack != null) {
 					if (stack == player.getHeldItem()) {
-						if (!event.entityLiving.isSwingInProgress) {
+						
+						boolean delay = false;
+						
+						if(player instanceof EntityPlayerMP) {
+							EntityPlayerMP playerMP = (EntityPlayerMP)player;
+							ItemInWorldManager iiwm = playerMP.theItemInWorldManager;
+							
+							if (iiwm != null) {
+								int x = iiwm.partiallyDestroyedBlockX;
+								int y = iiwm.partiallyDestroyedBlockY;
+								int z = iiwm.partiallyDestroyedBlockZ;
+								
+								Block b = player.worldObj.getBlock(x,y,z);
+								int m = player.worldObj.getBlockMetadata(x,y,z);
+								
+								if (b != null && b.canHarvestBlock(playerMP, m)) {
+									delay = true;
+								}
+							}
+						}
+						if (!(event.entityLiving.isSwingInProgress && delay)) {
 							doTriggerUpdate(stack, event.entityLiving);
 							doTriggerEquippedUpdate(stack, event.entityLiving);
 						}

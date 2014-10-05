@@ -6,18 +6,27 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
-import ttftcuts.physis.common.artifact.PhysisArtifacts;
 
-public class EffectPoison extends AbstractEffect {
+public class EffectPotion extends AbstractEffect {
 
-	public EffectPoison(String name) {
+	private Potion potionEffect;
+	private int[] durations = {20, 20, 20, 20, 20, 20, 20};
+	
+	public EffectPotion(String name, Potion potion) {
 		super(name);
+		this.potionEffect = potion;
 	}
 
 	@Override
 	public void doEffectChecked(NBTTagCompound tag, ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {
-		PhysisArtifacts.setEffectCooldown(tag, 200);
-		
-		target.addPotionEffect(new PotionEffect(Potion.poison.id, 100));
+		target.addPotionEffect(new PotionEffect(this.potionEffect.id, durations[cooldowntype.ordinal()]));
+	}
+	
+	public AbstractEffect setDurations(int... d) {
+		int len = Math.min(6, d.length);
+		for (int i=0; i<len; i++) {
+			durations[i] = d[i];
+		}
+		return this;
 	}
 }

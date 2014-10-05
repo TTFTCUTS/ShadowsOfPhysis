@@ -6,11 +6,15 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.WeightedRandom;
 
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
-import ttftcuts.physis.common.artifact.effect.EffectPoison;
+import ttftcuts.physis.common.artifact.effect.EffectPotion;
+import ttftcuts.physis.common.artifact.trigger.TriggerOnDealDamage;
+import ttftcuts.physis.common.artifact.trigger.TriggerOnEquippedUpdate;
+import ttftcuts.physis.common.artifact.trigger.TriggerOnTakeDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnUpdate;
 import ttftcuts.physis.common.file.ServerData;
 
@@ -31,15 +35,27 @@ public final class PhysisArtifacts {
 	private static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
 
 	public static IArtifactTrigger triggerOnUpdate;
+	public static IArtifactTrigger triggerOnEquippedUpdate;
+	public static IArtifactTrigger triggerOnDealDamage;
+	public static IArtifactTrigger triggerOnDealDamageSelf;
+	public static IArtifactTrigger triggerOnTakeDamage;
+	public static IArtifactTrigger triggerOnTakeDamageSelf;
 	
 	public static IArtifactEffect effectPoison;
 	
 	public static void init() {
 		instance = new PhysisArtifacts();
 		
-		triggerOnUpdate = registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 100);
+		triggerOnUpdate = registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 50);
+		triggerOnEquippedUpdate = registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate"), 100);
+		triggerOnDealDamage = registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamage", false), 100);
+		triggerOnDealDamageSelf = registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamageSelf", true), 50);
+		triggerOnTakeDamage = registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamage", false), 100);
+		triggerOnTakeDamageSelf = registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamageSelf", true), 50);
 		
-		effectPoison = registerPhysisEffect(new EffectPoison("Poison"), 100);
+		effectPoison = registerPhysisEffect(new EffectPotion("Poison", Potion.poison)
+												.setDurations(80, 100, 120, 140, 160, 180, 200)
+												.setCooldowns(20, 30, 40, 50, 100, 150, 200), 100);
 	}
 	
 	// ################### registration ###################

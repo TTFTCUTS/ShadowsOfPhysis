@@ -36,4 +36,13 @@ public class ArtifactHandler implements IArtifactHandler {
 		return false;
 	}
 
+	@Override
+	public void triggerEffectCooldown(ItemStack stack, int ticks, int id) {
+		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
+		
+		if (sockets[id] != null) {
+			PhysisArtifacts.setEffectCooldown(sockets[id], ticks);
+		}
+	}
+
 }

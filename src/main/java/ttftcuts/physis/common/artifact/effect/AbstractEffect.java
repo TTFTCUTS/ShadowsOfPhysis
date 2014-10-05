@@ -11,6 +11,7 @@ import ttftcuts.physis.common.artifact.PhysisArtifacts;
 public abstract class AbstractEffect implements IArtifactEffect {
 	
 	protected String name;
+	protected int[] cooldowns = {20, 20, 20, 20, 20, 20, 20};
 	
 	public AbstractEffect(String name) {
 		this.name = Physis.MOD_ID +"_"+ name;
@@ -25,14 +26,27 @@ public abstract class AbstractEffect implements IArtifactEffect {
 			if (remainingCooldown == 0) {
 				
 				this.doEffectChecked(sockets[id], stack, target, source, id, cooldowntype);
+				this.doCooldown(sockets[id], cooldowntype);
 			}
 		}
 	}
 	
 	public void doEffectChecked(NBTTagCompound tag, ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {}
 	
+	protected void doCooldown(NBTTagCompound tag, CooldownCategory cd) {
+		PhysisArtifacts.setEffectCooldown(tag, cooldowns[cd.ordinal()]);
+	}
+	
 	@Override
 	public String getName() {
 		return this.name;
+	}
+	
+	public AbstractEffect setCooldowns(int... cd) {
+		int len = Math.min(6, cd.length);
+		for (int i=0; i<len; i++) {
+			cooldowns[i] = cd[i];
+		}
+		return this;
 	}
 }

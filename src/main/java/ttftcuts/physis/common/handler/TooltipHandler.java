@@ -2,6 +2,8 @@ package ttftcuts.physis.common.handler;
 
 import java.util.List;
 
+import ttftcuts.physis.api.artifact.IArtifactEffect;
+import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.InputHelper;
@@ -34,9 +36,20 @@ public class TooltipHandler {
 			}
 			
 			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
-				long cd = PhysisArtifacts.getEffectCooldown(event.itemStack);
-				
-				event.toolTip.add("Cooldown: "+cd+"t");
+				NBTTagCompound tag = event.itemStack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
+				if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
+					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(event.itemStack);
+					if (trigger != null) {
+						event.toolTip.add(trigger.getName());
+					}
+					IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(event.itemStack);
+					if (effect != null) {
+						event.toolTip.add(effect.getName());
+					}
+					
+					long cd = PhysisArtifacts.getEffectCooldown(event.itemStack);
+					event.toolTip.add("Cooldown: "+cd+"t");
+				}
 			}
 		}
 	}

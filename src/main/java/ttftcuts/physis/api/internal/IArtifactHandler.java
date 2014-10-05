@@ -15,9 +15,16 @@ public interface IArtifactHandler {
 	
 	public boolean triggerInWorldArtifactEffect(int x, int y, int z, EntityLivingBase target, int id, CooldownCategory cooldown);
 	
+	public void triggerEffectCooldown(ItemStack stack, int ticks, int id);
+	
 	public enum CooldownCategory {
-		LONG,
+		NONE,
+		SHORTEST,
+		SHORTER,
 		SHORT,
-		NONE
+		MEDIUM,
+		LONG,
+		LONGER,
+		LONGEST
 	}
 }

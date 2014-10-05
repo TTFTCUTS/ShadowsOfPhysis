@@ -13,6 +13,6 @@ public class TriggerOnUpdate extends AbstractTrigger {
 
 	@Override
 	public void onUpdate(ItemStack stack, EntityLivingBase holder, int id) {
-		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, CooldownCategory.LONG);
+		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, CooldownCategory.LONGEST);
 	}
 }

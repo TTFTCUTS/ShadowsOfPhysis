@@ -5,13 +5,16 @@ import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.ItemInWorldManager;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 public class ArtifactEventHandler {
@@ -61,12 +64,7 @@ public class ArtifactEventHandler {
 					doTriggerUpdate(stack, player);
 					doTriggerEquippedUpdate(stack, event.entityLiving);
 				}
-			}
-			
-			/*if (player.getHeldItem() != null) {
-				doTriggerEquippedUpdate(player.getHeldItem(), event.entityLiving);
-			}*/
-			
+			}			
 		} else {
 			for(int i=0; i<5; i++) {
 				ItemStack item = event.entityLiving.getEquipmentInSlot(i);
@@ -90,13 +88,67 @@ public class ArtifactEventHandler {
 		}
 	}
 	
+	@SubscribeEvent
+	public void onLivingAttack(LivingAttackEvent event) {
+		Entity damagesource = event.source.getSourceOfDamage();
+		EntityLivingBase damager = null;
+		if (damagesource instanceof EntityLivingBase) {
+			damager = (EntityLivingBase)damagesource;
+		}
+		
+		if (damager != null) {
+			if (damager instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer)damager;
+				
+				if (player.getHeldItem() != null) {
+					doTriggerOnDealDamage(player.getHeldItem(), event.entityLiving, player);
+				}
+			} else {
+				ItemStack stack = damager.getEquipmentInSlot(0);
+				if (stack != null) {
+					doTriggerOnDealDamage(stack, event.entityLiving, damager);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onLivingHurt(LivingHurtEvent event){
+		Entity damagesource = event.source.getSourceOfDamage();
+		EntityLivingBase damager = null;
+		if (damagesource instanceof EntityLivingBase) {
+			damager = (EntityLivingBase)damagesource;
+		}
+		
+		if (event.entityLiving instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)event.entityLiving;
+			
+			if (player.getHeldItem() != null) {
+				doTriggerOnTakeDamage(player.getHeldItem(), player, damager);
+			}
+			
+			for(ItemStack armour: player.inventory.armorInventory) {
+				if (armour != null) {
+					doTriggerOnTakeDamage(armour, player, damager);
+				}
+			}
+		} else {
+			for(int i=0; i<5; i++) {
+				ItemStack item = event.entityLiving.getEquipmentInSlot(i);
+				if (item != null) {
+					doTriggerOnTakeDamage(item, event.entityLiving, damager);
+				}
+			}
+		}
+	}
+	
+	// ############### trigger calling ###############
+	
 	private void doTriggerUpdate(ItemStack stack, EntityLivingBase target) {
 		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
 		if (sockets != null) {
 			for (int i=0; i<sockets.length; i++) {
 				if (sockets[i] != null) {
-					//PhysisArtifacts.doEffectCooldownTick(sockets[i]);
-					
 					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
 					if (trigger != null) {
 						trigger.onUpdate(stack, target, i);
@@ -107,6 +159,44 @@ public class ArtifactEventHandler {
 	}
 	
 	private void doTriggerEquippedUpdate(ItemStack stack, EntityLivingBase target) {
-		
+		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
+		if (sockets != null) {
+			for (int i=0; i<sockets.length; i++) {
+				if (sockets[i] != null) {
+					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
+					if (trigger != null) {
+						trigger.onEquippedUpdate(stack, target, i);
+					}
+				}
+			}
+		}
+	}
+	
+	private void doTriggerOnDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
+		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
+		if (sockets != null) {
+			for (int i=0; i<sockets.length; i++) {
+				if (sockets[i] != null) {
+					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
+					if (trigger != null) {
+						trigger.onDealDamage(stack, target, source, i);
+					}
+				}
+			}
+		}
+	}
+	
+	private void doTriggerOnTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
+		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
+		if (sockets != null) {
+			for (int i=0; i<sockets.length; i++) {
+				if (sockets[i] != null) {
+					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
+					if (trigger != null) {
+						trigger.onTakeDamage(stack, target, source, i);
+					}
+				}
+			}
+		}
 	}
 }

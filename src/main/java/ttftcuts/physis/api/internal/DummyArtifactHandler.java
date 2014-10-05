@@ -27,6 +27,7 @@ public class DummyArtifactHandler implements IArtifactHandler {
 		return false;
 	}
 
-
+	@Override
+	public void triggerEffectCooldown(ItemStack stack, int ticks, int id) {}
 
 }

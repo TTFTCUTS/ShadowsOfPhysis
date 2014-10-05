@@ -11,6 +11,7 @@ import net.minecraft.util.WeightedRandom;
 
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
+import ttftcuts.physis.common.artifact.effect.EffectExplosion;
 import ttftcuts.physis.common.artifact.effect.EffectPotion;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnDealDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnEquippedUpdate;
@@ -42,6 +43,7 @@ public final class PhysisArtifacts {
 	public static IArtifactTrigger triggerOnTakeDamageSelf;
 	
 	public static IArtifactEffect effectPoison;
+	public static IArtifactEffect effectExplosion;
 	
 	public static void init() {
 		instance = new PhysisArtifacts();
@@ -56,6 +58,8 @@ public final class PhysisArtifacts {
 		effectPoison = registerPhysisEffect(new EffectPotion("Poison", Potion.poison)
 												.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
 												.setDurations(4, 5, 6, 7, 8, 9, 10), 100);
+		effectExplosion = registerPhysisEffect(new EffectExplosion("SmallExplosion", 4)
+												.setCooldowns(2, 3, 4, 5, 7, 9, 11), 20);
 	}
 	
 	// ################### registration ###################

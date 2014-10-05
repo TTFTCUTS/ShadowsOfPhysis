@@ -20,6 +20,7 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	
 	@Override
 	public void doEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {
+		if (target.worldObj.isRemote) { return; }
 		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
 		
 		if (sockets.length <= id+1 && sockets[id] != null) {

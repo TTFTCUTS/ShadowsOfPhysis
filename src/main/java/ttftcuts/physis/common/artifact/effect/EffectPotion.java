@@ -10,7 +10,6 @@ import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 public class EffectPotion extends AbstractEffect {
 
 	private Potion potionEffect;
-	private int[] durations = {20, 20, 20, 20, 20, 20, 20};
 	
 	public EffectPotion(String name, Potion potion) {
 		super(name);
@@ -22,11 +21,5 @@ public class EffectPotion extends AbstractEffect {
 		target.addPotionEffect(new PotionEffect(this.potionEffect.id, durations[cooldowntype.ordinal()]));
 	}
 	
-	public AbstractEffect setDurations(int... d) {
-		int len = Math.min(6, d.length);
-		for (int i=0; i<len; i++) {
-			durations[i] = d[i];
-		}
-		return this;
-	}
+	
 }

@@ -1,5 +1,8 @@
 package ttftcuts.physis.common.handler;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -15,10 +18,17 @@ import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 public class ArtifactEventHandler {
 
+	private Map<EntityPlayer,ItemStack> lastBow;
+	
+	public ArtifactEventHandler() {
+		this.lastBow = new WeakHashMap<EntityPlayer, ItemStack>();
+	}
+	
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
 		if (event.entityLiving.worldObj.isRemote) {return;}
@@ -78,7 +88,8 @@ public class ArtifactEventHandler {
 	
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		Physis.logger.info("break");
+		if (event.getPlayer().worldObj.isRemote) { return; }
+		
 		EntityPlayer player = event.getPlayer();
 		if (player != null && player.getHeldItem() != null) {
 			Physis.logger.info("player");
@@ -90,6 +101,8 @@ public class ArtifactEventHandler {
 	
 	@SubscribeEvent
 	public void onLivingAttack(LivingAttackEvent event) {
+		if (event.entity.worldObj.isRemote) { return; }
+		
 		Entity damagesource = event.source.getSourceOfDamage();
 		EntityLivingBase damager = null;
 		if (damagesource instanceof EntityLivingBase) {
@@ -99,7 +112,7 @@ public class ArtifactEventHandler {
 		if (damager != null) {
 			if (damager instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer)damager;
-				
+
 				if (player.getHeldItem() != null) {
 					doTriggerOnDealDamage(player.getHeldItem(), event.entityLiving, player);
 				}
@@ -114,6 +127,8 @@ public class ArtifactEventHandler {
 	
 	@SubscribeEvent
 	public void onLivingHurt(LivingHurtEvent event){
+		if (event.entity.worldObj.isRemote) { return; }
+		
 		Entity damagesource = event.source.getSourceOfDamage();
 		EntityLivingBase damager = null;
 		if (damagesource instanceof EntityLivingBase) {
@@ -139,6 +154,29 @@ public class ArtifactEventHandler {
 					doTriggerOnTakeDamage(item, event.entityLiving, damager);
 				}
 			}
+		}
+		
+		if (event.source.isProjectile() 
+				&& event.source.getEntity() != null 
+				&& event.source.getEntity() instanceof EntityPlayer) {
+			
+			EntityPlayer damagePlayer = (EntityPlayer)event.source.getEntity();
+			
+			ItemStack bow = this.lastBow.get(damagePlayer);
+			if (bow != null) {
+				doTriggerOnDealDamage(bow, event.entityLiving, damagePlayer);
+			}
+		}
+	}
+	
+	// ############### util events ###############
+	
+	@SubscribeEvent
+	public void onArrowLoose(ArrowLooseEvent event) {
+		if (event.entity.worldObj.isRemote) { return; }
+		
+		if (event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
+			this.lastBow.put(event.entityPlayer, event.entityPlayer.getHeldItem());
 		}
 	}
 	

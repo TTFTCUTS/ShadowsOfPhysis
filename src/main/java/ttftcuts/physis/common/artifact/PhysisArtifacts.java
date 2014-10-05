@@ -54,8 +54,8 @@ public final class PhysisArtifacts {
 		triggerOnTakeDamageSelf = registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamageSelf", true), 50);
 		
 		effectPoison = registerPhysisEffect(new EffectPotion("Poison", Potion.poison)
-												.setDurations(80, 100, 120, 140, 160, 180, 200)
-												.setCooldowns(20, 30, 40, 50, 100, 150, 200), 100);
+												.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
+												.setDurations(4, 5, 6, 7, 8, 9, 10), 100);
 	}
 	
 	// ################### registration ###################

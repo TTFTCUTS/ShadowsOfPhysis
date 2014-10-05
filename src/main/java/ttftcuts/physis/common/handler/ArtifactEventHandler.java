@@ -3,9 +3,8 @@ package ttftcuts.physis.common.handler;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import ttftcuts.physis.Physis;
-import ttftcuts.physis.api.artifact.IArtifactTrigger;
-import ttftcuts.physis.common.artifact.PhysisArtifacts;
+import ttftcuts.physis.utils.Socket;
+import ttftcuts.physis.utils.SocketIterator;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -13,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -29,6 +27,7 @@ public class ArtifactEventHandler {
 		this.lastBow = new WeakHashMap<EntityPlayer, ItemStack>();
 	}
 	
+	// onUpdate and onEquippedUpdate
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
 		if (event.entityLiving.worldObj.isRemote) {return;}
@@ -86,19 +85,20 @@ public class ArtifactEventHandler {
 		}
 	}
 	
+	// prevents updates being delayed forever by digging
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
 		if (event.getPlayer().worldObj.isRemote) { return; }
 		
 		EntityPlayer player = event.getPlayer();
 		if (player != null && player.getHeldItem() != null) {
-			Physis.logger.info("player");
-			// prevents delaying effects forever by digging
+
 			doTriggerUpdate(player.getHeldItem(), player);
 			doTriggerEquippedUpdate(player.getHeldItem(), player);
 		}
 	}
 	
+	// onDealDamage
 	@SubscribeEvent
 	public void onLivingAttack(LivingAttackEvent event) {
 		if (event.entity.worldObj.isRemote) { return; }
@@ -125,6 +125,7 @@ public class ArtifactEventHandler {
 		}
 	}
 	
+	// onTakeDamage, and onDealDamage from ranged weapons
 	@SubscribeEvent
 	public void onLivingHurt(LivingHurtEvent event){
 		if (event.entity.worldObj.isRemote) { return; }
@@ -169,7 +170,7 @@ public class ArtifactEventHandler {
 		}
 	}
 	
-	// ############### util events ###############
+	// ############### utility events ###############
 	
 	@SubscribeEvent
 	public void onArrowLoose(ArrowLooseEvent event) {
@@ -183,57 +184,33 @@ public class ArtifactEventHandler {
 	// ############### trigger calling ###############
 	
 	private void doTriggerUpdate(ItemStack stack, EntityLivingBase target) {
-		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
-		if (sockets != null) {
-			for (int i=0; i<sockets.length; i++) {
-				if (sockets[i] != null) {
-					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
-					if (trigger != null) {
-						trigger.onUpdate(stack, target, i);
-					}
-				}
+		for(Socket socket : SocketIterator.triggers(stack)) {
+			if (socket.trigger != null) {
+				socket.trigger.onUpdate(stack, target, socket.slot);
 			}
 		}
 	}
 	
 	private void doTriggerEquippedUpdate(ItemStack stack, EntityLivingBase target) {
-		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
-		if (sockets != null) {
-			for (int i=0; i<sockets.length; i++) {
-				if (sockets[i] != null) {
-					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
-					if (trigger != null) {
-						trigger.onEquippedUpdate(stack, target, i);
-					}
-				}
+		for(Socket socket : SocketIterator.triggers(stack)) {
+			if (socket.trigger != null) {
+				socket.trigger.onEquippedUpdate(stack, target, socket.slot);
 			}
 		}
 	}
 	
 	private void doTriggerOnDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
-		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
-		if (sockets != null) {
-			for (int i=0; i<sockets.length; i++) {
-				if (sockets[i] != null) {
-					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
-					if (trigger != null) {
-						trigger.onDealDamage(stack, target, source, i);
-					}
-				}
+		for(Socket socket : SocketIterator.triggers(stack)) {
+			if (socket.trigger != null) {
+				socket.trigger.onDealDamage(stack, target, source, socket.slot);
 			}
 		}
 	}
 	
 	private void doTriggerOnTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
-		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
-		if (sockets != null) {
-			for (int i=0; i<sockets.length; i++) {
-				if (sockets[i] != null) {
-					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(sockets[i]);
-					if (trigger != null) {
-						trigger.onTakeDamage(stack, target, source, i);
-					}
-				}
+		for(Socket socket : SocketIterator.triggers(stack)) {
+			if (socket.trigger != null) {
+				socket.trigger.onTakeDamage(stack, target, source, socket.slot);
 			}
 		}
 	}

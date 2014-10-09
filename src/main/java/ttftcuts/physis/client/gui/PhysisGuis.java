@@ -3,7 +3,9 @@ package ttftcuts.physis.client.gui;
 public enum PhysisGuis {
 
 	JOURNAL,
-	SOCKET_TABLE;
+	SOCKET_TABLE,
+	SOCKET_TABLE_DRAWER,
+	;
 	
 	private static final PhysisGuis[] cache = values();
 	

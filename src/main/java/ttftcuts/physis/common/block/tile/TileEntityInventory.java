@@ -1,73 +1,43 @@
 package ttftcuts.physis.common.block.tile;
 
+import ttftcuts.physis.common.inventory.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileEntityInventory extends TileEntityPhysis implements IInventory {
 
-	ItemStack[] inventory = new ItemStack[this.getSizeInventory()];
+	private Inventory inventory = new Inventory(this.getSizeInventory());
 	
 	@Override
 	public void readCustomNBT(NBTTagCompound tag) {
 		super.readCustomNBT(tag);
 		
-		NBTTagList list = tag.getTagList("Items", 10);
-		this.inventory = new ItemStack[this.getSizeInventory()];
+		NBTTagCompound itag = tag.getCompoundTag("Items");
+		this.inventory = new Inventory(this.getSizeInventory());
 		
-		for (int i=0; i<list.tagCount(); i++) {
-			NBTTagCompound itag = list.getCompoundTagAt(i);
-			byte slot = itag.getByte("Slot");
-			if (slot >= 0 && slot < this.inventory.length) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(itag);
-			}
-		}
+		this.inventory.readFromNBT(itag);
 	}
 	
 	@Override
 	public void writeCustomNBT(NBTTagCompound tag) {
 		super.writeCustomNBT(tag);
 		
-		NBTTagList list = new NBTTagList();
-		for(int i=0; i<this.inventory.length; i++) {
-			if (this.inventory[i] != null) {
-				NBTTagCompound itag = new NBTTagCompound();
-				itag.setByte("Slot", (byte)i);
-				
-				this.inventory[i].writeToNBT(itag);
-				list.appendTag(itag);
-			}
-		}
-		tag.setTag("Items", list);
+		NBTTagCompound invtag = new NBTTagCompound();
+		this.inventory.writeToNBT(invtag);
+		tag.setTag("Items", invtag);
 	}
 	
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return this.inventory[slot];
+		return this.inventory.getStackInSlot(slot);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.inventory[slot] != null) {
-			ItemStack stack; 
-			
-			if (this.inventory[slot].stackSize <= amount) {
-				stack = this.inventory[slot];
-				this.inventory[slot] = null;
-				return stack;
-			} else {
-				stack = this.inventory[slot].splitStack(amount);
-				
-				if (this.inventory[slot].stackSize == 0) {
-					this.inventory[slot] = null;
-				}
-				return stack;
-			}
-		}
-		return null;
+		return this.inventory.decrStackSize(slot, amount);
 	}
 
 	@Override
@@ -77,7 +47,7 @@ public abstract class TileEntityInventory extends TileEntityPhysis implements II
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		inventory[slot] = stack;
+		this.inventory.setInventorySlotContents(slot, stack);
 	}
 
 	@Override
@@ -87,7 +57,7 @@ public abstract class TileEntityInventory extends TileEntityPhysis implements II
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 64;
+		return this.inventory.getInventoryStackLimit();
 	}
 
 	@Override
@@ -105,4 +75,7 @@ public abstract class TileEntityInventory extends TileEntityPhysis implements II
 	@Override
 	public void closeInventory() {}
 
+	public void dropInventory() {
+		this.inventory.dropItems(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+	}
 }

@@ -1,6 +1,9 @@
 package ttftcuts.physis.common.container;
 
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
+import ttftcuts.physis.common.container.slot.SlotSocketable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -18,7 +21,7 @@ private TileEntitySocketTable table;
 		
 		for (int y=0; y<numRows; y++) {
 			for (int x=0; x<numColumns; x++) {
-				this.addSlotToContainer(new Slot(table.drawer, y*numColumns + x, 8 + x * 18, 20 + y * 18));
+				this.addSlotToContainer(new SlotSocketable(table.drawer, y*numColumns + x, 8 + x * 18, 20 + y * 18));
 			}
 		}
 		
@@ -41,14 +44,17 @@ private TileEntitySocketTable table;
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
+            Physis.logger.info("Slot id: "+slotid);
+            
             if (slotid < this.numRows * 9)
             {
+            	Physis.logger.info("< rows*9");
                 if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false))
+            else if (!(itemstack1.getItem() instanceof ISocketable) || !this.mergeItemStack(itemstack1, 0, this.numRows * 9, false))
             {
                 return null;
             }

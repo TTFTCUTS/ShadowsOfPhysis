@@ -15,4 +15,15 @@ public class GuiSocketTable extends GuiContainerPhysis {
 		
 	}
 
+	@Override
+	public void updateScreen() {
+		
+		ContainerSocketTable cont = (ContainerSocketTable)this.inventorySlots;
+		
+		if (cont != null) {
+			cont.updateLayout();
+		}
+		
+		super.updateScreen();
+	}
 }

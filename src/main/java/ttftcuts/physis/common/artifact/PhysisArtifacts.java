@@ -32,8 +32,8 @@ public final class PhysisArtifacts {
 	public static final String SOCKETCOUNTTAG = "count";
 	public static final String SOCKETFIXED = "socketFixed";
 	
-	private static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
-	private static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
+	public static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
+	public static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
 
 	public static IArtifactTrigger triggerOnUpdate;
 	public static IArtifactTrigger triggerOnEquippedUpdate;
@@ -347,7 +347,7 @@ public final class PhysisArtifacts {
 	
 	// ################### internal classes ###################
 	
-	private class WeightedTrigger extends WeightedRandom.Item {
+	public class WeightedTrigger extends WeightedRandom.Item {
 
 		public IArtifactTrigger theTrigger;
 		
@@ -357,7 +357,7 @@ public final class PhysisArtifacts {
 		}
 	}
 	
-	private class WeightedEffect extends WeightedRandom.Item {
+	public class WeightedEffect extends WeightedRandom.Item {
 
 		public IArtifactEffect theEffect;
 		

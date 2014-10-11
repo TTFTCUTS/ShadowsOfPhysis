@@ -8,11 +8,12 @@ public class GuiSocketTable extends GuiContainerPhysis {
 
 	public GuiSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		super(new ContainerSocketTable(inventory, table));
+		this.ySize = 222;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float mousex, int mousey, int partialTicks) {
-		
+		this.drawPlayerInventory();
 	}
 
 	@Override

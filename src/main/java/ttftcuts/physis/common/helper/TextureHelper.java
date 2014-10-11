@@ -226,7 +226,7 @@ public class TextureHelper {
 	
 	// Bitwise colour ops!
 	
-	protected static int compose(int r, int g, int b, int a) {
+	public static int compose(int r, int g, int b, int a) {
 		int rgb = a;
 		rgb = (rgb << 8) + r;
 		rgb = (rgb << 8) + g;
@@ -234,19 +234,19 @@ public class TextureHelper {
 		return rgb;
 	}
 
-	protected static int alpha(int c) {
+	public static int alpha(int c) {
 		return (c >> 24) & 0xFF;
 	}
 
-	protected static int red(int c) {
+	public static int red(int c) {
 		return (c >> 16) & 0xFF;
 	}
 
-	protected static int green(int c) {
+	public static int green(int c) {
 		return (c >> 8) & 0xFF;
 	}
 
-	protected static int blue(int c) {
+	public static int blue(int c) {
 		return (c) & 0xFF;
 	}
 	

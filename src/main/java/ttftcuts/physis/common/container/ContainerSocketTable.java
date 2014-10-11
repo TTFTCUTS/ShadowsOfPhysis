@@ -23,7 +23,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 	public ContainerSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		this.table = table;
 		
-		mainSlot = new SlotItemWithSockets(table, 0, 40, 30);
+		mainSlot = new SlotItemWithSockets(table, 0, 26, 65);
 		
 		addSlotToContainer(mainSlot);
 		
@@ -31,11 +31,11 @@ public class ContainerSocketTable extends ContainerPhysis {
 		activeSlots = 0;
 		
 		for (int i = 0; i<5; i++) {
-			socketSlots[i] = new SlotSocketable(table, i+1, 40 + 20 * i, 20);
+			socketSlots[i] = new SlotSocketable(table, i+1, 40 + 20 * i, 60);
 			addSlotToContainer(socketSlots[i]);
 		}
 		
-		this.addPlayerInventory(inventory, 8, 84);
+		this.addPlayerInventory(inventory, 8, 139);
 		this.updateLayout();
 	}
 
@@ -70,12 +70,12 @@ public class ContainerSocketTable extends ContainerPhysis {
 			Slot s = this.socketSlots[i];
 			if (i < this.activeSlots) {
 				// put in place
-				s.xDisplayPosition = 120;
-				s.yDisplayPosition = 30 + 18 * i - 9 * (this.activeSlots-1);
+				s.xDisplayPosition = 98;
+				s.yDisplayPosition = 65 + 18 * i - 9 * (this.activeSlots-1);
 			} else {
 				// put at the side
-				s.xDisplayPosition = 150;
-				s.yDisplayPosition = -50 + 18 * (i - (this.activeSlots - 1));
+				s.xDisplayPosition = 151;
+				s.yDisplayPosition = 29 + 18 * (i - this.activeSlots);
 			}
 		}
 	}

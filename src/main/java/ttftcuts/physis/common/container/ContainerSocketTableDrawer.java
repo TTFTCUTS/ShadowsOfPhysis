@@ -21,11 +21,11 @@ private TileEntitySocketTable table;
 		
 		for (int y=0; y<numRows; y++) {
 			for (int x=0; x<numColumns; x++) {
-				this.addSlotToContainer(new SlotSocketable(table.drawer, y*numColumns + x, 8 + x * 18, 20 + y * 18));
+				this.addSlotToContainer(new SlotSocketable(table.drawer, y*numColumns + x, 8 + x * 18, 18 + y * 18));
 			}
 		}
 		
-		this.addPlayerInventory(inventory, 8, 84);
+		this.addPlayerInventory(inventory, 8, 85);
 	}
 
 	@Override

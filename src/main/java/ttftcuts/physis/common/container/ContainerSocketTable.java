@@ -1,10 +1,8 @@
 package ttftcuts.physis.common.container;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.container.slot.SlotItemWithSockets;
-import ttftcuts.physis.common.container.slot.SlotShowSocketable;
 import ttftcuts.physis.common.container.slot.SlotSocketable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -18,7 +16,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 	
 	private SlotItemWithSockets mainSlot;
 	private SlotSocketable[] socketSlots;
-	private int activeSlots = 0;
+	public int activeSlots = 0;
 	
 	public ContainerSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		this.table = table;

@@ -5,19 +5,14 @@ import org.lwjgl.opengl.GL11;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.model.ModelSocketTable;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
-import ttftcuts.physis.common.helper.TextureHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderTileSocketTable extends TileEntitySpecialRenderer {
@@ -84,37 +79,6 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 			
 			dummyRenderItem.doRender(dummyEntityItem, 0, 0, 0, 0, 0);
 			
-			/*GL11.glRotatef(90f, 1f, 0f, 0f); // flatten down
-			
-			GL11.glTranslatef(0.18f, -0.45f, -0.52f); // shift to table top
-			GL11.glRotatef(70f, 0f, 0f, 1f); // rotate a bit
-			
-			float scale = 0.65f;
-			GL11.glScalef(scale, scale, scale); // scale it down to be sensible
-			
-			mc.renderEngine.bindTexture(TextureMap.locationItemsTexture);
-			
-			int pass = 0;
-			do {
-				IIcon icon = stack.getItem().getIcon(stack, pass);
-				
-				if (icon != null) {
-					int col = stack.getItem().getColorFromItemStack(stack, pass);
-					byte red = (byte)TextureHelper.red(col);
-					byte green = (byte)TextureHelper.green(col);
-					byte blue = (byte)TextureHelper.blue(col);
-					GL11.glColor3ub(red, green, blue);
-					float umin = icon.getMinU();
-					float umax = icon.getMaxU();
-					float vmin = icon.getMinV();
-					float vmax = icon.getMaxV();
-					
-					ItemRenderer.renderItemIn2D(Tessellator.instance, umin, vmin, umax, vmax, icon.getIconWidth(), icon.getIconHeight(), 1f / 16f);
-					
-					GL11.glColor3f(1f,1f,1f);
-				}
-				pass++;
-			} while (pass < stack.getItem().getRenderPasses(stack.getItemDamage()));*/
 			GL11.glPopMatrix();
 		}
 		

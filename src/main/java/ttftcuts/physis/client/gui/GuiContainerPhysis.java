@@ -31,4 +31,10 @@ public abstract class GuiContainerPhysis extends GuiContainer {
 			this.drawPlayerInventory(0, 0);
 		}
 	}
+	
+	protected void drawWoodenSlot(int x, int y) {
+		GL11.glColor3f(1f, 1f, 1f);
+		mc.renderEngine.bindTexture(inventoryTexture);
+		this.drawTexturedModalRect(this.guiLeft + x-16, this.guiTop + y-16, 208, 0, 48, 48);
+	}
 }

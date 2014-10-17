@@ -30,6 +30,8 @@ public class GuiSocketTable extends GuiContainerPhysis {
 		
 		this.drawTexturedModalRect(this.guiLeft - 40, this.guiTop - 65, 0, 0, 256, 256);
 		
+		this.drawWoodenSlot(26, 65);
+		
 		int sideslots = 5 - cont.activeSlots;
 		
 		if (sideslots > 0) {

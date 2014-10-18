@@ -1,12 +1,17 @@
 package ttftcuts.physis.common.container;
 
+import ttftcuts.physis.common.network.IGuiMessageHandler;
+import ttftcuts.physis.common.network.PacketGuiMessage;
+import ttftcuts.physis.common.network.PhysisPacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class ContainerPhysis extends Container {
+public abstract class ContainerPhysis extends Container implements IGuiMessageHandler {
 
 	public int inventoryX = 0;
 	public int inventoryY = 0;
@@ -31,4 +36,12 @@ public abstract class ContainerPhysis extends Container {
     {
 		return null;
     }
+	
+	public void sendUiPacket(NBTTagCompound tag) {
+		PhysisPacketHandler.bus.sendToServer(PacketGuiMessage.createPacket(this.windowId, tag));
+		this.processMessage(Minecraft.getMinecraft().thePlayer, tag);
+	}
+	
+	@Override
+	public void processMessage(EntityPlayer player, NBTTagCompound tag) {}
 }

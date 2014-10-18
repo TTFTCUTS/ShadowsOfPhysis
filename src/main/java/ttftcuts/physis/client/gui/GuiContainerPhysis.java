@@ -37,4 +37,26 @@ public abstract class GuiContainerPhysis extends GuiContainer {
 		mc.renderEngine.bindTexture(inventoryTexture);
 		this.drawTexturedModalRect(this.guiLeft + x-16, this.guiTop + y-16, 208, 0, 48, 48);
 	}
+	
+	protected void drawWoodenColumn(int x, int y, int number) {
+		GL11.glColor3f(1f, 1f, 1f);
+		mc.renderEngine.bindTexture(inventoryTexture);
+		this.drawTexturedModalRect(this.guiLeft + x-16, this.guiTop + y-16, 208, 0, 48, 15);
+		
+		for (int i=0; i<number; i++) {
+			this.drawTexturedModalRect(this.guiLeft + x-16, this.guiTop + y - 1 + i*18, 208, 15, 48, 18);
+		}
+		
+		this.drawTexturedModalRect(this.guiLeft + x-16, this.guiTop + y-1 + number*18, 208, 33, 48, 15);
+	}
+	
+	protected void drawSlotOverlay(int x, int y) {
+		GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glColorMask(true, true, true, false);
+        this.drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
+        GL11.glColorMask(true, true, true, true);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+	}
 }

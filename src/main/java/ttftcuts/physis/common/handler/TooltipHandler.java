@@ -62,7 +62,9 @@ public class TooltipHandler {
 		lines.add(index, "");
 		index++;
 		
+		int totaloffset = 0;
 		for (int i=0; i<sockets.length; i++) {
+			int offset = totaloffset + i;
 			if (sockets[i] != null) {
 				ItemStack socketed = ItemStack.loadItemStackFromNBT(sockets[i]);
 				
@@ -82,13 +84,14 @@ public class TooltipHandler {
 							stt.set(j, "     "+stt.get(j));
 						}
 					}
-					lines.addAll(index+i, stt);
+					lines.addAll(index+offset, stt);
+					totaloffset += stt.size() - 1;
 				} else {
 					String name = socketed.getDisplayName();
-					lines.add(index+i, " \u00A7"+socketColour+"\u25a0\u00A7r  "+format+name+ (stt.size() > 1 ? " \u00A78+" : ""));
+					lines.add(index+offset, " \u00A7"+socketColour+"\u25a0\u00A7r  "+format+name+ (stt.size() > 1 ? " \u00A78+" : ""));
 				}
 			} else {
-				lines.add(index+i, " \u00A78\u25a0  Empty socket");
+				lines.add(index+offset, " \u00A78\u25a0  Empty socket");
 			}
 		}
 	}

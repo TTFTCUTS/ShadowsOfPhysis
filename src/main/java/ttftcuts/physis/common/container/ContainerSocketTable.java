@@ -1,5 +1,6 @@
 package ttftcuts.physis.common.container;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.container.slot.SlotItemWithSockets;
@@ -10,7 +11,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ContainerSocketTable extends ContainerPhysis {
+public class ContainerSocketTable extends ContainerPhysis { 
 
 	private TileEntitySocketTable table;
 	
@@ -21,7 +22,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 	public ContainerSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		this.table = table;
 		
-		mainSlot = new SlotItemWithSockets(table, 0, 26, 65);
+		mainSlot = new SlotItemWithSockets(table, 0, 8, 65);
 		
 		addSlotToContainer(mainSlot);
 		
@@ -68,7 +69,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 			Slot s = this.socketSlots[i];
 			if (i < this.activeSlots) {
 				// put in place
-				s.xDisplayPosition = 98;
+				s.xDisplayPosition = 107;
 				s.yDisplayPosition = 65 + 18 * i - 9 * (this.activeSlots-1);
 			} else {
 				// put at the side
@@ -76,5 +77,11 @@ public class ContainerSocketTable extends ContainerPhysis {
 				s.yDisplayPosition = 29 + 18 * (i - this.activeSlots);
 			}
 		}
+	}
+
+	@Override
+	public void processMessage(EntityPlayer player, NBTTagCompound tag) {
+		int id = tag.getInteger("id");
+		Physis.logger.info("Button "+id+" pressed");
 	}
 }

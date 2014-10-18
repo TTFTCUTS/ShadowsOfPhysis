@@ -15,6 +15,8 @@ import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import ttftcuts.physis.common.item.material.ShapedOreRecipeCT;
 import ttftcuts.physis.common.item.material.ShapedRecipeCT;
+import ttftcuts.physis.common.network.PacketGuiMessage;
+import ttftcuts.physis.common.network.PhysisPacketHandler;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -38,6 +40,7 @@ public class CommonProxy {
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
     	MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
+    	networkSetup();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
 	}
@@ -65,4 +68,9 @@ public class CommonProxy {
 		Physis.oooBuilder.stop();
 	}
 		
+	private void networkSetup() {
+		PhysisPacketHandler.registerPacketHandler(new PacketGuiMessage(), 0);
+		
+		PhysisPacketHandler.init();
+	}
 }

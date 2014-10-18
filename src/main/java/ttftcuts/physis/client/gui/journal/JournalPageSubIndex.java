@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL12;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.journal.buttons.GuiButtonInvisible;
+import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import ttftcuts.physis.utils.NaturalOrderComparator;
 
 public class JournalPageSubIndex extends JournalPage {
@@ -120,7 +121,7 @@ public class JournalPageSubIndex extends JournalPage {
 			
 			if (article.iconstack != null) {
 				// render item stack as icon
-				RenderItem render = new RenderItem();
+				/*RenderItem render = new RenderItem();
 				GL11.glPushMatrix();
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -131,7 +132,8 @@ public class JournalPageSubIndex extends JournalPage {
 				render.renderItemOverlayIntoGUI(journal.mc.fontRenderer, journal.mc.getTextureManager(), article.iconstack, iconx, icony);
 				RenderHelper.disableStandardItemLighting();
 				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glPopMatrix();
+				GL11.glPopMatrix();*/
+				PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony);
 				
 			} else if (article.icontexture != null) {
 				// render texture icon

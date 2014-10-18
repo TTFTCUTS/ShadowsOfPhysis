@@ -1,12 +1,18 @@
 package ttftcuts.physis.common.helper;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class PhysisRenderHelper {
+	private static Minecraft mc = Minecraft.getMinecraft();
 	
 	public static void renderStandardBlockAsItem(Block block, int metadata, RenderBlocks renderer) {
 		Tessellator tess =  Tessellator.instance;
@@ -54,6 +60,21 @@ public class PhysisRenderHelper {
 		renderer.renderFaceXPos(block, 0.0F, 0.0F, 0.0F, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
 		tess.draw();
 		
+		GL11.glPopMatrix();
+	}
+	
+	public static void renderItemStack(ItemStack stack, int x, int y) {
+		RenderItem render = new RenderItem();
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderHelper.enableGUIStandardItemLighting();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		render.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+		render.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 	}
 }

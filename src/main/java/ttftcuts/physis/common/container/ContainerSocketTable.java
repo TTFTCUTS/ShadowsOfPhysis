@@ -16,6 +16,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 	private TileEntitySocketTable table;
 	
 	private SlotItemWithSockets mainSlot;
+	private Slot materialSlot;
 	private SlotSocketable[] socketSlots;
 	public int activeSlots = 0;
 	
@@ -23,14 +24,16 @@ public class ContainerSocketTable extends ContainerPhysis {
 		this.table = table;
 		
 		mainSlot = new SlotItemWithSockets(table, 0, 8, 65);
-		
 		addSlotToContainer(mainSlot);
+		
+		materialSlot = new Slot(table, 1, 8, 101);
+		addSlotToContainer(materialSlot);
 		
 		socketSlots = new SlotSocketable[5];
 		activeSlots = 0;
 		
 		for (int i = 0; i<5; i++) {
-			socketSlots[i] = new SlotSocketable(table, i+1, 40 + 20 * i, 60);
+			socketSlots[i] = new SlotSocketable(table, i+2, 40 + 20 * i, 60);
 			addSlotToContainer(socketSlots[i]);
 		}
 		
@@ -83,5 +86,51 @@ public class ContainerSocketTable extends ContainerPhysis {
 	public void processMessage(EntityPlayer player, NBTTagCompound tag) {
 		int id = tag.getInteger("id");
 		Physis.logger.info("Button "+id+" pressed");
+		
+		ItemStack mainitem = this.mainSlot.getStack();
+		if (mainitem != null) {
+			NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(mainitem);
+			Physis.logger.info(mainitem);
+			if (id < this.activeSlots && id < sockets.length) {
+				//Physis.logger.info("test");
+				boolean left = sockets[id] != null;
+				boolean right = this.socketSlots[id].getHasStack();
+				
+				int mats = this.getReagentCount();
+				Physis.logger.info(mats);
+				
+				if (left && !right && mats >= TileEntitySocketTable.REMOVECOST) {
+					// unsocket
+					ItemStack stack = ItemStack.loadItemStackFromNBT(sockets[id]);
+					PhysisArtifacts.removeItemFromSocket(mainitem, id);
+					this.socketSlots[id].putStack(stack);
+					this.consumeReagent(TileEntitySocketTable.REMOVECOST);
+				} else if (right && !left && mats >= TileEntitySocketTable.INSERTCOST) {
+					// socket
+					ItemStack toSocket = this.socketSlots[id].getStack();
+					this.socketSlots[id].putStack(null);
+					
+					PhysisArtifacts.addItemToSocket(mainitem, toSocket, id);
+					this.consumeReagent(TileEntitySocketTable.INSERTCOST);
+				}
+			}
+		}
+	}
+	
+	public int getReagentCount() {
+		if (this.materialSlot.getHasStack()) {
+			return this.materialSlot.getStack().stackSize;
+		}
+		return 0;
+	}
+	
+	public void consumeReagent(int number) {
+		if (this.materialSlot.getHasStack()) {
+			ItemStack stack = this.materialSlot.getStack();
+			stack.splitStack(number);
+			if (stack.stackSize <= 0) {
+				this.materialSlot.putStack(null);
+			}
+		}
 	}
 }

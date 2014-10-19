@@ -1,5 +1,7 @@
 package ttftcuts.physis.client.gui;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
@@ -58,5 +60,13 @@ public abstract class GuiContainerPhysis extends GuiContainer {
         GL11.glColorMask(true, true, true, true);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+	}
+	
+	protected void drawCustomTooltip(int x, int y, List<String> lines) {
+		this.drawHoveringText(lines, x, y, mc.fontRenderer);
+	}
+	
+	protected void drawCustomTooltip(int x, int y, String text, int width) {
+		this.drawCustomTooltip(x, y, Physis.text.translateAndWrap(text, width));
 	}
 }

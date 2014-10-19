@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
-import ttftcuts.physis.client.gui.journal.buttons.GuiButtonInvisible;
+import ttftcuts.physis.client.gui.button.GuiButtonInvisible;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import ttftcuts.physis.utils.NaturalOrderComparator;
 

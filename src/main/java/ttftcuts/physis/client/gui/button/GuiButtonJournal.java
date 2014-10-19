@@ -1,4 +1,4 @@
-package ttftcuts.physis.client.gui.journal.buttons;
+package ttftcuts.physis.client.gui.button;
 
 import org.lwjgl.opengl.GL11;
 

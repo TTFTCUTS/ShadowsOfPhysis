@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.*;
-import ttftcuts.physis.client.gui.journal.buttons.*;
+import ttftcuts.physis.client.gui.button.*;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

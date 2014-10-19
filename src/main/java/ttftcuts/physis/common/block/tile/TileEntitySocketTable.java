@@ -9,6 +9,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntitySocketTable extends TileEntityInventory implements ISidedInventory {
 
+	public static final int INSERTCOST = 3;
+	public static final int REMOVECOST = 1;
+	
 	public int facing = 0;
 	
 	public Inventory drawer;
@@ -21,7 +24,7 @@ public class TileEntitySocketTable extends TileEntityInventory implements ISided
 	
 	@Override
 	public int getSizeInventory() {
-		return 6;
+		return 7;
 	}
 
 	@Override

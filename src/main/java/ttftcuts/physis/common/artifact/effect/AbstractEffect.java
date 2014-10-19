@@ -11,8 +11,8 @@ import ttftcuts.physis.common.artifact.PhysisArtifacts;
 public abstract class AbstractEffect implements IArtifactEffect {
 	
 	protected String name;
-	protected int[] cooldowns = {20, 20, 20, 20, 20, 20, 20};
-	protected int[] durations = {20, 20, 20, 20, 20, 20, 20};
+	protected int[] cooldowns = {0, 20, 20, 20, 20, 20, 20, 20};
+	protected int[] durations = {0, 20, 20, 20, 20, 20, 20, 20};
 	
 	public AbstractEffect(String name) {
 		this.name = Physis.MOD_ID +"_"+ name;
@@ -45,17 +45,17 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	}
 	
 	public AbstractEffect setCooldowns(double... cd) {
-		int len = Math.min(6, cd.length);
+		int len = Math.min(7, cd.length);
 		for (int i=0; i<len; i++) {
-			cooldowns[i] = (int)Math.ceil(cd[i] * 20.0);
+			cooldowns[i+1] = (int)Math.ceil(cd[i] * 20.0);
 		}
 		return this;
 	}
 	
 	public AbstractEffect setDurations(double... d) {
-		int len = Math.min(6, d.length);
+		int len = Math.min(7, d.length);
 		for (int i=0; i<len; i++) {
-			durations[i] = (int)Math.ceil(d[i] * 20.0);
+			durations[i+1] = (int)Math.ceil(d[i] * 20.0);
 		}
 		return this;
 	}

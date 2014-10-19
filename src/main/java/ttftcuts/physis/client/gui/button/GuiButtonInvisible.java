@@ -1,4 +1,4 @@
-package ttftcuts.physis.client.gui.journal.buttons;
+package ttftcuts.physis.client.gui.button;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

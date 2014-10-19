@@ -39,7 +39,7 @@ public abstract class ContainerPhysis extends Container implements IGuiMessageHa
 	
 	public void sendUiPacket(NBTTagCompound tag) {
 		PhysisPacketHandler.bus.sendToServer(PacketGuiMessage.createPacket(this.windowId, tag));
-		this.processMessage(Minecraft.getMinecraft().thePlayer, tag);
+		//this.processMessage(Minecraft.getMinecraft().thePlayer, tag);
 	}
 	
 	@Override

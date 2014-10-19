@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
-import ttftcuts.physis.client.gui.journal.buttons.GuiButtonInvisible;
+import ttftcuts.physis.client.gui.button.GuiButtonInvisible;
 
 public class JournalPageIndex extends JournalPage {
 

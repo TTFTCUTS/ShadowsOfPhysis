@@ -24,7 +24,7 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
 	
 	@Override
 	public int getSocketColour(ItemStack stack) {
-		return 0xFF00FF;
+		return 5;
 	}
 
 	

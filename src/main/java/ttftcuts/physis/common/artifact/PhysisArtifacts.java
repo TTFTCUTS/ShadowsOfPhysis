@@ -325,6 +325,19 @@ public final class PhysisArtifacts {
 		}
 	}
 	
+	public static void removeItemFromSocket(ItemStack stack, int socket) {
+		NBTTagCompound data = stack.stackTagCompound.getCompoundTag(SOCKETEDTAG);
+		
+		if (data.hasKey(SOCKETCOUNTTAG)) {
+			int sockets = data.getInteger(SOCKETCOUNTTAG);
+			if (socket >= sockets) {
+				return;
+			}
+
+			data.removeTag(SOCKETTAG + socket);
+		}
+	}
+	
 	public static void addTriggerAndEffectToItem(ItemStack stack, IArtifactTrigger trigger, IArtifactEffect effect) {
 		if (stack.stackSize == 1) {
 			if (stack.stackTagCompound == null) {

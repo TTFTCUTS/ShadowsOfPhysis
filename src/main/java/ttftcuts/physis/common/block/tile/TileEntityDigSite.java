@@ -19,6 +19,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public static final String LEVELTAG = "physisdiglevel";
 	public static final String LAYERTAG = "physisdiglayer";
 	public static final String LAYERLISTTAG = "physisdiglayerlist";
+	public static final String SEEDTAG = "physisoooseed";
 	
 	// this one isn't saved, used for the hacky rendering
 	public int renderlayer = 0;
@@ -28,6 +29,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public int numlayers = 0;
 	
 	public boolean loadRequestPuzzle = true;
+	public int requestSeed = 0;
 	
 	public List<DigSiteLayer> layerlist = new ArrayList<DigSiteLayer>();
 	public List<DigSiteRenderLayer> renderdata = new ArrayList<DigSiteRenderLayer>();
@@ -35,6 +37,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public void onPlaced(int level) {
 		this.level = level;
 		this.currentlayer = 0;
+		this.requestSeed = this.worldObj.rand.nextInt();
 		
 		this.buildLayerList();
 		this.buildRenderData();
@@ -95,10 +98,9 @@ public class TileEntityDigSite extends TileEntityPhysis {
 					
 					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
 					
-					Physis.logger.info(Physis.proxy.getClass());
-					
 					loadRequestPuzzle = false;
-					Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, world.rand.nextInt());
+					this.requestSeed = this.worldObj.rand.nextInt();
+					Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, requestSeed);
 					
 					this.buildRenderData();
 					
@@ -123,7 +125,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	@Override
 	public void updateEntity() {
 		if (loadRequestPuzzle && layerlist.size() > 0 && !layerlist.get(currentlayer).built && this.getWorldObj() != null) {
-			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, this.getWorldObj().rand.nextInt());
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, requestSeed);
 		}
 	}
 	
@@ -133,6 +135,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		
 		tag.setInteger(LEVELTAG, this.level);
 		tag.setInteger(LAYERTAG, this.currentlayer);
+		tag.setInteger(SEEDTAG, this.requestSeed);
 		
 		NBTTagCompound layerdata = new NBTTagCompound();
 		for (int i=0; i<numlayers; i++) {
@@ -148,6 +151,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 
 		this.level = tag.getInteger(LEVELTAG);
 		this.currentlayer = tag.getInteger(LAYERTAG);
+		this.requestSeed = tag.getInteger(SEEDTAG);
 		
 		this.layerlist.clear();
 		NBTTagCompound layerdata = tag.getCompoundTag(LAYERLISTTAG);

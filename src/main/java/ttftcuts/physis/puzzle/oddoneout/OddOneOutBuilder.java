@@ -40,6 +40,8 @@ public class OddOneOutBuilder {
 					queue.put(req);
 					waitingRoom.add(req);
 				}
+				//Physis.logger.info(queue);
+				//Physis.logger.info(waitingRoom);
 			} catch (InterruptedException e) {
 	        	e.printStackTrace();
 			}
@@ -138,6 +140,11 @@ public class OddOneOutBuilder {
 					+ this.difficulty * 23010067
 					+ this.layerid * 37171397
 					+ this.seed; // big random number anyway
+		}
+		
+		@Override
+		public String toString() {
+			return "(Request "+this.hashCode()+" ("+this.x+","+this.y+","+this.z+") "+this.difficulty+", "+this.layerid+", "+this.seed+")";
 		}
 	}
 	

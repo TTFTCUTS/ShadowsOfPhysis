@@ -42,7 +42,7 @@ public class Physis {
     	creativeTab = new PhysisCreativeTab();
     	
     	PhysisAPI.artifactHandler = new ArtifactHandler();
-    	
+
     	proxy.preInit(event);
     }
     

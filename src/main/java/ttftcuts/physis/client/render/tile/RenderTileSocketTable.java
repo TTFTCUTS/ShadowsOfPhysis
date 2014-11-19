@@ -1,10 +1,13 @@
 package ttftcuts.physis.client.render.tile;
 
+import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.model.ModelSocketTable;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
+import ttftcuts.physis.common.helper.ShaderCallback;
+import ttftcuts.physis.common.helper.ShaderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -18,6 +21,8 @@ import net.minecraft.util.ResourceLocation;
 public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation texture = new ResourceLocation(Physis.MOD_ID+":textures/blocks/socketTable.png");
+	// TEMA: MC end portal texture
+	private static final ResourceLocation starsTexture = new ResourceLocation("textures/entity/end_portal.png");
 	
 	private static final ModelSocketTable model = new ModelSocketTable();
 	
@@ -26,6 +31,9 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 	
 	private final EntityItem dummyEntityItem = new EntityItem(null);
 	private final RenderItem dummyRenderItem;
+	
+	private TileEntitySocketTable table;
+	private final ShaderCallback shaderCallback;
 	
 	public RenderTileSocketTable() {
 		dummyRenderItem = new RenderItem() {
@@ -40,11 +48,28 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 			}
 		};
 		dummyRenderItem.setRenderManager(RenderManager.instance);
+		
+		// TEMA: this is the shader callback where the uniforms are set for this particular shader.
+		// it's called each frame when the shader is bound. Probably the most expensive part of the whole thing.
+		// you might be able to even call this once per frame instead of once per draw, pointing call at the program instead of passing this in useShader.
+		shaderCallback = new ShaderCallback() {
+			@Override
+			public void call(int shader) {
+				Minecraft mc = Minecraft.getMinecraft();
+				float fov = mc.gameSettings.fovSetting * 2f;
+				
+				int x = ARBShaderObjects.glGetUniformLocationARB(shader, "xpos");
+				ARBShaderObjects.glUniform1fARB(x, mc.thePlayer.rotationYaw / fov);
+				
+				int z = ARBShaderObjects.glGetUniformLocationARB(shader, "zpos");
+				ARBShaderObjects.glUniform1fARB(z, - mc.thePlayer.rotationPitch / fov);
+			}
+		};
 	}
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float tick) {
-		TileEntitySocketTable table = (TileEntitySocketTable)tile;
+		table = (TileEntitySocketTable)tile;
 		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1f, 1f, 1f, 1f);
@@ -82,10 +107,12 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 		
+		// TEMA: binding the star texture here instead of the normal table one - you'd want this conditional on ShaderHelper.useShaders, and act accordingly otherwise.
+		mc.renderEngine.bindTexture(starsTexture);
 		
-		mc.renderEngine.bindTexture(texture);
-		
+		ShaderHelper.useShader(ShaderHelper.testShader, shaderCallback);
 		model.render();
+		ShaderHelper.releaseShader();
 		
 		GL11.glPopMatrix();
 	}

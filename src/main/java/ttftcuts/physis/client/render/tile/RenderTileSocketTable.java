@@ -1,7 +1,12 @@
 package ttftcuts.physis.client.render.tile;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.vector.Matrix4f;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.model.ModelSocketTable;
@@ -10,6 +15,7 @@ import ttftcuts.physis.common.helper.ShaderCallback;
 import ttftcuts.physis.common.helper.ShaderHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -56,13 +62,21 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 			@Override
 			public void call(int shader) {
 				Minecraft mc = Minecraft.getMinecraft();
-				float fov = mc.gameSettings.fovSetting * 2f;
+
+				int x = ARBShaderObjects.glGetUniformLocationARB(shader, "yaw");
+				ARBShaderObjects.glUniform1fARB(x, (float)((mc.thePlayer.rotationYaw * 2 * Math.PI) / 360.0));
 				
-				int x = ARBShaderObjects.glGetUniformLocationARB(shader, "xpos");
-				ARBShaderObjects.glUniform1fARB(x, mc.thePlayer.rotationYaw / fov);
+				int z = ARBShaderObjects.glGetUniformLocationARB(shader, "pitch");
+				ARBShaderObjects.glUniform1fARB(z, - (float)((mc.thePlayer.rotationPitch * 2 * Math.PI) / 360.0));
 				
-				int z = ARBShaderObjects.glGetUniformLocationARB(shader, "zpos");
-				ARBShaderObjects.glUniform1fARB(z, - mc.thePlayer.rotationPitch / fov);
+				int offset1 = 7;
+				int offset2 = 1;
+				
+				int o1 = ARBShaderObjects.glGetUniformLocationARB(shader, "offset1");
+				ARBShaderObjects.glUniform1iARB(o1, offset1);
+				
+				int o2 = ARBShaderObjects.glGetUniformLocationARB(shader, "offset2");
+				ARBShaderObjects.glUniform1iARB(o2, offset2);
 			}
 		};
 	}

@@ -33,7 +33,7 @@ public final class ShaderHelper {
 		if(!useShaders())
 			return;
 		
-		testShader = createProgram(null, "test.frag");
+		testShader = createProgram("test2.vert", "test2.frag");
 	}
 
 	public static void useShader(int shader, ShaderCallback callback) {

@@ -68,15 +68,6 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 				
 				int z = ARBShaderObjects.glGetUniformLocationARB(shader, "pitch");
 				ARBShaderObjects.glUniform1fARB(z, - (float)((mc.thePlayer.rotationPitch * 2 * Math.PI) / 360.0));
-				
-				int offset1 = 7;
-				int offset2 = 1;
-				
-				int o1 = ARBShaderObjects.glGetUniformLocationARB(shader, "offset1");
-				ARBShaderObjects.glUniform1iARB(o1, offset1);
-				
-				int o2 = ARBShaderObjects.glGetUniformLocationARB(shader, "offset2");
-				ARBShaderObjects.glUniform1iARB(o2, offset2);
 			}
 		};
 	}

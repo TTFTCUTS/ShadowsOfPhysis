@@ -1,21 +1,14 @@
 package ttftcuts.physis.client.render.tile;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.vector.Matrix4f;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.model.ModelSocketTable;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.helper.ShaderCallback;
-import ttftcuts.physis.common.helper.ShaderHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -113,11 +106,12 @@ public class RenderTileSocketTable extends TileEntitySpecialRenderer {
 		}
 		
 		// TEMA: binding the star texture here instead of the normal table one - you'd want this conditional on ShaderHelper.useShaders, and act accordingly otherwise.
-		mc.renderEngine.bindTexture(starsTexture);
+		//mc.renderEngine.bindTexture(starsTexture);
+		mc.renderEngine.bindTexture(texture);		
 		
-		ShaderHelper.useShader(ShaderHelper.testShader, shaderCallback);
+		//ShaderHelper.useShader(ShaderHelper.testShader, shaderCallback);
 		model.render();
-		ShaderHelper.releaseShader();
+		//ShaderHelper.releaseShader();
 		
 		GL11.glPopMatrix();
 	}

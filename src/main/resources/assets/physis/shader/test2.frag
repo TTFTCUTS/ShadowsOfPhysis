@@ -25,9 +25,6 @@ mat4 rotationMatrix(vec3 axis, float angle)
 }
 
 void main() {
-	vec2 texcoord = vec2(gl_TexCoord[0]);
-    vec4 color = texture2D(texture, texcoord);
-    
     // background colour
     vec4 col = vec4(0.044,0.036,0.063,1);
     
@@ -84,13 +81,6 @@ void main() {
 		// mix the colours
 		col = col*(1-a) + vec4(r,g,b,1)*a;
 	}
-
-	//gl_FragColor = abs(vec4(c, c, c, 1.0));
-    //gl_FragColor = abs(vec4(u, v, 0.0, 1.0));
-    //gl_FragColor = vec4((ray.x*0.5)+0.5, (ray.y*0.5)+0.5, (ray.z*0.5)+0.5, 1.0);
-    //gl_FragColor = vec4(ray.x, ray.y, ray.z, 1.0);
-    //gl_FragColor = abs(vec4(ray.x, ray.y, ray.z, 1.0));
-    //gl_FragColor = color;
     
     gl_FragColor = col;
 }

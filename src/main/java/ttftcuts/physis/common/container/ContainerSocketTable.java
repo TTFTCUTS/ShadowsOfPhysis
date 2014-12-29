@@ -67,6 +67,7 @@ public class ContainerSocketTable extends ContainerPhysis {
 		} else {
 			this.activeSlots = 0;
 		}
+		//Physis.logger.info("New active slots: "+ this.activeSlots);
 		
 		for (int i=0; i<5; i++) {
 			Slot s = this.socketSlots[i];
@@ -87,10 +88,13 @@ public class ContainerSocketTable extends ContainerPhysis {
 		int id = tag.getInteger("id");
 		Physis.logger.info("Button "+id+" pressed");
 		
+		this.updateLayout();
+		
 		ItemStack mainitem = this.mainSlot.getStack();
 		if (mainitem != null) {
 			NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(mainitem);
 			Physis.logger.info(mainitem);
+			Physis.logger.info("Active slots: "+this.activeSlots+", Socket length: "+sockets.length);
 			if (id < this.activeSlots && id < sockets.length) {
 				//Physis.logger.info("test");
 				boolean left = sockets[id] != null;

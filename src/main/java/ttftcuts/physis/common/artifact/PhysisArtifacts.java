@@ -9,8 +9,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.WeightedRandom;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
+import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.artifact.effect.EffectExplosion;
 import ttftcuts.physis.common.artifact.effect.EffectPotion;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnDealDamage;
@@ -24,6 +26,7 @@ public final class PhysisArtifacts {
 	private static PhysisArtifacts instance;
 	
 	public static Random colourRand = new Random(23456);
+	public static final String PREFIX = Physis.MOD_ID+".artifact.";
 	
 	public static final String ARTIFACTTAG = "physisArtifact";
 	public static final String TRIGGERTAG = "trigger";
@@ -206,8 +209,11 @@ public final class PhysisArtifacts {
 		if (tag.hasKey(ARTIFACTTAG)) {
 			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				IArtifactTrigger trigger = triggers.get(tag.getString(TRIGGERTAG)).theTrigger;
-				return trigger;
+				String name = tag.getString(TRIGGERTAG);
+				if (triggers.containsKey(name)) {
+					IArtifactTrigger trigger = triggers.get(name).theTrigger;
+					return trigger;
+				}
 			}
 		}
 		return null;
@@ -231,7 +237,10 @@ public final class PhysisArtifacts {
 		if (tag.hasKey(ARTIFACTTAG)) {
 			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				return effects.get(tag.getString(EFFECTTAG)).theEffect;
+				String name = tag.getString(EFFECTTAG);
+				if (effects.containsKey(name)) {
+					return effects.get(name).theEffect;
+				}
 			}
 		}
 		return null;
@@ -281,7 +290,12 @@ public final class PhysisArtifacts {
 			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
 				//return Math.max(0, tag.getLong(COOLDOWNTAG) - ServerData.instance.serverTick);
-				effects.get(tag.getString(EFFECTTAG)).theEffect.
+				String ename = tag.getString(EFFECTTAG);
+				String tname = tag.getString(TRIGGERTAG);
+				if (effects.containsKey(ename) && triggers.containsKey(tname)) {
+					CooldownCategory cd = triggers.get(tname).theTrigger.getCooldownCategory();
+					effects.get(ename).theEffect.getCooldown(cd);
+				}
 			}
 		}
 		return 0;

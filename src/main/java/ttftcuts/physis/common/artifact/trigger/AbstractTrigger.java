@@ -2,20 +2,23 @@ package ttftcuts.physis.common.artifact.trigger;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 
 public abstract class AbstractTrigger implements IArtifactTrigger {
 
+	public static final String TARGET_HOLDER = PhysisArtifacts.PREFIX + "target.holder";
+	public static final String TARGET_TARGET = PhysisArtifacts.PREFIX + "target.target";
+	public static final String TARGET_ATTACKER = PhysisArtifacts.PREFIX + "target.attacker";
+	
 	protected String name;
 	
 	public double hue = 0.0;
 	public double saturation = 0.0;
 	
 	public AbstractTrigger(String name) {
-		this.name = Physis.MOD_ID +"_"+ name;
+		this.name = PhysisArtifacts.PREFIX + name;
 		this.hue = PhysisArtifacts.colourRand.nextDouble();
 		this.saturation = 1.0 - (PhysisArtifacts.colourRand.nextDouble() * PhysisArtifacts.colourRand.nextDouble());
 	}
@@ -41,13 +44,25 @@ public abstract class AbstractTrigger implements IArtifactTrigger {
 	}
 	
 	@Override
+	public String getLocalizationName() {
+		return this.name;
+	}
+	
+	@Override
 	public String getUnlocalizedTriggerString() {
-		return "When something happens, %e.\n%c second cooldown.";
+		return this.getLocalizationName() + ".trigger";
+		//return "When something happens, %1$s.\n%4$s second cooldown.";
 	}
 	
 	@Override
 	public String getUnlocalizedTargetString() {
-		return "something";
+		return TARGET_TARGET;
+		//return "something";
+	}
+	
+	@Override
+	public String getTooltipInfo() {
+		return "<No extra info>";
 	}
 	
 	@Override

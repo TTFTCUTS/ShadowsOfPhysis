@@ -5,7 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
+import ttftcuts.physis.common.artifact.PhysisArtifacts;
 
 public class EffectPotion extends AbstractEffect {
 
@@ -22,8 +24,12 @@ public class EffectPotion extends AbstractEffect {
 	}
 	
 	@Override
-	public String getUnlocalizedEffectString() {
-		return "applies %d seconds of "+this.potionEffect.getName()+" to %t";
+	public String getLocalizationName() {
+		return PhysisArtifacts.PREFIX + "Potion";
 	}
 	
+	@Override
+	public String getTooltipInfo() {
+		return Physis.text.translate(this.potionEffect.getName());
+	}
 }

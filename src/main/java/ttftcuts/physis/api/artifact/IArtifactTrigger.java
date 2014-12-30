@@ -17,11 +17,13 @@ public interface IArtifactTrigger {
 	public void onTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id);
 	
 	public String getName();
+	public String getLocalizationName();
 	
 	public CooldownCategory getCooldownCategory();
 	
 	public String getUnlocalizedTriggerString();
 	public String getUnlocalizedTargetString();
+	public String getTooltipInfo();
 	
 	public double getHue();
 	public double getSaturation();

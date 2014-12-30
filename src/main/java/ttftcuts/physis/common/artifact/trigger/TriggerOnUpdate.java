@@ -20,4 +20,14 @@ public class TriggerOnUpdate extends AbstractTrigger {
 	public void onUpdate(ItemStack stack, EntityLivingBase holder, int id) {
 		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
 	}
+	
+	/*@Override
+	public String getUnlocalizedTriggerString() {
+		return "Every %3$s seconds, %1$s.";
+	}*/
+	
+	@Override
+	public String getUnlocalizedTargetString() {
+		return TARGET_HOLDER;
+	}
 }

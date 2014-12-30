@@ -1,6 +1,7 @@
 package ttftcuts.physis.common.handler;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
@@ -100,8 +101,9 @@ public class TooltipHandler {
 		}
 	}
 	
+	//private static Pattern replaceable = Pattern.compile("%[1-6]\\$s");
 	public String getTooltipForSocketable(ItemStack stack) {
-		String output = null;
+		/*String output = null;
 		
 		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
 		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
@@ -109,17 +111,34 @@ public class TooltipHandler {
 			IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(stack);
 			
 			if (trigger != null && effect != null) {
-				output = trigger.getUnlocalizedTriggerString();
+				output = Physis.text.translate(trigger.getUnlocalizedTriggerString());
 				
-				while (output.contains("%")) {
-					output = output.replaceAll("%c", Physis.text.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())));
-					output = output.replaceAll("%e", effect.getUnlocalizedEffectString());
-					output = output.replaceAll("%t", trigger.getUnlocalizedTargetString());
-					output = output.replaceAll("%d", "<duration>");
+				while (replaceable.matcher(output).find()) {
+					try {
+						output = String.format(output, 
+							Physis.text.translate(effect.getUnlocalizedEffectString()), 
+							Physis.text.translate(trigger.getUnlocalizedTargetString()), 
+							Physis.text.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())), 
+							Physis.text.ticksToSeconds2dp(effect.getDuration(trigger.getCooldownCategory())),
+							trigger.getTooltipInfo(),
+							effect.getTooltipInfo()
+						);
+					} catch (Exception e) {
+						Physis.logger.warn("Tooltip formatting error: "+e.getLocalizedMessage());
+						break;
+					}
 				}
 			}
 		}
 		
-		return output;
+		return output;*/
+		
+		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
+		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
+			IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
+		
+			return Physis.text.formatArtifactNames(trigger.getUnlocalizedTriggerString(), stack);
+		}
+		return null;
 	}
 }

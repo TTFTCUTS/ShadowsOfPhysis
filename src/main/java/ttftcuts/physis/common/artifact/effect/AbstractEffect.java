@@ -3,7 +3,6 @@ package ttftcuts.physis.common.artifact.effect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -18,7 +17,7 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	public double saturation = 0.0;
 	
 	public AbstractEffect(String name) {
-		this.name = Physis.MOD_ID +"_"+ name;
+		this.name = PhysisArtifacts.PREFIX + name;
 		this.hue = PhysisArtifacts.colourRand.nextDouble();
 		this.saturation = 1.0 - (PhysisArtifacts.colourRand.nextDouble() * PhysisArtifacts.colourRand.nextDouble());
 	}
@@ -45,6 +44,11 @@ public abstract class AbstractEffect implements IArtifactEffect {
 		return cooldowns[cd.ordinal()];
 	}
 	
+	@Override
+	public int getDuration(CooldownCategory cd) {
+		return durations[cd.ordinal()];
+	}
+	
 	protected void doCooldown(NBTTagCompound tag, CooldownCategory cd) {
 		PhysisArtifacts.setEffectCooldown(tag, getCooldown(cd));
 	}
@@ -55,8 +59,19 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	}
 	
 	@Override
+	public String getLocalizationName() {
+		return this.name;
+	}
+	
+	@Override
 	public String getUnlocalizedEffectString() {
-		return "does a thing to %t";
+		return this.getLocalizationName() + ".effect";
+		//return "does a thing to %2$s";
+	}
+	
+	@Override
+	public String getTooltipInfo() {
+		return "<No extra info>";
 	}
 	
 	public AbstractEffect setCooldowns(double... cd) {

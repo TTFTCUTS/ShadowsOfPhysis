@@ -15,7 +15,14 @@ public class EffectExplosion extends AbstractEffect {
 	
 	@Override
 	public void doEffectChecked(NBTTagCompound tag, ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {
-		target.worldObj.createExplosion(source, target.posX, target.posY, target.posZ, power, false);
+		double x = (target.boundingBox.minX + target.boundingBox.maxX)*0.5;
+		double y = (target.boundingBox.minY + target.boundingBox.maxY)*0.5;
+		double z = (target.boundingBox.minZ + target.boundingBox.maxZ)*0.5;
+		target.worldObj.createExplosion(source, x, y, z, power, false);
 	}
 
+	/*@Override
+	public String getUnlocalizedEffectString() {
+		return "causes a small explosion at %2$s";
+	}*/
 }

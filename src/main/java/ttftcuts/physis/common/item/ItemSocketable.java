@@ -146,4 +146,26 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
         }
         Physis.logger.info("Socketable Icons: "+Arrays.deepToString(icons));
 	}
+	
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		
+		IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
+		IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(stack);
+		
+		if (trigger != null && effect != null) {
+			int type = 0;
+			
+			String out = Physis.text.translate(PhysisArtifacts.PREFIX+"type."+type+".name");
+			
+			out = String.format(out, 
+				Physis.text.translate(trigger.getLocalizationName()+".name"),
+				Physis.text.translate(effect.getLocalizationName()+".name")
+			);
+			
+			return Physis.text.formatArtifactNames(out, stack);
+		}
+		
+		return super.getItemStackDisplayName(stack);
+	}
 }

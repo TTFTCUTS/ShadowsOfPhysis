@@ -29,4 +29,31 @@ item.physis:trowel.leveltooltip=Maximum dig site level
 item.physis:addsocket.name=(PH) Add Socket
 item.physis:addsocket.tooltip=Craft this with any item which has a maximum stack size of one to add a socket, up to a limit of two.\n\n@oThis item is consumed in the process.
 
+item.physis:socketable.name=Broken Socketable Item
+
+physis.artifact.type.0.name=%1$s Shard %2$s
+
+physis.artifact.OnUpdate.name=Passive
+physis.artifact.OnUpdate.trigger=Every %3$s seconds, %1$s.
+physis.artifact.OnEquippedUpdate.name=Wielded
+physis.artifact.OnEquippedUpdate.trigger=Every %3$s seconds while equipped or held, %1$s.
+physis.artifact.OnDealDamage.name=Aggressor's
+physis.artifact.OnDealDamage.trigger=When dealing damage, %1$s.\n%3$s second cooldown.
+physis.artifact.OnTakeDamage.name=Defender's
+physis.artifact.OnTakeDamage.trigger=When taking damage, %1$s.\n%3$s second cooldown.
+physis.artifact.OnDealDamageSelf.name=Brawler's
+physis.artifact.OnDealDamageSelf.trigger=When dealing damage, %1$s.\n%3$s second cooldown.
+physis.artifact.OnTakeDamageSelf.name=Vigilant
+physis.artifact.OnTakeDamageSelf.trigger=When taking damage, %1$s.\n%3$s second cooldown.
+
+
+physis.artifact.SmallExplosion.name=of Blasting
+physis.artifact.SmallExplosion.effect=causes a small explosion centred on %2$s
+physis.artifact.Potion.name=of %6$s
+physis.artifact.Potion.effect=applies %4$s seconds of %6$s to %2$s
+
+physis.artifact.target.holder=the holder
+physis.artifact.target.target=the target
+physis.artifact.target.attacker=the attacker
+
 tile.physis:digsite.name=Buried Artifact

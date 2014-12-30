@@ -10,10 +10,13 @@ public interface IArtifactEffect {
 	public void doEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, IArtifactHandler.CooldownCategory cooldowntype);
 	
 	public int getCooldown(CooldownCategory cd);
+	public int getDuration(CooldownCategory cd);
 	
 	public String getName();
+	public String getLocalizationName();
 	
 	public String getUnlocalizedEffectString();
+	public String getTooltipInfo();
 	
 	public double getHue();
 	public double getSaturation();

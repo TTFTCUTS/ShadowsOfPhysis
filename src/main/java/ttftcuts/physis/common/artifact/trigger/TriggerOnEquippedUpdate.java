@@ -12,7 +12,12 @@ public class TriggerOnEquippedUpdate extends AbstractTrigger {
 	}
 
 	@Override
+	public CooldownCategory getCooldownCategory() {
+		return CooldownCategory.LONG;
+	}
+	
+	@Override
 	public void onEquippedUpdate(ItemStack stack, EntityLivingBase holder, int id) {
-		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, CooldownCategory.LONG);
+		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
 	}
 }

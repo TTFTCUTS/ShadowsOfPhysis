@@ -15,14 +15,23 @@ public class TriggerOnTakeDamage extends AbstractTrigger {
 	}
 
 	@Override
+	public CooldownCategory getCooldownCategory() {
+		if (self) {
+			return CooldownCategory.MEDIUM;
+		} else {
+			return CooldownCategory.SHORTER;
+		}
+	}
+	
+	@Override
 	public void onTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id) {
 		if (self) {
 			// effect on self when hit
-			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, target, target, id, CooldownCategory.MEDIUM);
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, target, target, id, getCooldownCategory());
 		} else {
 			// effect on attacker when hit
 			if (source != null) {
-				PhysisAPI.artifactHandler.triggerArtifactEffect(stack, source, target, id, CooldownCategory.SHORTER);
+				PhysisAPI.artifactHandler.triggerArtifactEffect(stack, source, target, id, getCooldownCategory());
 			}
 		}
 	}

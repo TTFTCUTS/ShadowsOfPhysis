@@ -23,6 +23,8 @@ public final class PhysisArtifacts {
 
 	private static PhysisArtifacts instance;
 	
+	public static Random colourRand = new Random(23456);
+	
 	public static final String ARTIFACTTAG = "physisArtifact";
 	public static final String TRIGGERTAG = "trigger";
 	public static final String EFFECTTAG = "effect";
@@ -267,6 +269,20 @@ public final class PhysisArtifacts {
 	public static long getEffectCooldown(ItemStack stack) {
 		if (stack.stackTagCompound != null) {
 			return getEffectCooldown(stack.stackTagCompound);
+		}
+		return 0;
+	}
+	
+	public static long getEffectMaxCooldown(NBTTagCompound tag) {
+		if (tag.hasKey("tag")) {
+			return getEffectMaxCooldown(tag.getCompoundTag("tag"));
+		}
+		if (tag.hasKey(ARTIFACTTAG)) {
+			tag = tag.getCompoundTag(ARTIFACTTAG);
+			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
+				//return Math.max(0, tag.getLong(COOLDOWNTAG) - ServerData.instance.serverTick);
+				effects.get(tag.getString(EFFECTTAG)).theEffect.
+			}
 		}
 		return 0;
 	}

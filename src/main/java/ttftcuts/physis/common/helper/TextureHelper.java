@@ -233,6 +233,14 @@ public class TextureHelper {
 		rgb = (rgb << 8) + b;
 		return rgb;
 	}
+	
+	public static int compose(int[] col) {
+		int r = col[0];
+		int g = col[1];
+		int b = col[2];
+		int a = col.length > 3 ? col[3] : 255;
+		return compose(r,g,b,a);
+	}
 
 	public static int alpha(int c) {
 		return (c >> 24) & 0xFF;
@@ -252,5 +260,33 @@ public class TextureHelper {
 	
 	protected static int mult(int c1, int c2) {
 		return (int)(c1 * (c2/255.0));
+	}
+	
+	protected static double hue2rgb(double p, double q, double t) {
+		if (t < 0) t += 1;
+		if (t > 1) t -= 1;
+		if (t < 1/6.0) return p + (q - p) * 6 * t;
+		if (t < 1/2.0) return q;
+		if (t < 2/3.0) return p + (q - p) * (2/3.0 - t) * 6;
+		return p;
+	}
+	
+	public static int[] hsl2rgb(double h, double s, double l) {
+		//h *= 360.0;
+		
+		double r,g,b;
+		
+		if (s<=0) {
+			r = g = b = l;
+			Physis.logger.info("grey");
+		} else {
+			double q = l < 0.5 ? l * (1+s) : l + s - l*s;
+			double p = 2 * l - q;
+			r = hue2rgb(p, q, h + 1/3.0);
+			g = hue2rgb(p, q, h);
+			b = hue2rgb(p, q, h - 1/3.0);
+		}
+		
+		return new int[]{(int)Math.round(r * 255), (int)Math.round(g * 255), (int)Math.round(b * 255)};
 	}
 }

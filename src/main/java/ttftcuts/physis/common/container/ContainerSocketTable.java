@@ -3,8 +3,8 @@ package ttftcuts.physis.common.container;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
-import ttftcuts.physis.common.container.slot.SlotItemWithSockets;
-import ttftcuts.physis.common.container.slot.SlotSocketable;
+import ttftcuts.physis.common.container.slot.SlotFilter;
+import ttftcuts.physis.common.container.slot.SlotFiltered;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -15,25 +15,32 @@ public class ContainerSocketTable extends ContainerPhysis {
 
 	private TileEntitySocketTable table;
 	
-	private SlotItemWithSockets mainSlot;
+	private Slot mainSlot;
 	private Slot materialSlot;
-	private SlotSocketable[] socketSlots;
+	private Slot[] socketSlots;
 	public int activeSlots = 0;
+	
+	private static SlotFilter materialFilter = new SlotFilter() {
+		@Override
+		public boolean isValidStack(ItemStack stack) {
+			return TileEntitySocketTable.checkReagentValidity(stack);
+		}
+	};
 	
 	public ContainerSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		this.table = table;
 		
-		mainSlot = new SlotItemWithSockets(table, 0, 8, 65);
+		mainSlot = new SlotFiltered(table, 0, 8, 65, SlotFilter.SOCKETED);
 		addSlotToContainer(mainSlot);
 		
-		materialSlot = new Slot(table, 1, 8, 101);
+		materialSlot = new SlotFiltered(table, 1, 8, 101, materialFilter);
 		addSlotToContainer(materialSlot);
 		
-		socketSlots = new SlotSocketable[5];
+		socketSlots = new Slot[5];
 		activeSlots = 0;
 		
 		for (int i = 0; i<5; i++) {
-			socketSlots[i] = new SlotSocketable(table, i+2, 40 + 20 * i, 60);
+			socketSlots[i] = new SlotFiltered(table, i+2, 40 + 20 * i, 60, SlotFilter.SOCKETABLE);
 			addSlotToContainer(socketSlots[i]);
 		}
 		
@@ -105,17 +112,19 @@ public class ContainerSocketTable extends ContainerPhysis {
 				
 				if (left && !right && mats >= TileEntitySocketTable.REMOVECOST) {
 					// unsocket
-					ItemStack stack = ItemStack.loadItemStackFromNBT(sockets[id]);
-					PhysisArtifacts.removeItemFromSocket(mainitem, id);
-					this.socketSlots[id].putStack(stack);
-					this.consumeReagent(TileEntitySocketTable.REMOVECOST);
+					if (this.consumeReagent(TileEntitySocketTable.REMOVECOST)) {
+						ItemStack stack = ItemStack.loadItemStackFromNBT(sockets[id]);
+						PhysisArtifacts.removeItemFromSocket(mainitem, id);
+						this.socketSlots[id].putStack(stack);
+					}
 				} else if (right && !left && mats >= TileEntitySocketTable.INSERTCOST) {
 					// socket
-					ItemStack toSocket = this.socketSlots[id].getStack();
-					this.socketSlots[id].putStack(null);
-					
-					PhysisArtifacts.addItemToSocket(mainitem, toSocket, id);
-					this.consumeReagent(TileEntitySocketTable.INSERTCOST);
+					if (this.consumeReagent(TileEntitySocketTable.INSERTCOST)) {
+						ItemStack toSocket = this.socketSlots[id].getStack();
+						this.socketSlots[id].putStack(null);
+						
+						PhysisArtifacts.addItemToSocket(mainitem, toSocket, id);
+					}
 				}
 			}
 		}
@@ -123,18 +132,25 @@ public class ContainerSocketTable extends ContainerPhysis {
 	
 	public int getReagentCount() {
 		if (this.materialSlot.getHasStack()) {
-			return this.materialSlot.getStack().stackSize;
+			ItemStack stack = this.materialSlot.getStack();
+			if (TileEntitySocketTable.checkReagentValidity(stack)) {
+				return stack.stackSize;
+			}
 		}
 		return 0;
 	}
 	
-	public void consumeReagent(int number) {
+	public boolean consumeReagent(int number) {
 		if (this.materialSlot.getHasStack()) {
 			ItemStack stack = this.materialSlot.getStack();
-			stack.splitStack(number);
-			if (stack.stackSize <= 0) {
-				this.materialSlot.putStack(null);
+			if (TileEntitySocketTable.checkReagentValidity(stack)) {
+				stack.splitStack(number);
+				if (stack.stackSize <= 0) {
+					this.materialSlot.putStack(null);
+				}
+				return true;
 			}
 		}
+		return false;
 	}
 }

@@ -14,8 +14,13 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	protected int[] cooldowns = {0, 20, 20, 20, 20, 20, 20, 20};
 	protected int[] durations = {0, 20, 20, 20, 20, 20, 20, 20};
 	
+	public double hue = 0.0;
+	public double saturation = 0.0;
+	
 	public AbstractEffect(String name) {
 		this.name = Physis.MOD_ID +"_"+ name;
+		this.hue = PhysisArtifacts.colourRand.nextDouble();
+		this.saturation = 1.0 - (PhysisArtifacts.colourRand.nextDouble() * PhysisArtifacts.colourRand.nextDouble());
 	}
 	
 	@Override
@@ -23,9 +28,9 @@ public abstract class AbstractEffect implements IArtifactEffect {
 		if (target.worldObj.isRemote) { return; }
 		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
 		
-		if (sockets.length <= id+1 && sockets[id] != null) {
+		if (sockets.length >= id+1 && sockets[id] != null) {
 			long remainingCooldown = PhysisArtifacts.getEffectCooldown(sockets[id]);
-			if (remainingCooldown == 0) {
+			if (remainingCooldown <= 0) {
 				
 				this.doEffectChecked(sockets[id], stack, target, source, id, cooldowntype);
 				this.doCooldown(sockets[id], cooldowntype);
@@ -35,13 +40,23 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	
 	public void doEffectChecked(NBTTagCompound tag, ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {}
 	
+	@Override
+	public int getCooldown(CooldownCategory cd) {
+		return cooldowns[cd.ordinal()];
+	}
+	
 	protected void doCooldown(NBTTagCompound tag, CooldownCategory cd) {
-		PhysisArtifacts.setEffectCooldown(tag, cooldowns[cd.ordinal()]);
+		PhysisArtifacts.setEffectCooldown(tag, getCooldown(cd));
 	}
 	
 	@Override
 	public String getName() {
 		return this.name;
+	}
+	
+	@Override
+	public String getUnlocalizedEffectString() {
+		return "does a thing to %t";
 	}
 	
 	public AbstractEffect setCooldowns(double... cd) {
@@ -58,5 +73,15 @@ public abstract class AbstractEffect implements IArtifactEffect {
 			durations[i+1] = (int)Math.ceil(d[i] * 20.0);
 		}
 		return this;
+	}
+	
+	@Override
+	public double getHue() {
+		return this.hue;
+	}
+	
+	@Override
+	public double getSaturation() {
+		return this.saturation;
 	}
 }

@@ -21,5 +21,9 @@ public class EffectPotion extends AbstractEffect {
 		target.addPotionEffect(new PotionEffect(this.potionEffect.id, durations[cooldowntype.ordinal()]));
 	}
 	
+	@Override
+	public String getUnlocalizedEffectString() {
+		return "applies %d seconds of "+this.potionEffect.getName()+" to %t";
+	}
 	
 }

@@ -3,6 +3,7 @@ package ttftcuts.physis.common.block.tile;
 import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.inventory.Inventory;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,6 +66,8 @@ public class TileEntitySocketTable extends TileEntityInventory implements ISided
 		this.drawer = new Inventory(27);
 		NBTTagCompound itag = tag.getCompoundTag("drawer");
 		this.drawer.readFromNBT(itag);
+		
+		
 	}
 	
 	@Override
@@ -82,5 +85,13 @@ public class TileEntitySocketTable extends TileEntityInventory implements ISided
 	public void dropInventory() {
 		super.dropInventory();
 		this.drawer.dropItems(worldObj, xCoord, yCoord, zCoord);
+	}
+	
+	public static boolean checkReagentValidity(ItemStack stack) {
+		// is it lapis?
+		if (stack.getItem() == Items.dye && stack.getItemDamage() == 4) {
+			return true;
+		}
+		return false;
 	}
 }

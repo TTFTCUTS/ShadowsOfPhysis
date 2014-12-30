@@ -1,5 +1,6 @@
 package ttftcuts.physis.api.artifact;
 
+import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
@@ -16,4 +17,12 @@ public interface IArtifactTrigger {
 	public void onTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id);
 	
 	public String getName();
+	
+	public CooldownCategory getCooldownCategory();
+	
+	public String getUnlocalizedTriggerString();
+	public String getUnlocalizedTargetString();
+	
+	public double getHue();
+	public double getSaturation();
 }

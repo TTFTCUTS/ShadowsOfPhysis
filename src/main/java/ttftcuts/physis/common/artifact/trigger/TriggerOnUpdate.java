@@ -12,7 +12,12 @@ public class TriggerOnUpdate extends AbstractTrigger {
 	}
 
 	@Override
+	public CooldownCategory getCooldownCategory() {
+		return CooldownCategory.LONGEST;
+	}
+	
+	@Override
 	public void onUpdate(ItemStack stack, EntityLivingBase holder, int id) {
-		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, CooldownCategory.LONGEST);
+		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
 	}
 }

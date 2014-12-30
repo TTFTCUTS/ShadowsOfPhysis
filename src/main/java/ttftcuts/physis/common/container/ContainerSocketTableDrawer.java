@@ -3,7 +3,8 @@ package ttftcuts.physis.common.container;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
-import ttftcuts.physis.common.container.slot.SlotSocketable;
+import ttftcuts.physis.common.container.slot.SlotFilter;
+import ttftcuts.physis.common.container.slot.SlotFiltered;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -21,7 +22,7 @@ private TileEntitySocketTable table;
 		
 		for (int y=0; y<numRows; y++) {
 			for (int x=0; x<numColumns; x++) {
-				this.addSlotToContainer(new SlotSocketable(table.drawer, y*numColumns + x, 8 + x * 18, 18 + y * 18));
+				this.addSlotToContainer(new SlotFiltered(table.drawer, y*numColumns + x, 8 + x * 18, 18 + y * 18, SlotFilter.SOCKETABLE));
 			}
 		}
 		

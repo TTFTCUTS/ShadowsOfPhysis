@@ -15,13 +15,36 @@ public class TriggerOnDealDamage extends AbstractTrigger {
 	}
 
 	@Override
+	public CooldownCategory getCooldownCategory() {
+		if (self) {
+			return CooldownCategory.MEDIUM;
+		} else {
+			return CooldownCategory.SHORT;
+		}
+	}
+	
+	@Override
 	public void onDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id) {
 		if (self) {
 			// effect on self when damage enemy
-			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, source, source, id, CooldownCategory.MEDIUM);
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, source, source, id, getCooldownCategory());
 		} else {
 			// effect on target when attacking
-			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, target, source, id, CooldownCategory.SHORT);
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, target, source, id, getCooldownCategory());
+		}
+	}
+	
+	@Override
+	public String getUnlocalizedTriggerString() {
+		return "When dealing damage, %e.\n%c second cooldown.";
+	}
+	
+	@Override
+	public String getUnlocalizedTargetString() {
+		if (self) {
+			return "the holder";
+		} else {
+			return "the target";
 		}
 	}
 }

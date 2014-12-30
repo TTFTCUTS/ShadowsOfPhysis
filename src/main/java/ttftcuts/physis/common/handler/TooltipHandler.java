@@ -2,6 +2,7 @@ package ttftcuts.physis.common.handler;
 
 import java.util.List;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.artifact.ISocketable;
@@ -36,7 +37,7 @@ public class TooltipHandler {
 			}
 			
 			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
-				NBTTagCompound tag = event.itemStack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
+				/*NBTTagCompound tag = event.itemStack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
 				if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
 					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(event.itemStack);
 					if (trigger != null) {
@@ -49,7 +50,10 @@ public class TooltipHandler {
 					
 					long cd = PhysisArtifacts.getEffectCooldown(event.itemStack);
 					event.toolTip.add("Cooldown: "+cd+"t");
-				}
+				}*/
+				
+				List<String> content = Physis.text.translateAndWrap(this.getTooltipForSocketable(event.itemStack), 200);
+				event.toolTip.addAll(content);
 			}
 		}
 	}
@@ -94,5 +98,28 @@ public class TooltipHandler {
 				lines.add(index+offset, " \u00A78\u25a0  Empty socket");
 			}
 		}
+	}
+	
+	public String getTooltipForSocketable(ItemStack stack) {
+		String output = null;
+		
+		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
+		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
+			IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
+			IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(stack);
+			
+			if (trigger != null && effect != null) {
+				output = trigger.getUnlocalizedTriggerString();
+				
+				while (output.contains("%")) {
+					output = output.replaceAll("%c", Physis.text.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())));
+					output = output.replaceAll("%e", effect.getUnlocalizedEffectString());
+					output = output.replaceAll("%t", trigger.getUnlocalizedTargetString());
+					output = output.replaceAll("%d", "<duration>");
+				}
+			}
+		}
+		
+		return output;
 	}
 }

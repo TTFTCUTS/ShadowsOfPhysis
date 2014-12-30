@@ -37,4 +37,13 @@ public class LocalizationHelper {
 	public List<String> translateAndWrap(String input, int width) {
 		return wrapText(translate(input), width);
 	}
+	
+	public String ticksToSeconds2dp(int ticks) {
+		double seconds = ticks / 20.0;
+		double rounded = Math.round(seconds*100.0)/100.0;
+		if (rounded % 1.0 == 0.0) {
+			return String.valueOf((int)rounded);
+		}
+		return String.valueOf(rounded);
+	}
 }

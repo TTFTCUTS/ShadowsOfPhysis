@@ -2,7 +2,6 @@ package ttftcuts.physis.common.artifact.trigger;
 
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
-import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
@@ -36,11 +35,6 @@ public class TriggerOnTakeDamage extends AbstractTrigger {
 			}
 		}
 	}
-	
-	/*@Override
-	public String getLocalizationName() {
-		return PhysisArtifacts.PREFIX + "OnTakeDamage";
-	}*/
 	
 	@Override
 	public String getUnlocalizedTargetString() {

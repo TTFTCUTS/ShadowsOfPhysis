@@ -19,8 +19,8 @@ public abstract class AbstractTrigger implements IArtifactTrigger {
 	
 	public AbstractTrigger(String name) {
 		this.name = PhysisArtifacts.PREFIX + name;
-		this.hue = PhysisArtifacts.colourRand.nextDouble();
-		this.saturation = 1.0 - (PhysisArtifacts.colourRand.nextDouble() * PhysisArtifacts.colourRand.nextDouble());
+		this.hue = PhysisArtifacts.triggerColourRand.nextDouble();
+		this.saturation = 1.0 - (PhysisArtifacts.triggerColourRand.nextDouble() * PhysisArtifacts.triggerColourRand.nextDouble());
 	}
 	
 	@Override

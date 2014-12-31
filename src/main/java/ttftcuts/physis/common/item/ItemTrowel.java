@@ -18,7 +18,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.common.PhysisItems;
-import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,7 +28,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -92,21 +90,6 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		});
 		
 		types.addAll(trowels);
-		
-		ItemStack testsword = new ItemStack(Items.diamond_sword); 
-		PhysisArtifacts.addSocketToItem(testsword);
-		
-		ItemStack poisonApple = new ItemStack(Items.golden_apple, 1, 1);
-		PhysisArtifacts.addTriggerAndEffectToItem(poisonApple, PhysisArtifacts.triggerOnDealDamage, PhysisArtifacts.effectExplosion);
-		
-		PhysisArtifacts.addItemToSocket(testsword, poisonApple, 0);
-		
-		types.add(testsword);
-		
-		ItemStack testbow = new ItemStack(Items.bow);
-		PhysisArtifacts.addSocketToItem(testbow);
-		PhysisArtifacts.addItemToSocket(testbow, poisonApple, 0);
-		types.add(testbow);
 	}
 
 	

@@ -1,10 +1,8 @@
 package ttftcuts.physis.common.handler;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import ttftcuts.physis.Physis;
-import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -38,21 +36,6 @@ public class TooltipHandler {
 			}
 			
 			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
-				/*NBTTagCompound tag = event.itemStack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
-				if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
-					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(event.itemStack);
-					if (trigger != null) {
-						event.toolTip.add(trigger.getName());
-					}
-					IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(event.itemStack);
-					if (effect != null) {
-						event.toolTip.add(effect.getName());
-					}
-					
-					long cd = PhysisArtifacts.getEffectCooldown(event.itemStack);
-					event.toolTip.add("Cooldown: "+cd+"t");
-				}*/
-				
 				List<String> content = Physis.text.translateAndWrap(this.getTooltipForSocketable(event.itemStack), 200);
 				event.toolTip.addAll(content);
 			}
@@ -101,43 +84,14 @@ public class TooltipHandler {
 		}
 	}
 	
-	//private static Pattern replaceable = Pattern.compile("%[1-6]\\$s");
-	public String getTooltipForSocketable(ItemStack stack) {
-		/*String output = null;
-		
+	public String getTooltipForSocketable(ItemStack stack) {		
 		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
 		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
 			IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
-			IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(stack);
 			
-			if (trigger != null && effect != null) {
-				output = Physis.text.translate(trigger.getUnlocalizedTriggerString());
-				
-				while (replaceable.matcher(output).find()) {
-					try {
-						output = String.format(output, 
-							Physis.text.translate(effect.getUnlocalizedEffectString()), 
-							Physis.text.translate(trigger.getUnlocalizedTargetString()), 
-							Physis.text.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())), 
-							Physis.text.ticksToSeconds2dp(effect.getDuration(trigger.getCooldownCategory())),
-							trigger.getTooltipInfo(),
-							effect.getTooltipInfo()
-						);
-					} catch (Exception e) {
-						Physis.logger.warn("Tooltip formatting error: "+e.getLocalizedMessage());
-						break;
-					}
-				}
+			if (trigger != null) {
+				return Physis.text.formatArtifactNames(trigger.getUnlocalizedTriggerString(), stack);
 			}
-		}
-		
-		return output;*/
-		
-		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
-		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
-			IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
-		
-			return Physis.text.formatArtifactNames(trigger.getUnlocalizedTriggerString(), stack);
 		}
 		return null;
 	}

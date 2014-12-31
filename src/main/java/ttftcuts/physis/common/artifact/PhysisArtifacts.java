@@ -25,7 +25,8 @@ public final class PhysisArtifacts {
 
 	private static PhysisArtifacts instance;
 	
-	public static Random colourRand = new Random(23456);
+	public static Random triggerColourRand = new Random(23456);
+	public static Random effectColourRand = new Random(12345);
 	public static final String PREFIX = Physis.MOD_ID+".artifact.";
 	
 	public static final String ARTIFACTTAG = "physisArtifact";
@@ -40,7 +41,7 @@ public final class PhysisArtifacts {
 	public static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
 	public static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
 
-	public static IArtifactTrigger triggerOnUpdate;
+	/*public static IArtifactTrigger triggerOnUpdate;
 	public static IArtifactTrigger triggerOnEquippedUpdate;
 	public static IArtifactTrigger triggerOnDealDamage;
 	public static IArtifactTrigger triggerOnDealDamageSelf;
@@ -48,23 +49,65 @@ public final class PhysisArtifacts {
 	public static IArtifactTrigger triggerOnTakeDamageSelf;
 	
 	public static IArtifactEffect effectPoison;
-	public static IArtifactEffect effectExplosion;
+	public static IArtifactEffect effectExplosion;*/
 	
 	public static void init() {
 		instance = new PhysisArtifacts();
 		
-		triggerOnUpdate = registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 50);
-		triggerOnEquippedUpdate = registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate"), 100);
-		triggerOnDealDamage = registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamage", false), 100);
-		triggerOnDealDamageSelf = registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamageSelf", true), 50);
-		triggerOnTakeDamage = registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamage", false), 100);
-		triggerOnTakeDamageSelf = registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamageSelf", true), 50);
+		// register triggers
+		registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 50);
+		registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate"), 100);
+		registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamage", false), 100);
+		registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamageSelf", true), 50);
+		registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamage", false), 100);
+		registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamageSelf", true), 50);
 		
-		effectPoison = registerPhysisEffect(new EffectPotion("Poison", Potion.poison)
-												.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
-												.setDurations(4, 5, 6, 7, 8, 9, 10), 100);
-		effectExplosion = registerPhysisEffect(new EffectExplosion("SmallExplosion", 4)
-												.setCooldowns(2, 3, 4, 5, 7, 9, 11), 20);
+		// register effects
+		
+		// potions
+		registerPhysisEffect(new EffectPotion("Poison", Potion.poison)
+			.setCooldowns(2, 2.5, 3, 4, 6, 9, 12)
+			.setDurations(4, 5, 5, 5, 6, 6, 6), 100);
+		registerPhysisEffect(new EffectPotion("Wither", Potion.wither)
+			.setCooldowns(3, 4, 6, 9, 12, 15, 25)
+			.setDurations(4, 5, 5, 5, 6, 6, 6), 20);
+		registerPhysisEffect(new EffectPotion("Hunger", Potion.hunger)
+			.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
+			.setDurations(4, 4, 5, 5, 6, 7, 8), 100);
+		registerPhysisEffect(new EffectPotion("Slowness", Potion.moveSlowdown)
+			.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
+			.setDurations(1, 1.5, 2, 2.5, 3.5, 5, 7.5), 60);
+		registerPhysisEffect(new EffectPotion("Speed", Potion.moveSpeed)
+			.setCooldowns(2, 3, 4, 5, 10, 15, 20)
+			.setDurations(1, 1, 1.5, 1.5, 2, 2, 2.5), 60);
+		registerPhysisEffect(new EffectPotion("Fatigue", Potion.digSlowdown)
+			.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
+			.setDurations(2, 3, 4, 5, 6, 7, 8), 60);
+		registerPhysisEffect(new EffectPotion("Haste", Potion.digSpeed)
+			.setCooldowns(2, 3, 4, 5, 10, 15, 20)
+			.setDurations(2, 2.5, 3, 3.5, 4, 4.5, 5), 80);
+		registerPhysisEffect(new EffectPotion("Strength", Potion.damageBoost)
+			.setCooldowns(2, 3, 4, 5, 10, 15, 20)
+			.setDurations(1, 1, 1.5, 1.5, 2, 2, 2.5), 60);
+		registerPhysisEffect(new EffectPotion("Weakness", Potion.weakness)
+			.setCooldowns(1, 1.5, 2, 2.5, 5, 7.5, 10)
+			.setDurations(4, 5, 6, 7, 8, 9, 10), 80);
+		registerPhysisEffect(new EffectPotion("Blindness", Potion.blindness)
+			.setCooldowns(2, 2.5, 3, 4, 6, 9, 12)
+			.setDurations(4, 5, 5, 5, 6, 6, 6), 60);
+		registerPhysisEffect(new EffectPotion("Regeneration", Potion.regeneration)
+			.setCooldowns(10, 15, 20, 25, 30, 45, 60)
+			.setDurations(6, 6, 7, 7, 8, 8, 10), 10);
+		registerPhysisEffect(new EffectPotion("Resistance", Potion.resistance)
+			.setCooldowns(1, 2, 3, 4, 6, 15, 25)
+			.setDurations(4, 5, 6, 7, 8, 9, 10), 50);
+		registerPhysisEffect(new EffectPotion("FireResistance", Potion.fireResistance)
+			.setCooldowns(10, 15, 20, 25, 30, 45, 60)
+			.setDurations(6, 6, 7, 7, 8, 8, 10), 10);
+		
+		// explosions
+		registerPhysisEffect(new EffectExplosion("SmallExplosion", 4)
+			.setCooldowns(2, 3, 4, 5, 7, 9, 11), 20);
 	}
 	
 	// ################### registration ###################

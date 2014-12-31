@@ -57,7 +57,7 @@ void main() {
 		vec3 axis = normalize(vec3(sin(rand1), sin(rand2) , cos(rand3)));
 		
 		// apply
-		ray = dir * rotationMatrix(axis, rand3);
+		ray = dir * rotationMatrix(axis, mod(rand3, 2*M_PI));
 		
 		// calcuate the UVs from the final ray
 		float u = 0.5 + (atan(ray.z,ray.x)/(2*M_PI));

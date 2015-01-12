@@ -189,9 +189,8 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
     public boolean getIsRepairable(ItemStack stack, ItemStack repairstack)
     {
     	PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
-    	if (mat != null) {
-    		return mat.toolmaterial.func_150995_f() == repairstack.getItem() ? true : false;
-    	}
+    	
+   		if (mat.ingot != null && net.minecraftforge.oredict.OreDictionary.itemMatches(mat.ingot, repairstack, false)) return true;
         
         return false;
     }

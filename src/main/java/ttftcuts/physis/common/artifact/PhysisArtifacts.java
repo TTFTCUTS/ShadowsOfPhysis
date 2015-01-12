@@ -19,6 +19,7 @@ import ttftcuts.physis.common.artifact.trigger.TriggerOnDealDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnEquippedUpdate;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnTakeDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnUpdate;
+import ttftcuts.physis.common.artifact.trigger.UpdateCondition;
 import ttftcuts.physis.common.file.ServerData;
 
 public final class PhysisArtifacts {
@@ -55,8 +56,14 @@ public final class PhysisArtifacts {
 		instance = new PhysisArtifacts();
 		
 		// register triggers
-		registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 50);
-		registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate"), 100);
+		//registerPhysisTrigger(new TriggerOnUpdate("OnUpdate"), 50);
+		for(UpdateCondition condition : UpdateCondition.values()) {
+			registerPhysisTrigger(new TriggerOnUpdate("OnUpdate", condition), (int)Math.floor(50 * condition.relativeRarity));
+		}
+		//registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate"), 100);
+		for(UpdateCondition condition : UpdateCondition.values()) {
+			registerPhysisTrigger(new TriggerOnEquippedUpdate("OnEquippedUpdate", condition), (int)Math.floor(100 * condition.relativeRarity));
+		}
 		registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamage", false), 100);
 		registerPhysisTrigger(new TriggerOnDealDamage("OnDealDamageSelf", true), 50);
 		registerPhysisTrigger(new TriggerOnTakeDamage("OnTakeDamage", false), 100);

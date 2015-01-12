@@ -33,10 +33,40 @@ item.physis:socketable.name=Broken Socketable Item
 
 physis.artifact.type.0.name=%1$s Shard %2$s
 
-physis.artifact.OnUpdate.name=Passive
-physis.artifact.OnUpdate.trigger=Every %3$s seconds, %1$s.
-physis.artifact.OnEquippedUpdate.name=Wielded
-physis.artifact.OnEquippedUpdate.trigger=Every %3$s seconds while equipped or held, %1$s.
+physis.artifact.OnUpdateAny.name=Passive
+physis.artifact.OnUpdateAny.trigger=Every %3$s seconds, %1$s.
+physis.artifact.OnUpdateFire.name=Scorched
+physis.artifact.OnUpdateFire.trigger=Every %3$s seconds while the bearer is on fire, %1$s.
+physis.artifact.OnUpdateSun.name=Radiant
+physis.artifact.OnUpdateSun.trigger=Every %3$s seconds while the bearer is in the sun, %1$s.
+physis.artifact.OnUpdateDark.name=Umbral
+physis.artifact.OnUpdateDark.trigger=Every %3$s seconds while the bearer is in darkness, %1$s.
+physis.artifact.OnUpdateRain.name=Damp
+physis.artifact.OnUpdateRain.trigger=Every %3$s seconds while the bearer is in the rain, %1$s.
+physis.artifact.OnUpdateSneak.name=Hidden
+physis.artifact.OnUpdateSneak.trigger=Every %3$s seconds while the bearer is sneaking, %1$s.
+physis.artifact.OnUpdateSprint.name=Swift
+physis.artifact.OnUpdateSprint.trigger=Every %3$s seconds while the bearer is sprinting, %1$s.
+physis.artifact.OnUpdateWater.name=Submerged
+physis.artifact.OnUpdateWater.trigger=Every %3$s seconds while the bearer is swimming, %1$s.
+
+physis.artifact.OnEquippedUpdateAny.name=Wielded
+physis.artifact.OnEquippedUpdateAny.trigger=Every %3$s seconds while equipped or held, %1$s.
+physis.artifact.OnEquippedUpdateFire.name=Firebane
+physis.artifact.OnEquippedUpdateFire.trigger=Every %3$s seconds while equipped or held and the bearer is on fire, %1$s.
+physis.artifact.OnEquippedUpdateSun.name=Solar
+physis.artifact.OnEquippedUpdateSun.trigger=Every %3$s seconds while equipped or held and the bearer is in the sun, %1$s.
+physis.artifact.OnEquippedUpdateDark.name=Skulking
+physis.artifact.OnEquippedUpdateDark.trigger=Every %3$s seconds while equipped or held and the bearer is in darkness, %1$s.
+physis.artifact.OnEquippedUpdateRain.name=Raindancing
+physis.artifact.OnEquippedUpdateRain.trigger=Every %3$s seconds while equipped or held and the bearer is in the rain, %1$s.
+physis.artifact.OnEquippedUpdateSneak.name=Stealthy
+physis.artifact.OnEquippedUpdateSneak.trigger=Every %3$s seconds while equipped or held and the bearer is sneaking, %1$s.
+physis.artifact.OnEquippedUpdateSprint.name=Runner's
+physis.artifact.OnEquippedUpdateSprint.trigger=Every %3$s seconds while equipped or held and the bearer is sprinting, %1$s.
+physis.artifact.OnEquippedUpdateWater.name=Swimmer's
+physis.artifact.OnEquippedUpdateWater.trigger=Every %3$s seconds while equipped or held and the bearer is swimming, %1$s.
+
 physis.artifact.OnDealDamage.name=Aggressor's
 physis.artifact.OnDealDamage.trigger=When dealing damage, %1$s.\n%3$s second cooldown.
 physis.artifact.OnTakeDamage.name=Defender's
@@ -52,8 +82,10 @@ physis.artifact.SmallExplosion.effect=causes a small explosion centred on %2$s
 physis.artifact.Potion.name=of %6$s
 physis.artifact.Potion.effect=applies %4$s seconds of %6$s to %2$s
 
+
 physis.artifact.target.holder=the holder
 physis.artifact.target.target=the target
 physis.artifact.target.attacker=the attacker
+
 
 tile.physis:digsite.name=Buried Artifact

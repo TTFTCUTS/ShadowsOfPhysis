@@ -7,18 +7,28 @@ import net.minecraft.item.ItemStack;
 
 public class TriggerOnEquippedUpdate extends AbstractTrigger {
 
+	public UpdateCondition condition;
+	
+	public TriggerOnEquippedUpdate(String name, UpdateCondition condition) {
+		super(name + condition.suffix);
+		this.condition = condition;
+	}
+	
 	public TriggerOnEquippedUpdate(String name) {
-		super(name);
+		this(name, UpdateCondition.ANY);
 	}
 
 	@Override
 	public CooldownCategory getCooldownCategory() {
-		return CooldownCategory.LONG;
+		//return CooldownCategory.LONG;
+		return this.condition.equippedCooldown;
 	}
 	
 	@Override
 	public void onEquippedUpdate(ItemStack stack, EntityLivingBase holder, int id) {
-		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
+		if (this.condition.condition(stack, holder)) {
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
+		}
 	}
 	
 	/*@Override

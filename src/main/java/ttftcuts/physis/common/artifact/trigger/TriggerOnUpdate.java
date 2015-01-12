@@ -7,24 +7,29 @@ import net.minecraft.item.ItemStack;
 
 public class TriggerOnUpdate extends AbstractTrigger {
 
+	public UpdateCondition condition;
+	
+	public TriggerOnUpdate(String name, UpdateCondition condition) {
+		super(name + condition.suffix);
+		this.condition = condition;
+	}
+	
 	public TriggerOnUpdate(String name) {
-		super(name);
+		this(name, UpdateCondition.ANY);
 	}
 
 	@Override
 	public CooldownCategory getCooldownCategory() {
-		return CooldownCategory.LONGEST;
+		//return CooldownCategory.LONGEST;
+		return condition.updateCooldown;
 	}
 	
 	@Override
 	public void onUpdate(ItemStack stack, EntityLivingBase holder, int id) {
-		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
+		if (this.condition.condition(stack, holder)) {
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
+		}
 	}
-	
-	/*@Override
-	public String getUnlocalizedTriggerString() {
-		return "Every %3$s seconds, %1$s.";
-	}*/
 	
 	@Override
 	public String getUnlocalizedTargetString() {

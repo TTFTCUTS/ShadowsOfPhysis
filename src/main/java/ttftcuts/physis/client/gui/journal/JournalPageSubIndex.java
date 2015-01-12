@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;

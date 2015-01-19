@@ -9,6 +9,7 @@ import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.crafting.AddSocketRecipe;
 import ttftcuts.physis.common.file.ServerData;
 import ttftcuts.physis.common.handler.ArtifactEventHandler;
+import ttftcuts.physis.common.handler.ChestGenHandler;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
 import ttftcuts.physis.common.item.ItemTrowel;
@@ -43,6 +44,8 @@ public class CommonProxy {
     	networkSetup();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
+    	
+    	ChestGenHandler.init();
 	}
 	
 	public void init(FMLInitializationEvent event) {

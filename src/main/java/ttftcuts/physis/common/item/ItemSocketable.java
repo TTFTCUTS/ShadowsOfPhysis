@@ -1,6 +1,7 @@
 package ttftcuts.physis.common.item;
 
 import java.util.List;
+import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -10,6 +11,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
@@ -168,4 +172,21 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
 		
 		return super.getItemStackDisplayName(stack);
 	}
+	
+	@Override
+	public WeightedRandomChestContent getChestGenBase(ChestGenHooks chest, Random rnd, WeightedRandomChestContent original)
+    {
+		Physis.logger.info("Generating random stuff for chest");
+		
+        IArtifactTrigger trigger = ((WeightedTrigger)WeightedRandom.getRandomItem(rnd, PhysisArtifacts.triggers.values())).theTrigger;
+        IArtifactEffect effect = ((WeightedEffect)WeightedRandom.getRandomItem(rnd, PhysisArtifacts.effects.values())).theEffect;
+		
+        ItemStack stack = original.theItemId;
+        
+        PhysisArtifacts.addTriggerAndEffectToItem(stack, trigger, effect);
+        
+        original.theItemId = stack;
+        
+        return original;
+    }
 }

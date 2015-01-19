@@ -1,9 +1,12 @@
 package ttftcuts.physis.common.artifact;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -13,7 +16,10 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
+import ttftcuts.physis.common.artifact.effect.EffectAir;
 import ttftcuts.physis.common.artifact.effect.EffectExplosion;
+import ttftcuts.physis.common.artifact.effect.EffectFire;
+import ttftcuts.physis.common.artifact.effect.EffectForce;
 import ttftcuts.physis.common.artifact.effect.EffectPotion;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnDealDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnEquippedUpdate;
@@ -41,16 +47,6 @@ public final class PhysisArtifacts {
 	
 	public static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
 	public static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
-
-	/*public static IArtifactTrigger triggerOnUpdate;
-	public static IArtifactTrigger triggerOnEquippedUpdate;
-	public static IArtifactTrigger triggerOnDealDamage;
-	public static IArtifactTrigger triggerOnDealDamageSelf;
-	public static IArtifactTrigger triggerOnTakeDamage;
-	public static IArtifactTrigger triggerOnTakeDamageSelf;
-	
-	public static IArtifactEffect effectPoison;
-	public static IArtifactEffect effectExplosion;*/
 	
 	public static void init() {
 		instance = new PhysisArtifacts();
@@ -115,6 +111,23 @@ public final class PhysisArtifacts {
 		// explosions
 		registerPhysisEffect(new EffectExplosion("SmallExplosion", 4)
 			.setCooldowns(2, 3, 4, 5, 7, 9, 11), 20);
+		
+		// fire
+		registerPhysisEffect(new EffectFire("Fire")
+			.setCooldowns(1,2,3,5,7,10,12)
+			.setDurations(2,3,4,5,6,8,10), 100);
+		
+		// force
+		registerPhysisEffect(new EffectForce("Forceup", 0.75)
+			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 10);
+		registerPhysisEffect(new EffectForce("Forcedown", -1.5)
+			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 5);
+		
+		// air
+		registerPhysisEffect(new EffectAir("Airup", 1)
+			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 10);
+		registerPhysisEffect(new EffectAir("Airdown", -1)
+			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 5);
 	}
 	
 	// ################### registration ###################
@@ -457,6 +470,33 @@ public final class PhysisArtifacts {
 		public WeightedEffect(int weight, IArtifactEffect effect) {
 			super(weight);
 			this.theEffect = effect;
+		}
+	}
+	
+	public static List<DelayedPunt> entitiesToPunt = new ArrayList<DelayedPunt>();
+	public class DelayedPunt {
+		public int delay = 0;
+		public final EntityLivingBase entity;
+		public final double force;
+		
+		public DelayedPunt(EntityLivingBase entity, double force, int delay) {
+			this.entity = entity;
+			this.force = force;
+			this.delay = delay;
+		}
+	}
+	public static void puntEntity(EntityLivingBase entity, double force, int delay) {
+		entitiesToPunt.add(instance.new DelayedPunt(entity, force, delay));
+	}
+	public static void doPuntEntities() {
+		for(int i=entitiesToPunt.size()-1; i>=0; i--) {
+			DelayedPunt punt = entitiesToPunt.get(i);
+			if (punt.delay > 0) {
+				punt.delay--;
+			} else {
+				punt.entity.motionY += punt.force;
+				entitiesToPunt.remove(i);
+			}
 		}
 	}
 }

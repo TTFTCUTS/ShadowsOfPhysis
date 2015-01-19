@@ -81,7 +81,16 @@ physis.artifact.SmallExplosion.name=of Blasting
 physis.artifact.SmallExplosion.effect=causes a small explosion centred on %2$s
 physis.artifact.Potion.name=of %6$s
 physis.artifact.Potion.effect=applies %4$s seconds of %6$s to %2$s
-
+physis.artifact.Fire.name=of Cinders
+physis.artifact.Fire.effect=sets %2$s on fire for %4$s seconds
+physis.artifact.Forceup.name=of the Updraft
+physis.artifact.Forceup.effect=flings %2$s high into the air
+physis.artifact.Forcedown.name=of the Anvil
+physis.artifact.Forcedown.effect=slams %2$s high into the ground
+physis.artifact.Airup.name=of Breath
+physis.artifact.Airup.effect=restores air to %2$s
+physis.artifact.Airdown.name=of Suffocation
+physis.artifact.Airdown.effect=drains air from %2$s
 
 physis.artifact.target.holder=the holder
 physis.artifact.target.target=the target

@@ -8,8 +8,10 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
+import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;
 import ttftcuts.physis.common.CommonProxy;
+import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.handler.ClientTickHandler;
 import ttftcuts.physis.common.handler.TextureMapHandler;
@@ -31,6 +33,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new RenderDigSite(RenderingRegistry.getNextAvailableRenderId()));
 		RenderingRegistry.registerBlockHandler(new RenderSocketTable(RenderingRegistry.getNextAvailableRenderId()));
 		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDigSite.class, new RenderTileDigSite());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySocketTable.class, new RenderTileSocketTable());
 		
 		ShaderHelper.initShaders();

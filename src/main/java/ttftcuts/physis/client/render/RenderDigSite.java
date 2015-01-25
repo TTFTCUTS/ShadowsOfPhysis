@@ -6,6 +6,7 @@ import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -40,11 +41,13 @@ public class RenderDigSite implements ISimpleBlockRenderingHandler {
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			
 			// symbol layers
-			int extralayers = tile.renderdata.size();
+			/*int extralayers = tile.renderdata.size();
 			for (int i=0; i<extralayers; i++) {
 				tile.renderlayer = i+1;
 				renderer.renderStandardBlock(block, x, y, z);
-			}
+			}*/
+			
+			
 			
 			// reset
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -66,5 +69,4 @@ public class RenderDigSite implements ISimpleBlockRenderingHandler {
 	public int getRenderId() {
 		return renderid;
 	}
-
 }

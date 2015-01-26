@@ -78,23 +78,24 @@ public class PhysisRenderHelper {
 		GL11.glPopMatrix();
 	}
 	
-	public static void renderUVQuad(double x, double y, double w, double h, double u1, double u2, double v1, double v2) {
+	public static void renderUVQuad(double x, double y, double w, double h, double u1, double u2, double v1, double v2, int brightness) {
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
-		t.setBrightness(255);
+		t.setBrightness(brightness);
 		t.addVertexWithUV(x, y + h, 0, u2, v1);
 		t.addVertexWithUV(x + w, y + h, 0, u1, v1);
 		t.addVertexWithUV(x + w, y, 0, u1, v2);
 		t.addVertexWithUV(x, y, 0, u2, v2);
+		t.setNormal(1, 0, 0);
 		t.draw();
 	}
 	
-	public static void renderDoubleUVQuad(double x, double y, double w, double h, double u1, double u2, double v1, double v2) {
+	public static void renderDoubleUVQuad(double x, double y, double w, double h, double u1, double u2, double v1, double v2, int brightness) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
-		renderUVQuad(0,0,w,h,u1,u2,v1,v2);
+		renderUVQuad(0,0,w,h,u1,u2,v1,v2,brightness);
 		GL11.glRotatef(180, 0, 1, 0);
-		renderUVQuad(-w,0,w,h,u2,u1,v1,v2);
+		renderUVQuad(-w,0,w,h,u2,u1,v1,v2,brightness);
 		GL11.glPopMatrix();
 	}
 }

@@ -6,7 +6,6 @@ import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

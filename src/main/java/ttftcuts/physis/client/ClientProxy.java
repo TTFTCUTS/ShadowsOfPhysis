@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
+import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;
 import ttftcuts.physis.common.CommonProxy;
@@ -44,5 +45,6 @@ public class ClientProxy extends CommonProxy {
 		super.postInit(event);
 		
 		PhysisToolMaterial.buildTintData(10);
+		RenderSocketed.injectRenderer();
 	}
 }

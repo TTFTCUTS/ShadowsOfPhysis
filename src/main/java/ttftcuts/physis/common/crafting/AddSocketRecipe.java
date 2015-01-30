@@ -70,17 +70,7 @@ public class AddSocketRecipe implements IRecipe {
 	
 	private boolean checkItem(ItemStack stack) {
 		if (stack.stackSize != 1) { return false; }
-		Item item = stack.getItem();
-		if (item == socketItem) {
-			return false;
-		}
-		if (item instanceof ItemBlock) {
-			return false;
-		}
-		if (item.getItemStackLimit(stack) > 1) {
-			return false;
-		}
-		return true;
+		return PhysisArtifacts.canItemAcceptSockets(stack);
 	}
 
 	@Override

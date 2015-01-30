@@ -1,5 +1,6 @@
 package ttftcuts.physis.common.item;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +15,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;

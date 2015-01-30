@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -16,6 +18,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
+import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.effect.EffectAir;
 import ttftcuts.physis.common.artifact.effect.EffectExplosion;
 import ttftcuts.physis.common.artifact.effect.EffectFire;
@@ -449,6 +452,20 @@ public final class PhysisArtifacts {
 	
 	public static void addRandomTriggerAndEffectToItem(ItemStack stack, Random rand) {
 		addTriggerAndEffectToItem(stack, getRandomTrigger(rand), getRandomEffect(rand));
+	}
+	
+	public static boolean canItemAcceptSockets(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item == PhysisItems.socketable) {
+			return false;
+		}
+		if (item instanceof ItemBlock) {
+			return false;
+		}
+		if (item.getItemStackLimit(stack) > 1) {
+			return false;
+		}
+		return true;
 	}
 	
 	// ################### internal classes ###################

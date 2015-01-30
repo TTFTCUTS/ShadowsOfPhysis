@@ -63,7 +63,12 @@ public class PhysisRenderHelper {
 		GL11.glPopMatrix();
 	}
 	
+	//private static RenderItem renderItem = new RenderItem();
 	public static void renderItemStack(ItemStack stack, int x, int y) {
+		renderItemStack(stack,x,y,true);
+	}
+	
+	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers) {
 		RenderItem render = new RenderItem();
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
@@ -71,7 +76,11 @@ public class PhysisRenderHelper {
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		render.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+		if (useCustomRenderers) {
+			render.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+		} else {
+			render.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
+		}
 		render.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_BLEND);

@@ -28,7 +28,7 @@ public abstract class AbstractEffect implements IArtifactEffect {
 		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
 		
 		if (sockets.length >= id+1 && sockets[id] != null) {
-			long remainingCooldown = PhysisArtifacts.getEffectCooldown(sockets[id]);
+			long remainingCooldown = PhysisArtifacts.getEffectCooldown(sockets[id], false);
 			if (remainingCooldown <= 0) {
 				
 				this.doEffectChecked(sockets[id], stack, target, source, id, cooldowntype);

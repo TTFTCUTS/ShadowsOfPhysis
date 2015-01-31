@@ -3,6 +3,8 @@ package ttftcuts.physis.common.handler;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.file.ServerData;
+import ttftcuts.physis.common.network.PacketWorldTime;
+import ttftcuts.physis.common.network.PhysisPacketHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -16,9 +18,7 @@ public class ServerTickHandler {
 				Physis.oooBuilder.update();
 			}
 			
-			if (ServerData.instance != null) {
-				ServerData.instance.serverTick++;
-			}
+			ServerData.tick(false);
 		}
 		
 		if (event.phase == Phase.END) {

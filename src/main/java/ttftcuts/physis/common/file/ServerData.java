@@ -6,48 +6,108 @@ import java.io.FileOutputStream;
 
 import com.google.common.io.Files;
 
-import ttftcuts.physis.Physis;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.network.PacketWorldTime;
+import ttftcuts.physis.common.network.PhysisPacketHandler;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ServerData {
-
-	public class ServerDataHandler {
+	
+	public static class ServerDataHandler {
 		@SubscribeEvent
         public void onWorldLoad(Load event) {
             if (event.world.isRemote) {
-            	instance.load();
+                reload(true);
             }
         }
 
         @SubscribeEvent
         public void onWorldSave(Save event) {
-            if (!event.world.isRemote && instance != null) {
-            	instance.save();
+            if (!event.world.isRemote && instance(false) != null) {
+            	instance(false).save();
             }
+        }
+
+        @SubscribeEvent
+        public void onPlayerLogin(PlayerLoggedInEvent event) {
+            instance(false).sendDataToPlayer(event.player);
+        }
+
+        @SubscribeEvent
+        public void onPlayerChangedDimension(PlayerLoggedOutEvent event) {
+            instance(false).sendDataToPlayer(event.player);
         }
 	}
 	
-	public static ServerData instance;
+	public final boolean client;
+	private static ServerData serverInstance;
+	private static ServerData clientInstance;
 	private File saveDir;
 	private File saveFile;
 	private File backupFile;
 	
 	public long serverTick = 0;
-	
-	public static void init() {
-		instance = new ServerData();
-		
-		MinecraftForge.EVENT_BUS.register(instance.new ServerDataHandler());
+
+	public static void reload(boolean client) {
+		ServerData data = new ServerData(client);
+		if (client) {
+			clientInstance = data;
+		} else {
+			serverInstance = data;
+		}
 	}
 	
-	private void load() {
+	public static ServerData instance(boolean client) {
+		return client ? clientInstance : serverInstance;
+	}
+	
+	public static void tick(boolean client) {
+		ServerData instance = ServerData.instance(client);
+		if (instance != null) {
+			if (client) {
+				if (!Minecraft.getMinecraft().isGamePaused()) {
+					instance.serverTick++;
+				}
+			} else {
+				instance.serverTick++;
+			
+				if (instance.serverTick % 600 == 0) {
+					instance.sendDataToAll();
+				}
+			}
+		}
+	}
+	
+	public static void setTime(long time, boolean client) {
+		ServerData instance = ServerData.instance(client);
+		if (instance != null) {
+			instance.serverTick = time;
+		}
+	}
+	
+	public ServerData(boolean client) {
+		this.client = client;
+		
+		this.serverTick = 0;
+		
+		if (!client) {
+			this.load();
+		}
+	}
+	
+	public void load() {
 		saveDir = new File(DimensionManager.getCurrentSaveRootDirectory(), Physis.MOD_ID);
 		try {
 			if (!saveDir.exists()) {
@@ -84,7 +144,7 @@ public class ServerData {
 			
 			if (data != null) {
 				this.serverTick = data.getLong("serverTick");
-				Physis.logger.info("Loaded server tick: "+this.serverTick);
+				Physis.logger.info("Loaded server tick: "+this.serverTick+ " for "+saveDir);
 				
 				if (saveBackup) {
 					this.save();
@@ -97,7 +157,7 @@ public class ServerData {
         }
 	}
 	
-	private void save() {
+	public void save() {
 		try {
 			if (saveFile != null && saveFile.exists()) {
 				try {
@@ -117,6 +177,8 @@ public class ServerData {
 					FileOutputStream output = new FileOutputStream(saveFile);
 					CompressedStreamTools.writeCompressed(data, output);
 					output.close();
+					
+					//Physis.logger.info("Saved server tick: "+this.serverTick+" for "+saveDir);
 				}
 			} catch (Exception e) {
 				Physis.logger.error("Failed to save world data file.");
@@ -132,5 +194,15 @@ public class ServerData {
 			Physis.logger.fatal("Failed to save world data file.");
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendDataToPlayer(EntityPlayer player) {
+		if (player instanceof EntityPlayerMP) {
+			PhysisPacketHandler.bus.sendTo(PacketWorldTime.createPacket(this.serverTick-1), (EntityPlayerMP)player);
+		}
+	}
+	
+	public void sendDataToAll() {
+		PhysisPacketHandler.bus.sendToAll(PacketWorldTime.createPacket(this.serverTick-1));
 	}
 }

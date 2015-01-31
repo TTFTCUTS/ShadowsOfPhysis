@@ -5,6 +5,9 @@ import java.util.Iterator;
 import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.artifact.IArtifactEffect;
+import ttftcuts.physis.api.artifact.IArtifactTrigger;
+import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
@@ -70,10 +73,31 @@ public class RenderSocketed implements IItemRenderer {
 
 				int filled = 0;
 				
+				long longestcooldown = 0;
+				int cooldownid = -1;
+				
 				for (int i=0; i<sockets.length; i++) {
 					if (sockets[i] != null) {
 						filled++;
+						
+						long cd = PhysisArtifacts.getEffectCooldown(sockets[i], true);
+						if (cd >= longestcooldown) {
+							longestcooldown = cd;
+							cooldownid = i;
+						}
 					}
+				}
+				
+				if (cooldownid != -1) {
+					NBTTagCompound cdsocket = sockets[cooldownid];
+					IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(cdsocket);
+					IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(cdsocket);
+					
+					long maxcd = effect.getCooldown(trigger.getCooldownCategory());
+					
+					double fraction = maxcd <= 0 ? 0 : longestcooldown / (double)maxcd; 
+					
+					this.renderCooldown(fraction);
 				}
 				
 				drawicon = true;
@@ -112,6 +136,80 @@ public class RenderSocketed implements IItemRenderer {
 			}
 			RenderHelper.enableGUIStandardItemLighting();
 		}
+	}
+	
+	
+	
+	public void renderCooldown(double f) {
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		int w = 16;
+		int h = 16;
+		//double u = 9/32.0;
+		//double v = 3/16.0;
+		
+		Minecraft mc = Minecraft.getMinecraft();
+		mc.renderEngine.bindTexture(overlay);
+		
+		if (f>0.75) { this.renderCooldownSector((f-0.75)*4,w/2,0,w/2,h/2,0); }
+		if (f>0.5) 	{ this.renderCooldownSector((f-0.5)*4,w/2,h/2,w/2,h/2,1); }
+		if (f>0.25) { this.renderCooldownSector((f-0.25)*4,0,h/2,w/2,h/2,2); }
+		if (f>0) 	{ this.renderCooldownSector((f)*4,0,0,w/2,h/2,3); };
+		
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+	}
+	
+	private void renderCooldownSector(double f, double x, double y, double w, double h, int rotation) {
+		double x1 = 0;
+		double y1 = 0;
+		double x2 = w;
+		double y2 = 0;
+		
+		f = Math.max(0, Math.min(1.0, (1-f)));
+		
+		if (f <= 0.5) {
+			double angle = f*0.5*Math.PI;
+			x1 = Math.tan(angle) * w;
+			y1 = 0;
+		} else {
+			double angle = (1.0-f)*0.5*Math.PI;
+			x1 = w;
+			y1 = (1.0-Math.tan(angle)) * h;
+			x2 = x1;
+			y2 = y1;
+		}
+		
+		double u = 9/32.0;
+		double v = 3/16.0;
+		
+		Tessellator t = Tessellator.instance;
+		t.startDrawingQuads();
+		t.setColorRGBA(0, 0, 0, 127);
+		if (rotation == 0) {
+			t.addVertexWithUV(x, 		y+h, 		0, u, v);
+			t.addVertexWithUV(x+w, 		y+h, 		0, u, v);
+			t.addVertexWithUV(x+x2, 	y+y2, 		0, u, v);
+			t.addVertexWithUV(x+x1, 	y+y1, 		0, u, v);
+		} else if (rotation == 1) {
+			t.addVertexWithUV(x, 		y+h, 		0, u, v);
+			t.addVertexWithUV(x+w-y1, 	y+x2, 		0, u, v);
+			t.addVertexWithUV(x+w-y2, 	y+x1,		0, u, v);
+			t.addVertexWithUV(x, 		y, 			0, u, v);
+		} else if (rotation == 2) {
+			t.addVertexWithUV(x+h-x2, 	y+h-y2,		0, u, v);
+			t.addVertexWithUV(x+w-x1,	y+h-y1,		0, u, v);
+			t.addVertexWithUV(x+w, 		y, 			0, u, v);
+			t.addVertexWithUV(x, 		y, 			0, u, v);
+		} else {
+			t.addVertexWithUV(x+y1,		y+h-x1, 	0, u, v);
+			t.addVertexWithUV(x+w, 		y+h, 		0, u, v);
+			t.addVertexWithUV(x+w, 		y, 			0, u, v);
+			t.addVertexWithUV(x+y2, 	y+x2-w, 	0, u, v);
+		}
+		t.draw();
 	}
 
 	// registering magics

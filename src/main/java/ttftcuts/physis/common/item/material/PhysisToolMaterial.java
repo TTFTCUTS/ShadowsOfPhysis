@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.common.helper.TextureHelper;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
@@ -26,7 +27,7 @@ public class PhysisToolMaterial {
 	
 	public static final String MATERIALTAG = "physisMaterial";
 	
-	public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
+	//public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
 	
 	public static Map<String,PhysisToolMaterial> materials;
 	public static Map<Class<? extends IRecipe>, IRecipeComponentTranslator> handlers = new HashMap<Class<? extends IRecipe>, IRecipeComponentTranslator>();

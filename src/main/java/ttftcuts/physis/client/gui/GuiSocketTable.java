@@ -250,6 +250,6 @@ public class GuiSocketTable extends GuiContainerPhysis {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setInteger("id", button.id);
 		this.cont.sendUiPacket(tag);
-		Physis.logger.info("button "+button.id);
+		//Physis.logger.info("button "+button.id);
 	}
 }

@@ -328,22 +328,22 @@ public final class PhysisArtifacts {
 		}
 	}
 	
-	public static long getEffectCooldown(NBTTagCompound tag) {
+	public static long getEffectCooldown(NBTTagCompound tag, boolean client) {
 		if (tag.hasKey("tag")) {
-			return getEffectCooldown(tag.getCompoundTag("tag"));
+			return getEffectCooldown(tag.getCompoundTag("tag"), client);
 		}
 		if (tag.hasKey(ARTIFACTTAG)) {
 			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				return Math.max(0, tag.getLong(COOLDOWNTAG) - ServerData.instance.serverTick);
+				return Math.max(0, tag.getLong(COOLDOWNTAG) - ServerData.instance(client).serverTick);
 			}
 		}
 		return 0;
 	}
 	
-	public static long getEffectCooldown(ItemStack stack) {
+	public static long getEffectCooldown(ItemStack stack, boolean client) {
 		if (stack.stackTagCompound != null) {
-			return getEffectCooldown(stack.stackTagCompound);
+			return getEffectCooldown(stack.stackTagCompound, client);
 		}
 		return 0;
 	}
@@ -375,8 +375,8 @@ public final class PhysisArtifacts {
 		if (tag.hasKey(ARTIFACTTAG)) {
 			tag = tag.getCompoundTag(ARTIFACTTAG);
 			if (tag.hasKey(TRIGGERTAG) && tag.hasKey(EFFECTTAG)) {
-				if (cooldown >= 0 && ServerData.instance != null) {
-					tag.setLong(COOLDOWNTAG, cooldown + ServerData.instance.serverTick);
+				if (cooldown >= 0 && ServerData.instance(false) != null) {
+					tag.setLong(COOLDOWNTAG, cooldown + ServerData.instance(false).serverTick);
 				}
 			}
 		}

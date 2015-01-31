@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 
@@ -23,10 +26,11 @@ public class JournalPageIndex extends JournalPage {
 	private boolean setup = false;
 	
 	public JournalPageIndex(int offset) {
-		
+		Physis.logger.info("Instantiated");
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void initGui(GuiJournal journal) {
 		if (!setup) {
 			categories.clear();
@@ -37,6 +41,7 @@ public class JournalPageIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void actionPerformed(GuiJournal journal, int id, GuiButton button) {
 		int bid = button.id - id;
 		
@@ -47,6 +52,7 @@ public class JournalPageIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public List<GuiButton> getNavButtonsForPage(int id, int x, int y) {
 		
 		List<GuiButton> buttons = new ArrayList<GuiButton>();
@@ -59,6 +65,7 @@ public class JournalPageIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		FontRenderer renderer = journal.mc.fontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();

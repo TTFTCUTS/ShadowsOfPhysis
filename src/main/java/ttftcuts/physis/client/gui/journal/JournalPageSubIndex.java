@@ -10,6 +10,9 @@ import net.minecraft.client.gui.GuiButton;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.button.GuiButtonInvisible;
@@ -37,6 +40,7 @@ public class JournalPageSubIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void initGui(GuiJournal journal) {
 		if (!setup) {
 			setup = true;
@@ -63,6 +67,7 @@ public class JournalPageSubIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void actionPerformed(GuiJournal journal, int id, GuiButton button) {
 		int bid = button.id - id;
 		
@@ -73,6 +78,7 @@ public class JournalPageSubIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public List<GuiButton> getNavButtonsForPage(int id, int x, int y) {
 		
 		List<GuiButton> buttons = new ArrayList<GuiButton>();
@@ -91,6 +97,7 @@ public class JournalPageSubIndex extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 
 		for(int i=0; i<articles.size(); i++) {

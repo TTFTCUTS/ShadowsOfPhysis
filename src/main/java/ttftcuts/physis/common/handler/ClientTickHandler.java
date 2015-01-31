@@ -1,5 +1,6 @@
 package ttftcuts.physis.common.handler;
 
+import ttftcuts.physis.common.file.ServerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,6 +17,8 @@ public class ClientTickHandler {
 			if (gui == null || !gui.doesGuiPauseGame()) {
 				gameTicks++;
 			}
-		}
+			
+			ServerData.tick(true);
+		}	
 	}
 }

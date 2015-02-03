@@ -136,15 +136,15 @@ public final class PhysisArtifacts {
 			.setDurations(2,3,4,5,6,8,10), 100);
 		
 		// force
-		registerPhysisEffect(new EffectForce("Forceup", 0.75)
+		registerPhysisEffect(new EffectForce("ForceUp", 0.75)
 			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 10);
-		registerPhysisEffect(new EffectForce("Forcedown", -1.5)
+		registerPhysisEffect(new EffectForce("ForceDown", -1.5)
 			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 5);
 		
 		// air
-		registerPhysisEffect(new EffectAir("Airup", 1)
+		registerPhysisEffect(new EffectAir("AirUp", 1)
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 10);
-		registerPhysisEffect(new EffectAir("Airdown", -1)
+		registerPhysisEffect(new EffectAir("AirDown", -1)
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 5);
 	}
 	

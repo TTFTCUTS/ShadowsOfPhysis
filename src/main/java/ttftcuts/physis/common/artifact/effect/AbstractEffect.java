@@ -24,7 +24,7 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	
 	public AbstractEffect(String name) {
 		this.name = PhysisArtifacts.PREFIX + name;
-		this.image = name;
+		this.image = "effect"+name;
 		this.hue = PhysisArtifacts.effectColourRand.nextDouble();
 		this.saturation = 1.0 - (PhysisArtifacts.effectColourRand.nextDouble() * PhysisArtifacts.effectColourRand.nextDouble());
 	}

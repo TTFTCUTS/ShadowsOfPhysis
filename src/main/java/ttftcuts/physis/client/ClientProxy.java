@@ -1,5 +1,6 @@
 package ttftcuts.physis.client;
 
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -8,10 +9,13 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
+import ttftcuts.physis.client.render.item.RenderSocketable;
 import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;
 import ttftcuts.physis.common.CommonProxy;
+import ttftcuts.physis.common.PhysisItems;
+import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.handler.ClientTickHandler;
@@ -37,7 +41,10 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDigSite.class, new RenderTileDigSite());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySocketTable.class, new RenderTileSocketTable());
 		
+		MinecraftForgeClient.registerItemRenderer(PhysisItems.socketable, new RenderSocketable());
+		
 		ShaderHelper.initShaders();
+		PhysisArtifacts.clientInit();
 	}
 	
 	@Override

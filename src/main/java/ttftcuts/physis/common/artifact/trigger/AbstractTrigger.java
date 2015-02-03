@@ -1,7 +1,10 @@
 package ttftcuts.physis.common.artifact.trigger;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -13,12 +16,14 @@ public abstract class AbstractTrigger implements IArtifactTrigger {
 	public static final String TARGET_ATTACKER = PhysisArtifacts.PREFIX + "target.attacker";
 	
 	protected String name;
+	protected String image;
 	
 	public double hue = 0.0;
 	public double saturation = 0.0;
 	
 	public AbstractTrigger(String name) {
 		this.name = PhysisArtifacts.PREFIX + name;
+		this.image = name;
 		this.hue = PhysisArtifacts.triggerColourRand.nextDouble();
 		this.saturation = 1.0 - (PhysisArtifacts.triggerColourRand.nextDouble() * PhysisArtifacts.triggerColourRand.nextDouble());
 	}
@@ -63,6 +68,11 @@ public abstract class AbstractTrigger implements IArtifactTrigger {
 	@Override
 	public String getTooltipInfo() {
 		return "<No extra info>";
+	}
+	
+	@Override
+	public IIcon registerIcon(IIconRegister register) {
+		return register.registerIcon(Physis.MOD_ID+":trigger_effect/"+this.image);
 	}
 	
 	@Override

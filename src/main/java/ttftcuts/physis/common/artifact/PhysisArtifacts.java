@@ -6,13 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandom;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
@@ -50,6 +58,13 @@ public final class PhysisArtifacts {
 	
 	public static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
 	public static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
+	
+	@SideOnly(Side.CLIENT)
+	public static Map<IArtifactTrigger, IIcon> triggerIcons = new HashMap<IArtifactTrigger, IIcon>();
+	@SideOnly(Side.CLIENT)
+	public static Map<IArtifactEffect, IIcon> effectIcons = new HashMap<IArtifactEffect, IIcon>();
+	@SideOnly(Side.CLIENT)
+	public static IIcon defaultIcon;
 	
 	public static void init() {
 		instance = new PhysisArtifacts();
@@ -131,6 +146,11 @@ public final class PhysisArtifacts {
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 10);
 		registerPhysisEffect(new EffectAir("Airdown", -1)
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 5);
+	}
+	
+	// registering the icon event handler
+	public static void clientInit() {
+		MinecraftForge.EVENT_BUS.register(instance.new IconHandler());
 	}
 	
 	// ################### registration ###################
@@ -473,6 +493,7 @@ public final class PhysisArtifacts {
 	public class WeightedTrigger extends WeightedRandom.Item {
 
 		public IArtifactTrigger theTrigger;
+		public IIcon icon;
 		
 		public WeightedTrigger(int weight, IArtifactTrigger trigger) {
 			super(weight);
@@ -483,6 +504,7 @@ public final class PhysisArtifacts {
 	public class WeightedEffect extends WeightedRandom.Item {
 
 		public IArtifactEffect theEffect;
+		public IIcon icon;
 		
 		public WeightedEffect(int weight, IArtifactEffect effect) {
 			super(weight);
@@ -515,5 +537,65 @@ public final class PhysisArtifacts {
 				entitiesToPunt.remove(i);
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public class IconHandler {
+		@SubscribeEvent
+		public void OnTextureStitch(TextureStitchEvent event) {
+			// if item sheet
+			if (event.map.getTextureType() == 1) {
+				Physis.logger.info("STITCHING THE THINGS");
+				
+				Physis.logger.info("Default icon");
+				PhysisArtifacts.defaultIcon = event.map.registerIcon(Physis.MOD_ID+":trigger_effect/default");
+				
+				for(WeightedTrigger trigger : PhysisArtifacts.triggers.values()) {
+					Physis.logger.info("Trigger: "+trigger.theTrigger.getName());
+					IIcon icon = trigger.theTrigger.registerIcon(event.map);
+					PhysisArtifacts.triggerIcons.put(trigger.theTrigger, icon);
+				}
+				
+				for(WeightedEffect effect : PhysisArtifacts.effects.values()) {
+					Physis.logger.info("Effect: "+effect.theEffect.getName());
+					IIcon icon = effect.theEffect.registerIcon(event.map);
+					PhysisArtifacts.effectIcons.put(effect.theEffect, icon);
+				}
+				
+				Physis.logger.info("FINISHED STITCHING");
+			}
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static IIcon getTriggerIcon(String name) {
+		IArtifactTrigger trigger = getTrigger(name);
+		return getTriggerIcon(trigger);
+	}
+	@SideOnly(Side.CLIENT)
+	public static IIcon getTriggerIcon(IArtifactTrigger trigger) {	
+		if (trigger != null && triggerIcons.containsKey(trigger)) {
+			IIcon icon = triggerIcons.get(trigger);
+			if (icon != null ) {
+				return icon;
+			}
+		}
+		return defaultIcon;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static IIcon getEffectIcon(String name) {
+		IArtifactEffect effect = getEffect(name);
+		return getEffectIcon(effect);
+	}
+	@SideOnly(Side.CLIENT)
+	public static IIcon getEffectIcon(IArtifactEffect effect) {
+		if (effect != null && effectIcons.containsKey(effect)) {
+			IIcon icon = effectIcons.get(effect);
+			if (icon != null) {
+				return icon;
+			}
+		}
+		return defaultIcon;
 	}
 }

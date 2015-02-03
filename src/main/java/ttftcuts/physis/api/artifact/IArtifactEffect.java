@@ -1,7 +1,11 @@
 package ttftcuts.physis.api.artifact;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import ttftcuts.physis.api.internal.IArtifactHandler;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 
@@ -18,6 +22,8 @@ public interface IArtifactEffect {
 	public String getUnlocalizedEffectString();
 	public String getTooltipInfo();
 	
+	@SideOnly(Side.CLIENT)
+	public IIcon registerIcon(IIconRegister register);
 	public double getHue();
 	public double getSaturation();
 }

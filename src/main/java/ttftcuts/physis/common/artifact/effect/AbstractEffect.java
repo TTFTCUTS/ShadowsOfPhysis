@@ -1,8 +1,13 @@
 package ttftcuts.physis.common.artifact.effect;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -10,6 +15,7 @@ import ttftcuts.physis.common.artifact.PhysisArtifacts;
 public abstract class AbstractEffect implements IArtifactEffect {
 	
 	protected String name;
+	protected String image;
 	protected int[] cooldowns = {0, 20, 20, 20, 20, 20, 20, 20};
 	protected int[] durations = {0, 20, 20, 20, 20, 20, 20, 20};
 	
@@ -18,6 +24,7 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	
 	public AbstractEffect(String name) {
 		this.name = PhysisArtifacts.PREFIX + name;
+		this.image = name;
 		this.hue = PhysisArtifacts.effectColourRand.nextDouble();
 		this.saturation = 1.0 - (PhysisArtifacts.effectColourRand.nextDouble() * PhysisArtifacts.effectColourRand.nextDouble());
 	}
@@ -88,6 +95,12 @@ public abstract class AbstractEffect implements IArtifactEffect {
 			durations[i+1] = (int)Math.ceil(d[i] * 20.0);
 		}
 		return this;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IIcon registerIcon(IIconRegister register) {
+		return register.registerIcon(Physis.MOD_ID+":trigger_effect/"+this.image);
 	}
 	
 	@Override

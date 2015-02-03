@@ -69,6 +69,7 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		Minecraft mc = Minecraft.getMinecraft();
 		Tessellator t = Tessellator.instance;
 		
+		if (digsite.layerlist == null || digsite.layerlist.size() == 0) { return; }
 		OddOneOutPuzzle puzzle = digsite.layerlist.get(digsite.currentlayer).puzzle;
 		if (puzzle == null) { return; }
 		

@@ -1,6 +1,7 @@
-package ttftcuts.physis.common.network;
+package ttftcuts.physis.common.network.packet;
 
 import ttftcuts.physis.common.file.ServerData;
+import ttftcuts.physis.common.network.PacketHandler;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

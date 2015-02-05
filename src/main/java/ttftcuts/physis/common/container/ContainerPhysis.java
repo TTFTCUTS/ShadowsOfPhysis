@@ -1,8 +1,8 @@
 package ttftcuts.physis.common.container;
 
 import ttftcuts.physis.common.network.IGuiMessageHandler;
-import ttftcuts.physis.common.network.PacketGuiMessage;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
+import ttftcuts.physis.common.network.packet.PacketGuiMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

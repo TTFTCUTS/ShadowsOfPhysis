@@ -3,6 +3,7 @@ package ttftcuts.physis.common;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import scala.util.Random;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -17,9 +18,13 @@ import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import ttftcuts.physis.common.item.material.ShapedOreRecipeCT;
 import ttftcuts.physis.common.item.material.ShapedRecipeCT;
-import ttftcuts.physis.common.network.PacketGuiMessage;
-import ttftcuts.physis.common.network.PacketWorldTime;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
+import ttftcuts.physis.common.network.packet.PacketGuiMessage;
+import ttftcuts.physis.common.network.packet.PacketStorySeed;
+import ttftcuts.physis.common.network.packet.PacketWorldTime;
+import ttftcuts.physis.common.story.PhysisStoryVars;
+import ttftcuts.physis.common.story.StoryEngine;
+import ttftcuts.physis.common.story.StoryEngine.StorySeedHandler;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -41,12 +46,15 @@ public class CommonProxy {
     	PhysisBlocks.init();
     	PhysisArtifacts.init();
     	
+    	PhysisStoryVars.init();
+    	
     	PageDefs.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
     	MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
     	MinecraftForge.EVENT_BUS.register(new ServerDataHandler());
     	FMLCommonHandler.instance().bus().register(new ServerDataHandler());
+    	FMLCommonHandler.instance().bus().register(new StorySeedHandler());
     	networkSetup();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
@@ -75,11 +83,17 @@ public class CommonProxy {
 	
 	public void serverStarting(FMLServerStartingEvent event) { 
 		Physis.oooBuilder.start();
-		//ServerData.instance.load();
+
+		// set up the story!
+		long seed = event.getServer().worldServers[0].getWorldInfo().getSeed();
+		Random r = new Random(seed);
+		long storySeed = r.nextLong();
+		
+		StoryEngine.reload(storySeed, false);
 	}
 	
 	public void serverStopping(FMLServerStoppingEvent event) {
-		//ServerData.instance.save();
+		
 	}
 	
 	public void serverStopped(FMLServerStoppedEvent event) {
@@ -89,6 +103,7 @@ public class CommonProxy {
 	private void networkSetup() {
 		PhysisPacketHandler.registerPacketHandler(new PacketGuiMessage(), 0);
 		PhysisPacketHandler.registerPacketHandler(new PacketWorldTime(), 1);
+		PhysisPacketHandler.registerPacketHandler(new PacketStorySeed(), 2);
 		
 		PhysisPacketHandler.init();
 	}

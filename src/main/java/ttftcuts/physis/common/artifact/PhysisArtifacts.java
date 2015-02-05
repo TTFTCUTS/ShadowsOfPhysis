@@ -545,24 +545,24 @@ public final class PhysisArtifacts {
 		public void OnTextureStitch(TextureStitchEvent event) {
 			// if item sheet
 			if (event.map.getTextureType() == 1) {
-				Physis.logger.info("STITCHING THE THINGS");
+				//Physis.logger.info("STITCHING THE THINGS");
 				
-				Physis.logger.info("Default icon");
+				//Physis.logger.info("Default icon");
 				PhysisArtifacts.defaultIcon = event.map.registerIcon(Physis.MOD_ID+":trigger_effect/default");
 				
 				for(WeightedTrigger trigger : PhysisArtifacts.triggers.values()) {
-					Physis.logger.info("Trigger: "+trigger.theTrigger.getName());
+					//Physis.logger.info("Trigger: "+trigger.theTrigger.getName());
 					IIcon icon = trigger.theTrigger.registerIcon(event.map);
 					PhysisArtifacts.triggerIcons.put(trigger.theTrigger, icon);
 				}
 				
 				for(WeightedEffect effect : PhysisArtifacts.effects.values()) {
-					Physis.logger.info("Effect: "+effect.theEffect.getName());
+					//Physis.logger.info("Effect: "+effect.theEffect.getName());
 					IIcon icon = effect.theEffect.registerIcon(event.map);
 					PhysisArtifacts.effectIcons.put(effect.theEffect, icon);
 				}
 				
-				Physis.logger.info("FINISHED STITCHING");
+				//Physis.logger.info("FINISHED STITCHING");
 			}
 		}
 	}

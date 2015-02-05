@@ -11,8 +11,8 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 import ttftcuts.physis.Physis;
-import ttftcuts.physis.common.network.PacketWorldTime;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
+import ttftcuts.physis.common.network.packet.PacketWorldTime;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

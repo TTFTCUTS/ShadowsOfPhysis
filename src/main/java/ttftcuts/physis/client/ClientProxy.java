@@ -23,6 +23,7 @@ import ttftcuts.physis.common.handler.TextureMapHandler;
 import ttftcuts.physis.common.handler.TooltipHandler;
 import ttftcuts.physis.common.helper.ShaderHelper;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
+import ttftcuts.physis.common.story.StoryEngine;
 
 public class ClientProxy extends CommonProxy {
 	
@@ -45,6 +46,9 @@ public class ClientProxy extends CommonProxy {
 		
 		ShaderHelper.initShaders();
 		PhysisArtifacts.clientInit();
+		
+		// make sure it doesn't come out null in that little while before loading.
+		StoryEngine.reload(-1, true);
 	}
 	
 	@Override

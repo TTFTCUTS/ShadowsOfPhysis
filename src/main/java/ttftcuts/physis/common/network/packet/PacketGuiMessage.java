@@ -1,5 +1,7 @@
-package ttftcuts.physis.common.network;
+package ttftcuts.physis.common.network.packet;
 
+import ttftcuts.physis.common.network.IGuiMessageHandler;
+import ttftcuts.physis.common.network.PacketHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import io.netty.buffer.ByteBuf;

@@ -75,6 +75,12 @@ public abstract class AbstractTrigger implements IArtifactTrigger {
 		return register.registerIcon(Physis.MOD_ID+":trigger_effect/"+this.image);
 	}
 	
+	public AbstractTrigger setColour(double hue, double saturation) {
+		this.hue = hue;
+		this.saturation = saturation;
+		return this;
+	}
+	
 	@Override
 	public double getHue() {
 		return this.hue;

@@ -22,11 +22,17 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	public double hue = 0.0;
 	public double saturation = 0.0;
 	
-	public AbstractEffect(String name) {
+	public AbstractEffect(String name, double hue, double saturation) {
 		this.name = PhysisArtifacts.PREFIX + name;
 		this.image = "effect"+name;
-		this.hue = PhysisArtifacts.effectColourRand.nextDouble();
-		this.saturation = 1.0 - (PhysisArtifacts.effectColourRand.nextDouble() * PhysisArtifacts.effectColourRand.nextDouble());
+		this.hue = hue;
+		this.saturation = saturation;
+	}
+	public AbstractEffect(String name) {
+		this(name,
+				PhysisArtifacts.effectColourRand.nextDouble(),
+				1.0 - (PhysisArtifacts.effectColourRand.nextDouble() * PhysisArtifacts.effectColourRand.nextDouble())
+		);
 	}
 	
 	@Override
@@ -94,6 +100,12 @@ public abstract class AbstractEffect implements IArtifactEffect {
 		for (int i=0; i<len; i++) {
 			durations[i+1] = (int)Math.ceil(d[i] * 20.0);
 		}
+		return this;
+	}
+	
+	public AbstractEffect setColour(double hue, double saturation) {
+		this.hue = hue;
+		this.saturation = saturation;
 		return this;
 	}
 	

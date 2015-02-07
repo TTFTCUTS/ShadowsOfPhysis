@@ -13,7 +13,7 @@ public class ItemAddSocket extends ItemPhysis {
 	public ItemAddSocket() {
 		super();
 		this.setUnlocalizedName("addsocket");
-		this.setTextureName(Physis.MOD_ID+":journal");
+		this.setTextureName("journal");
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

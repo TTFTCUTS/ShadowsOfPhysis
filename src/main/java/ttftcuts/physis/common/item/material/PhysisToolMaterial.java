@@ -13,8 +13,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.common.helper.TextureHelper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;

@@ -11,7 +11,7 @@ public class ItemJournal extends ItemPhysis {
 		super();
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("journal");
-		this.setTextureName(Physis.MOD_ID+":journal");
+		this.setTextureName("journal");
 		
 	}
 	

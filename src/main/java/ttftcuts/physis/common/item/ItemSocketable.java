@@ -1,6 +1,5 @@
 package ttftcuts.physis.common.item;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
+import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
@@ -23,17 +23,18 @@ import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.artifact.PhysisArtifacts.WeightedEffect;
 import ttftcuts.physis.common.artifact.PhysisArtifacts.WeightedTrigger;
 import ttftcuts.physis.common.helper.TextureHelper;
+import ttftcuts.physis.common.story.StoryEngine;
 
-public class ItemSocketable extends ItemPhysis implements ISocketable {
+public class ItemSocketable extends ItemPhysisThemed implements ISocketable {
 
-	public IIcon[][] icons;
+	public IIcon[][][] icons;
 	public static final int ICONTYPES = 1;
 	
 	public ItemSocketable() {
 		super();
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("socketable");
-		this.setTextureName(Physis.MOD_ID+":socketable/gem0_0");
+		this.setTextureName("socketable/gem0_0");
 	}
 	
 	@Override
@@ -78,7 +79,9 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
     {
 		int type = 0;
 		
-		return icons[type][pass];
+		int theme = StoryEngine.get("theme", true);
+		
+		return icons[type][pass][theme];
     }
 	
 	@Override
@@ -120,6 +123,7 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
 			
 			if (pass == 8) {
 				h = h1;
+				
 			}
 		}
 		
@@ -139,16 +143,19 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
     {
         super.registerIcons(register);
         
-    	icons = new IIcon[ICONTYPES][];
+    	icons = new IIcon[ICONTYPES][][];
     	
         for (int i=0; i<ICONTYPES; i++) {
-        	IIcon[] types = new IIcon[9];
+        	IIcon[][] types = new IIcon[9][];
         	for (int j=0; j<9; j++) {
-        		types[j] = register.registerIcon(Physis.MOD_ID+":socketable/gem"+i+"_"+j);
+        		//types[j] = register.registerIcon(Physis.MOD_ID+":socketable/gem"+i+"_"+j);
+        		types[j] = this.registerIcon("socketable/gem"+i+"_"+j, register);
         	}
         	icons[i] = types;
         }
-        Physis.logger.info("Socketable Icons: "+Arrays.deepToString(icons));
+        
+        Physis.logger.info("Gem icons:");
+        Physis.logger.info(Arrays.deepToString(icons));
 	}
 	
 	@Override
@@ -157,10 +164,13 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
 		IArtifactTrigger trigger = PhysisArtifacts.getTriggerFromSocketable(stack);
 		IArtifactEffect effect = PhysisArtifacts.getEffectFromSocketable(stack);
 		
+		int theme = StoryEngine.get("theme", true);
+		if (theme == -1) { theme = 0; }
+		
 		if (trigger != null && effect != null) {
 			int type = 0;
 			
-			String out = Physis.text.translate(PhysisArtifacts.PREFIX+"type."+type+".name");
+			String out = Physis.text.translate(PhysisArtifacts.PREFIX+"theme."+theme+".type."+type+".name");
 			
 			out = String.format(out, 
 				Physis.text.translate(trigger.getLocalizationName()+".name"),
@@ -175,9 +185,7 @@ public class ItemSocketable extends ItemPhysis implements ISocketable {
 	
 	@Override
 	public WeightedRandomChestContent getChestGenBase(ChestGenHooks chest, Random rnd, WeightedRandomChestContent original)
-    {
-		Physis.logger.info("Generating random stuff for chest");
-		
+    {		
         IArtifactTrigger trigger = ((WeightedTrigger)WeightedRandom.getRandomItem(rnd, PhysisArtifacts.triggers.values())).theTrigger;
         IArtifactEffect effect = ((WeightedEffect)WeightedRandom.getRandomItem(rnd, PhysisArtifacts.effects.values())).theEffect;
 		

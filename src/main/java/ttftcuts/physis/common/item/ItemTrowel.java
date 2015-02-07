@@ -51,7 +51,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		super();
 		this.maxStackSize = 1;
 		this.setUnlocalizedName("trowel");
-		this.setTextureName(Physis.MOD_ID+":trowel");
+		this.setTextureName("trowel");
 		this.setMaxDamage(5);
 		this.setNoRepair();
 	}

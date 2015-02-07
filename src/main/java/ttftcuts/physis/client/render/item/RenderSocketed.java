@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
-import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;

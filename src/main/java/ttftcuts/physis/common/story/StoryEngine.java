@@ -76,11 +76,26 @@ public class StoryEngine {
 		//Physis.logger.info("Starting Story Engine: "+seed);
 	}
 	
+	public static int get(String variable, boolean client) {
+		StoryEngine e = instance(client);
+		if (e != null) {
+			return e.get(variable);
+		}
+		return -1;
+	}
+	
 	public int get(String variable) {
 		if (storyVars.containsKey(variable)) {
 			return storyVars.get(variable);
 		}
 		return -1;
+	}
+	
+	public static int getRange(String variable) {
+		if (registry.containsKey(variable)) {
+			return registry.get(variable);
+		}
+		return 0;
 	}
 	
 	public String getVarString(String input, String varname) {

@@ -12,6 +12,13 @@ public class ItemPhysis extends Item {
 	}
 	
 	@Override
+	public Item setTextureName(String name)
+    {
+        this.iconString = Physis.MOD_ID+":"+name;
+        return this;
+    }
+	
+	@Override
 	public String getUnlocalizedNameInefficiently(ItemStack par1ItemStack) {
 		return super.getUnlocalizedNameInefficiently(par1ItemStack).replaceAll("item.", "item." + Physis.MOD_ID +":");
 	}

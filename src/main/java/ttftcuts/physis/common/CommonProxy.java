@@ -42,12 +42,12 @@ public class CommonProxy {
 	public void preInit(FMLPreInitializationEvent event) {
 		//ServerData.init();
 		
+		PhysisStoryVars.init();
+		
     	PhysisItems.init();
     	PhysisBlocks.init();
     	PhysisArtifacts.init();
-    	
-    	PhysisStoryVars.init();
-    	
+
     	PageDefs.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());

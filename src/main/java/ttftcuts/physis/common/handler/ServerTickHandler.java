@@ -3,8 +3,6 @@ package ttftcuts.physis.common.handler;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.file.ServerData;
-import ttftcuts.physis.common.network.PhysisPacketHandler;
-import ttftcuts.physis.common.network.packet.PacketWorldTime;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;

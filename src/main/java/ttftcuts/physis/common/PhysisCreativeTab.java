@@ -9,18 +9,24 @@ import net.minecraft.item.ItemStack;
 
 public class PhysisCreativeTab extends CreativeTabs {
 	
-	public PhysisCreativeTab() {
-		super(Physis.MOD_ID);
+	private ItemStack display;
+	
+	public PhysisCreativeTab(String name) {
+		super(Physis.MOD_ID+"_"+name);
+	}
+	
+	public void setDisplayStack(ItemStack stack) {
+		this.display = stack;
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getTabIconItem() {
-		return PhysisItems.journal;
+		return display.getItem();
 	}
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PhysisItems.journal);
+		return display;
 	}
 }

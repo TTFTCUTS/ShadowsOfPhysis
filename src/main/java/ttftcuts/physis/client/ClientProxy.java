@@ -33,7 +33,6 @@ public class ClientProxy extends CommonProxy {
 
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());
-		//MinecraftForge.EVENT_BUS.register(new HudHandler());
 		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
 		
 		RenderingRegistry.registerBlockHandler(new RenderDigSite(RenderingRegistry.getNextAvailableRenderId()));

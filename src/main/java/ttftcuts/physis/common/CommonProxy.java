@@ -7,7 +7,7 @@ import scala.util.Random;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
-import ttftcuts.physis.common.crafting.AddSocketRecipe;
+import ttftcuts.physis.common.crafting.PhysisCraftingRecipes;
 import ttftcuts.physis.common.file.ServerData;
 import ttftcuts.physis.common.file.ServerData.ServerDataHandler;
 import ttftcuts.physis.common.handler.ArtifactEventHandler;
@@ -35,7 +35,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 	
@@ -49,21 +48,24 @@ public class CommonProxy {
     	PhysisArtifacts.init();
 
     	PageDefs.init();
+    	
+    	PhysisCraftingRecipes.init();    	
+    	
+    	ChestGenHandler.init();
+    	
+    	Physis.oooBuilder = new OddOneOutBuilder();
+	}
+	
+	public void init(FMLInitializationEvent event) {
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
+    	
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
     	MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
     	MinecraftForge.EVENT_BUS.register(new ServerDataHandler());
     	FMLCommonHandler.instance().bus().register(new ServerDataHandler());
     	FMLCommonHandler.instance().bus().register(new StorySeedHandler());
+    	
     	networkSetup();
-    	
-    	Physis.oooBuilder = new OddOneOutBuilder();
-    	
-    	ChestGenHandler.init();
-	}
-	
-	public void init(FMLInitializationEvent event) {
-		
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
@@ -74,7 +76,6 @@ public class CommonProxy {
 		PhysisToolMaterial.buildMaterials();
 		
 		ItemTrowel.buildRecipes();
-		GameRegistry.addRecipe(new AddSocketRecipe());
 	}
 	
 	public void serverPreStarting(FMLServerAboutToStartEvent event) {

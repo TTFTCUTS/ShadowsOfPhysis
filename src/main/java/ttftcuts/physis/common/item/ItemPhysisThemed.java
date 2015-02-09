@@ -14,9 +14,9 @@ import ttftcuts.physis.common.story.StoryEngine;
 
 public class ItemPhysisThemed extends ItemPhysis {
 
-	private String textureRoot;
-	private Map<String, IIcon[]> variantIcons;
-	private String baseIcon;
+	protected String textureRoot;
+	protected Map<String, IIcon[]> variantIcons = new HashMap<String, IIcon[]>();;
+	protected String baseIcon;
 	
 	@Override
 	public Item setTextureName(String name)
@@ -36,6 +36,8 @@ public class ItemPhysisThemed extends ItemPhysis {
 			icons[i] = register.registerIcon(Physis.MOD_ID+":theme"+i+"/"+name);
 		}
 		
+		variantIcons.put(name, icons);
+		
 		return icons;
 	}
 	
@@ -43,7 +45,7 @@ public class ItemPhysisThemed extends ItemPhysis {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register)
     {
-		variantIcons = new HashMap<String, IIcon[]>();
+		//variantIcons = new HashMap<String, IIcon[]>();
 		
 		baseIcon = textureRoot; 
 		

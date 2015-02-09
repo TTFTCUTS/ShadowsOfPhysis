@@ -1,4 +1,6 @@
-itemGroup.physis=Shadows Of Physis
+itemGroup.physis_items=Shadows Of Physis
+itemGroup.physis_socketable=Shadows Of Physis Socketable
+itemGroup.physis_digsite=Shadows Of Physis Dig Sites
 
 item.physis:journal.name=Research Journal
 
@@ -22,14 +24,25 @@ physis.journal.text.index=Here, friend, I will keep an index of all the wonders 
 physis.journal.title.testitem=Test Item
 physis.journal.text.testitem=Text for the test item?
 
+tile.physis:digsite.dirt.name=Buried Artifact
+tile.physis:digsite.sand.name=Buried Artifact
+tile.physis:digsite.clay.name=Buried Artifact
+
+tile.physis:socketTable.name=Socketing Table
+
 item.physis:trowel.name=Trowel
 item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
 item.physis:trowel.leveltooltip=Maximum dig site level
 
-item.physis:addsocket.name=(PH) Add Socket
-item.physis:addsocket.tooltip=Craft this with any item which has a maximum stack size of one to add a socket, up to a limit of two.\n\n@oThis item is consumed in the process.
+item.physis:addsocket.name=Add Socket (Not Final)
+item.physis:addsocket.tooltip=Craft this with any eligible item to add a socket, up to a limit of two.\nHold in your hand to highlight valid items.\n\n@oThis item is consumed in the process.
 
 item.physis:socketable.name=Broken Socketable Item
+
+item.physis:component0.theme.0.name=Arcane Dust
+item.physis:component0.tooltip=@3Small crafting component
+item.physis:component1.theme.0.name=Crystal Cluster
+item.physis:component1.tooltip=@3Medium crafting component
 
 physis.artifact.theme.0.type.0.name=%1$s Shard %2$s
 

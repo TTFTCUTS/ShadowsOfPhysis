@@ -10,12 +10,16 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
+import net.minecraft.item.ItemStack;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.common.CommonProxy;
+import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.PhysisCreativeTab;
+import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.ArtifactHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
@@ -27,6 +31,8 @@ public class Physis {
     public static final Logger logger = LogManager.getLogger(MOD_ID);
    
     public static PhysisCreativeTab creativeTab;
+    public static PhysisCreativeTab socketableTab;
+    public static PhysisCreativeTab digsiteTab;
     public static OddOneOutBuilder oooBuilder;
     
     @Mod.Instance
@@ -41,11 +47,17 @@ public class Physis {
     public void preInit(FMLPreInitializationEvent event)
     {
     	text = new LocalizationHelper();
-    	creativeTab = new PhysisCreativeTab();
+    	creativeTab = new PhysisCreativeTab("items");
+    	socketableTab = new PhysisCreativeTab("socketable");
+    	digsiteTab = new PhysisCreativeTab("digsite");
     	
     	PhysisAPI.artifactHandler = new ArtifactHandler();
 
     	proxy.preInit(event);
+    	
+    	creativeTab.setDisplayStack(new ItemStack(PhysisItems.journal));
+    	socketableTab.setDisplayStack(new ItemStack(PhysisItems.socketable));
+    	digsiteTab.setDisplayStack(new ItemStack(PhysisBlocks.digSiteDirt));
     }
     
     @Mod.EventHandler

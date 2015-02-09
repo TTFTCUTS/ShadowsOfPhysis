@@ -61,8 +61,9 @@ public class BlockDigSite extends BlockContainerPhysis {
 	public IIcon transparent;
 	public final DigSiteLocale locale;
 	
-	public BlockDigSite(String localename) {
+	public BlockDigSite(String localename) {		
 		super(locales.get(localename).material);
+		this.setCreativeTab(Physis.digsiteTab);
 		this.locale = locales.get(localename);
 		this.setStepSound(locale.sounds);
 		this.setHardness(4.0F);

@@ -14,7 +14,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
@@ -32,6 +31,7 @@ public class ItemSocketable extends ItemPhysisThemed implements ISocketable {
 	
 	public ItemSocketable() {
 		super();
+		this.setCreativeTab(Physis.socketableTab);
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("socketable");
 		this.setTextureName("socketable/gem0_0");
@@ -154,8 +154,8 @@ public class ItemSocketable extends ItemPhysisThemed implements ISocketable {
         	icons[i] = types;
         }
         
-        Physis.logger.info("Gem icons:");
-        Physis.logger.info(Arrays.deepToString(icons));
+        //Physis.logger.info("Gem icons:");
+        //Physis.logger.info(Arrays.deepToString(icons));
 	}
 	
 	@Override

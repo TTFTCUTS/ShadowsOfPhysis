@@ -18,6 +18,7 @@ import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
+import ttftcuts.physis.common.handler.BlockHighlightHandler;
 import ttftcuts.physis.common.handler.ClientTickHandler;
 import ttftcuts.physis.common.handler.TextureMapHandler;
 import ttftcuts.physis.common.handler.TooltipHandler;
@@ -34,6 +35,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());
 		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
+		MinecraftForge.EVENT_BUS.register(new BlockHighlightHandler());
 		
 		RenderingRegistry.registerBlockHandler(new RenderDigSite(RenderingRegistry.getNextAvailableRenderId()));
 		RenderingRegistry.registerBlockHandler(new RenderSocketTable(RenderingRegistry.getNextAvailableRenderId()));

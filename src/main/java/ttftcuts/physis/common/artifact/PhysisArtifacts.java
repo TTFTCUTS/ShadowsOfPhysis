@@ -12,8 +12,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBed;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBoat;
+import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemBucketMilk;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.item.ItemEnchantedBook;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemMinecart;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemWritableBook;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.IIcon;
@@ -478,7 +489,18 @@ public final class PhysisArtifacts {
 		if (item == PhysisItems.socketable) {
 			return false;
 		}
-		if (item instanceof ItemBlock) {
+		if (item instanceof ItemBlock
+			|| item instanceof ItemReed
+			|| item instanceof ItemBed
+			|| item instanceof ItemFood
+			|| item instanceof ItemPotion
+			|| item instanceof ItemMinecart
+			|| item instanceof ItemBoat
+			|| item instanceof ItemEnchantedBook
+			|| item instanceof ItemWritableBook
+			|| item instanceof ItemBucket
+			|| item instanceof ItemBucketMilk
+			|| item instanceof ItemDoor) {
 			return false;
 		}
 		if (item.getItemStackLimit(stack) > 1) {

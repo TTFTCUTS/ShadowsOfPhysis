@@ -21,6 +21,7 @@ import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.PhysisCreativeTab;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.ArtifactHandler;
+import ttftcuts.physis.common.helper.HorseReflectionHelper;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 
@@ -46,6 +47,8 @@ public class Physis {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	HorseReflectionHelper.init();
+    	
     	text = new LocalizationHelper();
     	creativeTab = new PhysisCreativeTab("items");
     	socketableTab = new PhysisCreativeTab("socketable");

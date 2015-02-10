@@ -37,7 +37,7 @@ item.physis:trowel.leveltooltip=Maximum dig site level
 item.physis:addsocket.name=Add Socket (Not Final)
 item.physis:addsocket.tooltip=Craft this with any eligible item to add a socket, up to a limit of two.\nHold in your hand to highlight valid items.\n\n@oThis item is consumed in the process.
 
-item.physis:socketable.name=Broken Socketable Item
+item.physis:socketable.name=Socketable Item
 
 item.physis:component0.theme.0.name=Arcane Dust
 item.physis:component0.tooltip=@3Small crafting component

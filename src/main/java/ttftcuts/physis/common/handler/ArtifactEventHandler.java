@@ -4,14 +4,17 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.helper.HorseReflectionHelper;
 import ttftcuts.physis.utils.Socket;
 import ttftcuts.physis.utils.SocketIterator;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.AnimalChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -69,6 +72,7 @@ public class ArtifactEventHandler {
 				}
 			}
 			
+			// player armour
 			for(ItemStack stack : player.inventory.armorInventory) {
 				if (stack != null) {
 					doTriggerUpdate(stack, player);
@@ -76,11 +80,39 @@ public class ArtifactEventHandler {
 				}
 			}			
 		} else {
+			// general entity equipment
 			for(int i=0; i<5; i++) {
 				ItemStack item = event.entityLiving.getEquipmentInSlot(i);
 				if (item != null) {
 					doTriggerUpdate(item, event.entityLiving);
 					doTriggerEquippedUpdate(item, event.entityLiving);
+				}
+			}
+			
+			// horse inventory
+			if (event.entityLiving instanceof EntityHorse) {
+				EntityHorse horse = (EntityHorse) (event.entityLiving);
+				if (horse != null) {
+					AnimalChest inv = HorseReflectionHelper.getHorseChest(horse);
+					if (inv != null) {
+						// equipped updates for saddle/armour
+						ItemStack item = inv.getStackInSlot(0);
+						if (item != null) {
+							doTriggerEquippedUpdate(item, event.entityLiving);
+						}
+						item = inv.getStackInSlot(1);
+						if (item != null) {
+							doTriggerEquippedUpdate(item, event.entityLiving);
+						}
+						
+						// general update on all slots
+						for (int i=0; i<inv.getSizeInventory(); i++) {
+							item = inv.getStackInSlot(i);
+							if (item != null) {
+								doTriggerUpdate(item, event.entityLiving);
+							}
+						}
+					}
 				}
 			}
 		}

@@ -1,5 +1,7 @@
 package ttftcuts.physis.api.internal;
 
+import java.util.List;
+
 import ttftcuts.physis.api.artifact.IArtifactEffect;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,9 +13,7 @@ public interface IArtifactHandler {
 	
 	public boolean registerArtifactEffect(IArtifactEffect effect, int weight);
 	
-	public boolean triggerArtifactEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldown);
-	
-	public boolean triggerInWorldArtifactEffect(int x, int y, int z, EntityLivingBase target, int id, CooldownCategory cooldown);
+	public boolean triggerArtifactEffect(ItemStack stack, List<EntityLivingBase> target, EntityLivingBase source, int id, CooldownCategory cooldown);
 	
 	public void triggerEffectCooldown(ItemStack stack, int ticks, int id);
 	

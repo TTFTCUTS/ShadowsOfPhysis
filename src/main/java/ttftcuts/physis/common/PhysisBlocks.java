@@ -5,6 +5,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.block.BlockDigSite;
+import ttftcuts.physis.common.block.BlockSocketJukebox;
 import ttftcuts.physis.common.block.BlockSocketTable;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
@@ -19,6 +20,8 @@ public final class PhysisBlocks {
 	
 	public static Block socketTable;
 	
+	public static Block socketJukebox;
+	
 	public static void init() {
 		digSiteDirt = registerBlock(new BlockDigSite("dirt"));
 		digSiteSand = registerBlock(new BlockDigSite("sand"));
@@ -27,6 +30,9 @@ public final class PhysisBlocks {
 		
 		socketTable = registerBlock(new BlockSocketTable());
 		registerTile(TileEntitySocketTable.class, "socekttable");
+		
+		socketJukebox = registerBlock(new BlockSocketJukebox());
+		registerTile(BlockSocketJukebox.TileEntitySocketJukebox.class, "socketjukebox");
 	}
 	
 	private static Block registerBlock(Block block, Class<? extends ItemBlock> itemBlock) {

@@ -3,7 +3,6 @@ package ttftcuts.physis.common.handler;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.HorseReflectionHelper;
 import ttftcuts.physis.utils.Socket;
 import ttftcuts.physis.utils.SocketIterator;
@@ -236,7 +235,6 @@ public class ArtifactEventHandler {
 		for(Socket socket : SocketIterator.triggers(stack)) {
 			if (socket.trigger != null) {
 				socket.trigger.onDealDamage(stack, target, source, socket.slot);
-				Physis.logger.info("Damage for socket: "+socket);
 			}
 		}
 	}

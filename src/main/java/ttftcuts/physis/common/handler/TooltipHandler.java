@@ -5,18 +5,22 @@ import java.util.List;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactTrigger;
 import ttftcuts.physis.api.artifact.ISocketable;
+import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.InputHelper;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class TooltipHandler {
 
+	public static final int tipWidth = 200;
+	
 	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent event) {
 		if (event.itemStack.stackTagCompound != null){
@@ -36,8 +40,13 @@ public class TooltipHandler {
 			}
 			
 			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.ARTIFACTTAG)) {
-				List<String> content = Physis.text.translateAndWrap(this.getTooltipForSocketable(event.itemStack), 200);
+				List<String> content = Physis.text.translateAndWrap(this.getTooltipForSocketable(event.itemStack), tipWidth);
 				event.toolTip.addAll(content);
+			}
+		} else if (event.itemStack.getItem() instanceof ItemRecord) {
+			ItemStack held = event.entityPlayer.getHeldItem();
+			if (held != null && held.getItem() == PhysisItems.addsocket) {
+				addRecordTooltip(event.itemStack, event.toolTip, event.toolTip.size());
 			}
 		}
 	}
@@ -51,6 +60,7 @@ public class TooltipHandler {
 		index++;
 		
 		int totaloffset = 0;
+		int postoffset = 0;
 		for (int i=0; i<sockets.length; i++) {
 			int offset = totaloffset + i;
 			if (sockets[i] != null) {
@@ -63,6 +73,7 @@ public class TooltipHandler {
 					socketColour = ((ISocketable)socketed.getItem()).getSocketColour(socketed);
 				}
 				socketColour = Math.max(Math.min(15, socketColour), 0);
+				postoffset++;
 				
 				if (InputHelper.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode())) {
 					for(int j=0; j<stt.size(); j++) {
@@ -82,6 +93,9 @@ public class TooltipHandler {
 				lines.add(index+offset, " \u00A78\u25a0  Empty socket");
 			}
 		}
+		if (stack.getItem() instanceof ItemRecord) {
+			addRecordTooltip(stack, lines, index+totaloffset+postoffset);
+		}
 	}
 	
 	public String getTooltipForSocketable(ItemStack stack) {		
@@ -94,5 +108,11 @@ public class TooltipHandler {
 			}
 		}
 		return null;
+	}
+	
+	public void addRecordTooltip(ItemStack stack, List<String> lines, int offset) {
+		List<String> tip = Physis.text.translateAndWrap("tile.physis:jukebox.recordtip", tipWidth);
+		lines.add(offset, "");
+		lines.addAll(offset+1, tip);
 	}
 }

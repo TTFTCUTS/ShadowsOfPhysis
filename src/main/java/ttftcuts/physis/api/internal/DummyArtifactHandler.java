@@ -1,5 +1,7 @@
 package ttftcuts.physis.api.internal;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import ttftcuts.physis.api.artifact.IArtifactEffect;
@@ -18,12 +20,7 @@ public class DummyArtifactHandler implements IArtifactHandler {
 	}
 	
 	@Override
-	public boolean triggerArtifactEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldown) {
-		return false;
-	}
-
-	@Override
-	public boolean triggerInWorldArtifactEffect(int x, int y, int z, EntityLivingBase target, int id, CooldownCategory cooldown) {
+	public boolean triggerArtifactEffect(ItemStack stack, List<EntityLivingBase> target, EntityLivingBase source, int id, CooldownCategory cooldown) {
 		return false;
 	}
 

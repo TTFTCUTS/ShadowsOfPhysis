@@ -1,5 +1,7 @@
 package ttftcuts.physis.common.artifact.effect;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -36,15 +38,18 @@ public abstract class AbstractEffect implements IArtifactEffect {
 	}
 	
 	@Override
-	public void doEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {
-		if (target.worldObj.isRemote) { return; }
+	public void doEffect(ItemStack stack, List<EntityLivingBase> target, EntityLivingBase source, int id, CooldownCategory cooldowntype) {
+		if (target.size() <= 0) { return; } 
+		if (target.get(0).worldObj.isRemote) { return; }
 		NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(stack);
 		
 		if (sockets.length >= id+1 && sockets[id] != null) {
 			long remainingCooldown = PhysisArtifacts.getEffectCooldown(sockets[id], false);
 			if (remainingCooldown <= 0) {
 				
-				this.doEffectChecked(sockets[id], stack, target, source, id, cooldowntype);
+				for (EntityLivingBase e : target) {
+					this.doEffectChecked(sockets[id], stack, e, source, id, cooldowntype);
+				}
 				this.doCooldown(sockets[id], cooldowntype);
 			}
 		}

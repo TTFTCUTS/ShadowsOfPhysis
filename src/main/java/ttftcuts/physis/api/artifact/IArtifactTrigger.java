@@ -1,11 +1,14 @@
 package ttftcuts.physis.api.artifact;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 
 public interface IArtifactTrigger {
@@ -14,7 +17,7 @@ public interface IArtifactTrigger {
 	
 	public void onEquippedUpdate(ItemStack stack, EntityLivingBase holder, int id);
 	
-	public void onTileUpdate(int x, int y, int z, int id);
+	public void onTileUpdate(ItemStack stack, List<EntityLivingBase> targets, TileEntity tile, int id);
 	
 	public void onDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id);
 	

@@ -1,5 +1,8 @@
 package ttftcuts.physis.common.artifact.trigger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,11 +30,15 @@ public class TriggerOnTakeDamage extends AbstractTrigger {
 	public void onTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id) {
 		if (self) {
 			// effect on self when hit
-			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, target, target, id, getCooldownCategory());
+			List<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
+			targets.add(target);
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, targets, target, id, getCooldownCategory());
 		} else {
 			// effect on attacker when hit
 			if (source != null) {
-				PhysisAPI.artifactHandler.triggerArtifactEffect(stack, source, target, id, getCooldownCategory());
+				List<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
+				targets.add(source);
+				PhysisAPI.artifactHandler.triggerArtifactEffect(stack, targets, target, id, getCooldownCategory());
 			}
 		}
 	}

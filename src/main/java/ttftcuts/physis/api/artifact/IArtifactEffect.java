@@ -1,5 +1,7 @@
 package ttftcuts.physis.api.artifact;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,7 +13,7 @@ import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 
 public interface IArtifactEffect {
 
-	public void doEffect(ItemStack stack, EntityLivingBase target, EntityLivingBase source, int id, IArtifactHandler.CooldownCategory cooldowntype);
+	public void doEffect(ItemStack stack, List<EntityLivingBase> target, EntityLivingBase source, int id, IArtifactHandler.CooldownCategory cooldowntype);
 	
 	public int getCooldown(CooldownCategory cd);
 	public int getDuration(CooldownCategory cd);

@@ -30,6 +30,10 @@ tile.physis:digsite.clay.name=Buried Artifact
 
 tile.physis:socketTable.name=Socketing Table
 
+tile.physis:jukebox.name=Augmented Jukebox
+tile.physis:jukebox.tooltip=Projects the periodic effects of socketed records played upon it to all nearby living things.
+tile.physis:jukebox.recordtip=Socketed records project their periodic effects when played in an @3Augmented Jukebox@r.
+
 item.physis:trowel.name=Trowel
 item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
 item.physis:trowel.leveltooltip=Maximum dig site level

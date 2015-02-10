@@ -1,9 +1,13 @@
 package ttftcuts.physis.common.artifact.trigger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.api.internal.IArtifactHandler.CooldownCategory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class TriggerOnEquippedUpdate extends AbstractTrigger {
 
@@ -27,14 +31,22 @@ public class TriggerOnEquippedUpdate extends AbstractTrigger {
 	@Override
 	public void onEquippedUpdate(ItemStack stack, EntityLivingBase holder, int id) {
 		if (this.condition.condition(stack, holder)) {
-			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, holder, holder, id, getCooldownCategory());
+			List<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
+			targets.add(holder);
+			PhysisAPI.artifactHandler.triggerArtifactEffect(stack, targets, holder, id, getCooldownCategory());
 		}
 	}
 	
-	/*@Override
-	public String getUnlocalizedTriggerString() {
-		return "Every %3$s seconds while equipped or held, %1$s.";
-	}*/
+	@Override
+	public void onTileUpdate(ItemStack stack, List<EntityLivingBase> targets, TileEntity tile, int id) {
+		List<EntityLivingBase> shortlist = new ArrayList<EntityLivingBase>();
+		for (EntityLivingBase entity : targets) {
+			if (this.condition.condition(stack, entity)) {
+				shortlist.add(entity);
+			}
+		}
+		PhysisAPI.artifactHandler.triggerArtifactEffect(stack, targets, null, id, getCooldownCategory());
+	}
 	
 	@Override
 	public String getUnlocalizedTargetString() {

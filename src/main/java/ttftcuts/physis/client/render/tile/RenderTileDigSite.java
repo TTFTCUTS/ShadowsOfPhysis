@@ -1,5 +1,6 @@
 package ttftcuts.physis.client.render.tile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -46,13 +47,15 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 	private static final double[][][] shapeuvs = {
 		{{0,0.5},{0,0.5}},
 		{{0.5,1},{0,0.5}},
-		{{0,0.5},{0.5,1}}
+		{{0,0.5},{0.5,1}},
+		{{0.5,1},{0.5,1}}
 	};
 	
 	private static final int[] shapecolours = {
 		0xFF3333,
 		0x33FF33,
-		0x3333FF
+		0x3333FF,
+		0xFFFFFF
 	};
 	
 	private TileEntityDigSite digsite;
@@ -71,7 +74,7 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		
 		if (digsite.layerlist == null || digsite.layerlist.size() == 0) { return; }
 		OddOneOutPuzzle puzzle = digsite.layerlist.get(digsite.currentlayer).puzzle;
-		if (puzzle == null) { return; }
+		//if (puzzle == null) { return; }
 		
 		if (mc.thePlayer == null) { return; }
 		
@@ -106,13 +109,13 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		if (block.shouldSideBeRendered(world, digsite.xCoord+1, digsite.yCoord, digsite.zCoord, 5))
 		{
 			b = block.getMixedBrightnessForBlock(world, digsite.xCoord+1, digsite.yCoord, digsite.zCoord);
-			sym = puzzle.options.get(5).symbols;
+			sym = getSymbols(puzzle, 5);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(1, 0, 0);
 				t.setBrightness(b);
 				t.addVertexWithUV(1.1, coord[n-1][p][3][1], coord[n-1][p][3][0], shapeuvs[s][0][1], shapeuvs[s][1][1]);
@@ -123,17 +126,17 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 			}
 		}
 		
-		// negetive x
+		// negative x
 		if (block.shouldSideBeRendered(world, digsite.xCoord-1, digsite.yCoord, digsite.zCoord, 4))
 		{
 			b = block.getMixedBrightnessForBlock(world, digsite.xCoord-1, digsite.yCoord, digsite.zCoord);
-			sym = puzzle.options.get(4).symbols;
+			sym = getSymbols(puzzle, 4);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(-1, 0, 0);
 				t.setBrightness(b);
 				t.addVertexWithUV(-.1, coord[n-1][p][3][1], coord[n-1][p][1][0], shapeuvs[s][0][1], shapeuvs[s][1][1]);
@@ -148,13 +151,13 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		if (block.shouldSideBeRendered(world, digsite.xCoord, digsite.yCoord, digsite.zCoord+1, 3))
 		{
 			b = block.getMixedBrightnessForBlock(world, digsite.xCoord, digsite.yCoord, digsite.zCoord+1);
-			sym = puzzle.options.get(3).symbols;
+			sym = getSymbols(puzzle, 3);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(0, 0, 1);
 				t.setBrightness(b);
 				t.addVertexWithUV(coord[n-1][p][0][1], coord[n-1][p][0][0], 1.1, shapeuvs[s][0][1], shapeuvs[s][1][1]);
@@ -165,17 +168,17 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 			}
 		}
 		
-		// negetive z
+		// negative z
 		if (block.shouldSideBeRendered(world, digsite.xCoord, digsite.yCoord, digsite.zCoord-1, 2))
 		{
 			b = block.getMixedBrightnessForBlock(world, digsite.xCoord, digsite.yCoord, digsite.zCoord-1);
-			sym = puzzle.options.get(2).symbols;
+			sym = getSymbols(puzzle, 2);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(0, 0, -1);
 				t.setBrightness(b);
 				t.addVertexWithUV(coord[n-1][p][2][1], coord[n-1][p][0][0], -.1, shapeuvs[s][0][1], shapeuvs[s][1][1]);
@@ -199,13 +202,13 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		if (block.shouldSideBeRendered(world, digsite.xCoord, digsite.yCoord+1, digsite.zCoord, 1))
 		{
 			b = block.getMixedBrightnessForBlock(digsite.getWorldObj(), digsite.xCoord, digsite.yCoord+1, digsite.zCoord);
-			sym = puzzle.options.get(1).symbols;
+			sym = getSymbols(puzzle, 1);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(0, 1, 0);
 				t.setBrightness(b);
 				t.addVertexWithUV(coord[n-1][p][pos[0]][0], 1.1, coord[n-1][p][pos[0]][1], shapeuvs[s][0][1], shapeuvs[s][1][1]);
@@ -216,17 +219,17 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 			}
 		}
 		
-		// negetive y
+		// negative y
 		if (block.shouldSideBeRendered(world, digsite.xCoord, digsite.yCoord-1, digsite.zCoord, 0))
 		{
 			b = block.getMixedBrightnessForBlock(digsite.getWorldObj(), digsite.xCoord, digsite.yCoord-1, digsite.zCoord);
-			sym = puzzle.options.get(0).symbols;
+			sym = getSymbols(puzzle, 0);
 			n = sym.size();
 			
 			for(int p = 0; p<n; p++) {
-				s = sym.get(p).val1;
+				s = sym.get(p).val2;
 				t.startDrawingQuads();
-				t.setColorOpaque_I(shapecolours[sym.get(p).val2]);
+				t.setColorOpaque_I(shapecolours[sym.get(p).val1]);
 				t.setNormal(0, -1, 0);
 				t.setBrightness(b);
 				t.addVertexWithUV(coord[n-1][p][pos[3]][0], -.1, coord[n-1][p][pos[3]][1], shapeuvs[s][0][0], shapeuvs[s][1][0]);
@@ -245,5 +248,16 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-
+	private static List<TPair<Integer>> hourglass;
+	static {
+		hourglass = new ArrayList<TPair<Integer>>();
+		TPair<Integer> entry = new TPair<Integer>(3,3);
+		hourglass.add(entry);
+	}
+	private List<TPair<Integer>> getSymbols(OddOneOutPuzzle puzzle, int side) {
+		if (puzzle != null) {
+			return puzzle.options.get(side).symbols;
+		}
+		return hourglass;
+	}
 }

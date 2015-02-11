@@ -143,7 +143,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
         return trowel;
     }
 	
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	public static String getTrowelLevelString(ItemStack stack) {
 		String t = null;
 		if (stack.getItem() instanceof ITrowel) {
@@ -151,16 +151,16 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 			t = new StringBuilder().append("\u00A78").append(StatCollector.translateToLocal("item.physis:trowel.leveltooltip")).append(": ").append(trowellevel).toString();
 		}
 		return t;
-	}
+	}*/
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })//, "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation (ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		String info = getTrowelLevelString(stack);
+		/*String info = getTrowelLevelString(stack);
 		if (info != null) {
 			list.add(info);
-		}
+		}*/
 	}
 	
 	@Override

@@ -12,17 +12,31 @@ import ttftcuts.physis.utils.TPair;
 public class OddOneOutConstraintSolver {
 	private static OddOneOutConstraintSolver instance;
 	
-	public static List<OddOneOutOption> permutations = new ArrayList<OddOneOutOption>();
+	public static int[] symbolsPerLevel = {1,1,2,2,2,2,2,2,2,2};
+	public static int[] shapesPerLevel 	= {1,2,2,2,2,3,3,3,3,3};
+	public static int[] coloursPerLevel = {2,2,2,3,3,3,3,3,3,3};
+	public static boolean[] negativesPerLevel = {false,false,false,false,false,true,true,true,true,true};
+	
+	public static List<List<OddOneOutOption>> permutations;// = new ArrayList<OddOneOutOption>();
 	
 	public static void makePermutationList() {
 		instance = new OddOneOutConstraintSolver();
 		
-		for (int n = OddOneOutProperty.numSymbols.min - 1; n < OddOneOutProperty.numSymbols.max; n++) {
-			makeSymbols(0, n+1, 3, 3, new ArrayList<TPair<Integer>>(), permutations);
-		}
+		permutations = new ArrayList<List<OddOneOutOption>>();
 		
-		for(OddOneOutOption o : permutations) {
-			o.calculateProperties();
+		for (int level = 0; level < 10; level++) {
+			List<OddOneOutOption> levelpermutations = new ArrayList<OddOneOutOption>();
+			
+			//for (int n = OddOneOutProperty.numSymbols.min - 1; n < OddOneOutProperty.numSymbols.max; n++) {
+			for (int n = 0; n < symbolsPerLevel[level]; n++) {
+				makeSymbols(0, n+1, coloursPerLevel[level], shapesPerLevel[level], new ArrayList<TPair<Integer>>(), levelpermutations);
+			}
+			
+			for(OddOneOutOption o : levelpermutations) {
+				o.calculateProperties();
+			}
+			
+			permutations.add(levelpermutations);
 		}
 	}
 	
@@ -53,13 +67,13 @@ public class OddOneOutConstraintSolver {
 		
 		for (int i = 1; i<=6; i++) {
 			List<OddOneOutOption> d = new ArrayList<OddOneOutOption>(permutations.size());
-			d.addAll(permutations);
+			d.addAll(permutations.get(difficulty));
 			Collections.shuffle(d, rand);
 			domains.put(i, d);
 			variables.add(i);
 		}
 		
-		CSP csp = instance.new CSP(variables, domains, instance.new Constraint(variables));
+		CSP csp = instance.new CSP(variables, domains, instance.new Constraint(variables, negativesPerLevel[difficulty]));
 		Map<Integer, OddOneOutOption> optmap = backtrackingSearch(csp, new HashMap<Integer,OddOneOutOption>());
 		
 		List<OddOneOutOption> options = new ArrayList<OddOneOutOption>();
@@ -81,9 +95,11 @@ public class OddOneOutConstraintSolver {
 	private class Constraint {
 		public List<Integer> variables;
 		public int previousAnswer = 0;
+		public boolean allowNegatives = false;
 		
-		public Constraint(List<Integer> positions) {
+		public Constraint(List<Integer> positions, boolean allowNegatives) {
 			this.variables = positions;
+			this.allowNegatives = allowNegatives;
 		}
 		
 		public boolean isSatisfied(Map<Integer, OddOneOutOption> assignment) {
@@ -121,7 +137,7 @@ public class OddOneOutConstraintSolver {
 				for (int number : data.keySet()) {
 					int n = data.get(number);
 					
-					if (n==1 || n == 5) {
+					if (n==1 || (allowNegatives && n == 5)) {
 						OddOneOutOption st = lastStates.get(p).get(number);
 						if (oddstate != null && oddstate != st) { return false; }
 						oddstate = st;

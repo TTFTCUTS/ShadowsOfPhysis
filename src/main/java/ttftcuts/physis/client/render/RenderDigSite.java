@@ -45,9 +45,7 @@ public class RenderDigSite implements ISimpleBlockRenderingHandler {
 				tile.renderlayer = i+1;
 				renderer.renderStandardBlock(block, x, y, z);
 			}*/
-			
-			
-			
+
 			// reset
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			tile.renderlayer = 0;

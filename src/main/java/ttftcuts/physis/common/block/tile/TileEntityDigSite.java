@@ -108,7 +108,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 				}
 				trowel.onUseTrowel(held, player, true);
 			} else {
-				if (this.level > 0 && world.rand.nextBoolean()) {
+				if (this.level > 0 && world.rand.nextInt(3) == 0) {
 					this.level--;
 					this.markTileForUpdate();
 					// STUFF BREAK NOISE

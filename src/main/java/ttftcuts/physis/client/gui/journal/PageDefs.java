@@ -1,6 +1,5 @@
 package ttftcuts.physis.client.gui.journal;
 
-import ttftcuts.physis.Physis;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,14 +17,14 @@ public class PageDefs {
 	public static void init() {
 		articleMap = HashMultimap.create();
 		
-		Physis.logger.info("Intro pages");
+		//Physis.logger.info("Intro pages");
 		
 		introduction = new JournalArticle("intro", null,
 			new JournalPageText("intro1"),
 			new JournalPageText("intro2")
 		);
 		
-		Physis.logger.info("Pages");
+		//Physis.logger.info("Pages");
 		
 		test = new JournalArticle("testitem", Category.ITEM, new JournalPageTitle("testitem", "testitem"))
 			.setStack(new ItemStack(Items.apple));
@@ -35,7 +34,7 @@ public class PageDefs {
 				.setStack(new ItemStack(Blocks.bookshelf));
 		}
 		
-		Physis.logger.info("Index next");
+		//Physis.logger.info("Index next");
 		
 		// these should be last - any articles after here won't be indexed!
 		index = new JournalArticle("index", null,
@@ -43,7 +42,7 @@ public class PageDefs {
 			new JournalPageIndex(0)
 		);
 		
-		Physis.logger.info("Categories");
+		//Physis.logger.info("Categories");
 		
 		// category pages
 		for(Category category: Category.values()) {
@@ -57,7 +56,7 @@ public class PageDefs {
 			category.sectionMenu = cat;
 		}
 		
-		Physis.logger.info("Done");
+		//Physis.logger.info("Done");
 	}
 	
 	//##### ------------------------------------------------------- #####

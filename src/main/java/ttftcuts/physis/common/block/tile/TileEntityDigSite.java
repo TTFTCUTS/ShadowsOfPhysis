@@ -2,12 +2,15 @@ package ttftcuts.physis.common.block.tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.texture.DigStripTexture;
+import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.helper.EffectHelper;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutPuzzle;
+import ttftcuts.physis.utils.TileUtilities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,21 +37,25 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public List<DigSiteLayer> layerlist = new ArrayList<DigSiteLayer>();
 	public List<DigSiteRenderLayer> renderdata = new ArrayList<DigSiteRenderLayer>();
 	
+	public static Random digSiteRandom = new Random();
+	
+	private static final int[] layersPerLevel = {3,4,4,5,5,6,7,8,9,10};
+	
 	public void onPlaced(int level) {
 		this.level = level;
 		this.currentlayer = 0;
-		this.requestSeed = this.worldObj.rand.nextInt();
+		this.requestSeed = digSiteRandom.nextInt();
 		
-		this.buildLayerList();
+		this.buildLayerList(level);
 		this.buildRenderData();
 		
 		this.markTileForUpdate();
 	}
 	
-	private void buildLayerList() {
+	private void buildLayerList(int level) {
 		this.layerlist.clear();
 
-		for (int i=0; i<8; i++) {
+		for (int i=0; i<layersPerLevel[level]; i++) {
 			this.layerlist.add( new DigSiteLayer() );
 		}
 		
@@ -75,7 +82,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		ITrowel trowel = (ITrowel)(held.getItem());
 		DigSiteLayer layer = this.layerlist.get(this.currentlayer);
 		if (!layer.built) { 
-			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, world.rand.nextInt());
+			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, digSiteRandom.nextInt());
 			return false; 
 		}
 		
@@ -87,13 +94,15 @@ public class TileEntityDigSite extends TileEntityPhysis {
 					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
 					
 					// drop loot here
+					List<ItemStack> loot = LootSystem.getDigSiteLoot(digSiteRandom, this.level);
+					TileUtilities.dropItemsInWorld(world, loot, xCoord, yCoord, zCoord);
 		
 					world.setBlockToAir(xCoord, yCoord, zCoord);
 					this.invalidate();
 					this.markTileForUpdate();
 
 				} else {
-					Physis.logger.info("++");
+					//Physis.logger.info("++");
 					this.currentlayer++;
 					
 					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);

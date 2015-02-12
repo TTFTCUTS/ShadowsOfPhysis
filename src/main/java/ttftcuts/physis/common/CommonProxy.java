@@ -6,6 +6,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import scala.util.Random;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.crafting.PhysisCraftingRecipes;
 import ttftcuts.physis.common.file.ServerData;
@@ -66,6 +67,7 @@ public class CommonProxy {
     	FMLCommonHandler.instance().bus().register(new StorySeedHandler());
     	
     	networkSetup();
+    	LootSystem.init();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {

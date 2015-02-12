@@ -7,6 +7,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
 import ttftcuts.physis.client.render.item.RenderSocketable;
@@ -18,6 +19,7 @@ import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
+import ttftcuts.physis.common.compat.PhysisIntegration;
 import ttftcuts.physis.common.handler.BlockHighlightHandler;
 import ttftcuts.physis.common.handler.ClientTickHandler;
 import ttftcuts.physis.common.handler.TextureMapHandler;
@@ -27,6 +29,12 @@ import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import ttftcuts.physis.common.story.StoryEngine;
 
 public class ClientProxy extends CommonProxy {
+	
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		super.preInit(event);
+		PhysisIntegration.preInit(event, true);
+	}
 	
 	@Override
 	public void init(FMLInitializationEvent event) {
@@ -50,6 +58,8 @@ public class ClientProxy extends CommonProxy {
 		
 		// make sure it doesn't come out null in that little while before loading.
 		StoryEngine.reload(-1, true);
+		
+		PhysisIntegration.init(event, true);
 	}
 	
 	@Override
@@ -58,5 +68,7 @@ public class ClientProxy extends CommonProxy {
 		
 		PhysisToolMaterial.buildTintData(10);
 		RenderSocketed.injectRenderer();
+		
+		PhysisIntegration.postInit(event, true);
 	}
 }

@@ -8,6 +8,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
+import ttftcuts.physis.common.compat.PhysisIntegration;
 import ttftcuts.physis.common.crafting.PhysisCraftingRecipes;
 import ttftcuts.physis.common.file.ServerData;
 import ttftcuts.physis.common.file.ServerData.ServerDataHandler;
@@ -48,6 +49,8 @@ public class CommonProxy {
     	PhysisBlocks.init();
     	PhysisArtifacts.init();
 
+    	PhysisIntegration.loadModules();
+    	
     	PageDefs.init();
     	
     	PhysisCraftingRecipes.init();    	
@@ -55,6 +58,8 @@ public class CommonProxy {
     	ChestGenHandler.init();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
+    	
+    	PhysisIntegration.preInit(event, false);
 	}
 	
 	public void init(FMLInitializationEvent event) {
@@ -68,6 +73,8 @@ public class CommonProxy {
     	
     	networkSetup();
     	LootSystem.init();
+    	
+    	PhysisIntegration.init(event, false);
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
@@ -78,6 +85,8 @@ public class CommonProxy {
 		PhysisToolMaterial.buildMaterials();
 		
 		ItemTrowel.buildRecipes();
+		
+		PhysisIntegration.postInit(event, false);
 	}
 	
 	public void serverPreStarting(FMLServerAboutToStartEvent event) {

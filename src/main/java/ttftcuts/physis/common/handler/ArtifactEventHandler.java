@@ -3,7 +3,6 @@ package ttftcuts.physis.common.handler;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import ttftcuts.physis.common.helper.HorseReflectionHelper;
 import ttftcuts.physis.utils.Socket;
 import ttftcuts.physis.utils.SocketIterator;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -92,7 +91,7 @@ public class ArtifactEventHandler {
 			if (event.entityLiving instanceof EntityHorse) {
 				EntityHorse horse = (EntityHorse) (event.entityLiving);
 				if (horse != null) {
-					AnimalChest inv = HorseReflectionHelper.getHorseChest(horse);
+					AnimalChest inv = horse.horseChest;
 					if (inv != null) {
 						// equipped updates for saddle/armour
 						ItemStack item = inv.getStackInSlot(0);
@@ -215,7 +214,7 @@ public class ArtifactEventHandler {
 	
 	// ############### trigger calling ###############
 	
-	private void doTriggerUpdate(ItemStack stack, EntityLivingBase target) {
+	public static void doTriggerUpdate(ItemStack stack, EntityLivingBase target) {
 		for(Socket socket : SocketIterator.triggers(stack)) {
 			if (socket.trigger != null) {
 				socket.trigger.onUpdate(stack, target, socket.slot);
@@ -223,7 +222,7 @@ public class ArtifactEventHandler {
 		}
 	}
 	
-	private void doTriggerEquippedUpdate(ItemStack stack, EntityLivingBase target) {
+	public static void doTriggerEquippedUpdate(ItemStack stack, EntityLivingBase target) {
 		for(Socket socket : SocketIterator.triggers(stack)) {
 			if (socket.trigger != null) {
 				socket.trigger.onEquippedUpdate(stack, target, socket.slot);
@@ -231,7 +230,7 @@ public class ArtifactEventHandler {
 		}
 	}
 	
-	private void doTriggerOnDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
+	private static void doTriggerOnDealDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
 		for(Socket socket : SocketIterator.triggers(stack)) {
 			if (socket.trigger != null) {
 				socket.trigger.onDealDamage(stack, target, source, socket.slot);
@@ -239,7 +238,7 @@ public class ArtifactEventHandler {
 		}
 	}
 	
-	private void doTriggerOnTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
+	private static void doTriggerOnTakeDamage(ItemStack stack, EntityLivingBase target, EntityLivingBase source) {
 		for(Socket socket : SocketIterator.triggers(stack)) {
 			if (socket.trigger != null) {
 				socket.trigger.onTakeDamage(stack, target, source, socket.slot);

@@ -9,6 +9,7 @@ import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.texture.DigStripTexture;
 import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.helper.EffectHelper;
+import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutPuzzle;
 import ttftcuts.physis.utils.TileUtilities;
 
@@ -78,8 +79,15 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		ItemStack held = player.getHeldItem();
 		if (!(held.getItem() instanceof ITrowel)) {
 			return false;
-		}
+		}		
 		ITrowel trowel = (ITrowel)(held.getItem());
+		
+		// Creative override
+		if(ItemTrowel.isCreative(held)) {
+			this.dropLoot(world, player);
+			return true;
+		}
+		
 		DigSiteLayer layer = this.layerlist.get(this.currentlayer);
 		if (!layer.built) { 
 			Physis.oooBuilder.requestPuzzle(this.level, this, this.currentlayer, digSiteRandom.nextInt());
@@ -91,15 +99,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			if (side == puzzle.solution) {
 				if (this.currentlayer + 1 >= this.numlayers) {
 					// destroy! dispense loot!
-					EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
-					
-					// drop loot here
-					List<ItemStack> loot = LootSystem.getDigSiteLoot(digSiteRandom, this.level);
-					TileUtilities.dropItemsInWorld(world, loot, xCoord, yCoord, zCoord);
-		
-					world.setBlockToAir(xCoord, yCoord, zCoord);
-					this.invalidate();
-					this.markTileForUpdate();
+					this.dropLoot(world, player);
 
 				} else {
 					//Physis.logger.info("++");
@@ -129,6 +129,17 @@ public class TileEntityDigSite extends TileEntityPhysis {
 			}
 		}
 		return true;
+	}
+	
+	private void dropLoot(World world, EntityPlayer player) {
+		EffectHelper.doBlockBreakEffect(world, player, xCoord, yCoord, zCoord);
+		
+		List<ItemStack> loot = LootSystem.getDigSiteLoot(digSiteRandom, this.level);
+		TileUtilities.dropItemsInWorld(world, loot, xCoord, yCoord, zCoord);
+
+		world.setBlockToAir(xCoord, yCoord, zCoord);
+		this.invalidate();
+		this.markTileForUpdate();
 	}
 	
 	@Override

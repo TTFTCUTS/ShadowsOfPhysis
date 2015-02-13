@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,9 +29,13 @@ public class PhysisToolMaterial {
 	//public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
 	
 	public static Map<String,PhysisToolMaterial> materials;
+	private static List<PhysisToolMaterial> materialsById;
 	public static Map<Class<? extends IRecipe>, IRecipeComponentTranslator> handlers = new HashMap<Class<? extends IRecipe>, IRecipeComponentTranslator>();
 	
 	public static boolean generated = false;
+	private static int nextId = 0;
+	
+	public final int id;
 	
 	public String orename;
 	public String orematerial;
@@ -52,6 +57,9 @@ public class PhysisToolMaterial {
 	
 	public PhysisToolMaterial(String orename, ItemStack ingot, String stickorename, ItemStack stick, ItemStack pick) {
 		//Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
+		this.id = nextId;
+		materialsById.add(this);
+		nextId++;
 		
 		this.orename = orename;
 		this.orematerial = orename.replaceFirst("[^A-Z]*(?=[A-Z])", "");
@@ -74,6 +82,7 @@ public class PhysisToolMaterial {
 	public static void buildMaterials() {		
 		//Physis.logger.info("Building tool material list");
 		materials = new HashMap<String, PhysisToolMaterial>();
+		materialsById = new ArrayList<PhysisToolMaterial>();
 		
 		//Physis.logger.info("Getting Ingots");
 		
@@ -292,5 +301,13 @@ public class PhysisToolMaterial {
 		}
 		
 		stack.stackTagCompound.setString(MATERIALTAG, mat.orename);
+	}
+	
+	public static PhysisToolMaterial getMaterialById(int id) {
+		return materialsById.get(id);
+	}
+	
+	public static PhysisToolMaterial getRandomMaterial(Random rand) {
+		return materialsById.get(rand.nextInt(materialsById.size()));
 	}
 }

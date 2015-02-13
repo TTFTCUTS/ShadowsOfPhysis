@@ -18,6 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.common.PhysisItems;
+import ttftcuts.physis.common.handler.TooltipHandler;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -40,6 +41,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class ItemTrowel extends ItemPhysis implements ITrowel {
 
 	public static final String HANDLETAG = "physisTrowelHandle" ;
+	public static final String CREATIVETAG = "physisTrowelCreative";
 	
 	public IIcon handle;
 	public IIcon shaft;
@@ -90,8 +92,24 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		});
 		
 		types.addAll(trowels);
+		
+		ItemStack creativeTrowel = new ItemStack(this);
+		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialById(0);
+		
+		PhysisToolMaterial.writeMaterialToStack(mat, creativeTrowel);
+		
+		setCreative(creativeTrowel);
+		
+		types.add(creativeTrowel);
 	}
 
+	public static boolean isCreative(ItemStack trowel) {
+		return trowel.stackTagCompound.hasKey(CREATIVETAG) && trowel.stackTagCompound.getBoolean(CREATIVETAG);
+	}
+	
+	public static void setCreative(ItemStack trowel) {
+		trowel.stackTagCompound.setBoolean(CREATIVETAG, true);
+	}
 	
 	@Override
 	public int getMaxDamage(ItemStack stack) {
@@ -109,9 +127,13 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
     {
         String trowel = ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
         
-        String regex = StatCollector.translateToLocal("item.physis:trowel.regex");
+        if (isCreative(stack)) {
+        	return StatCollector.translateToLocal("item.physis:trowel.creative") + " " + trowel;
+        }
         
-        if (regex.equals("item.physis:trowel.regex")) {
+        String regex = StatCollector.translateToLocal("item.physis:material.regex");
+        
+        if (regex.equals("item.physis:material.regex")) {
         	Physis.logger.warn("Trowel regex localisation failure, setting to default");
         	regex = "(^\\w*)(?=\\sPick(axe)?)";
         }
@@ -153,14 +175,21 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		return t;
 	}*/
 	
-	@SuppressWarnings({ "rawtypes" })//, "unchecked" })
+	@SuppressWarnings({ "rawtypes" , "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation (ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		/*String info = getTrowelLevelString(stack);
-		if (info != null) {
-			list.add(info);
-		}*/
+		if (isCreative(stack)) {
+			List<String> info = Physis.text.translateAndWrap("item.physis:trowel.tooltip.creative", TooltipHandler.tipWidth);
+			list.addAll(info);
+		}
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack stack, int pass)
+	{
+		 return super.hasEffect(stack, pass) || isCreative(stack);
 	}
 	
 	@Override

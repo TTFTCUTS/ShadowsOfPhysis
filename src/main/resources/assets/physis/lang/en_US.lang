@@ -2,7 +2,7 @@ itemGroup.physis_items=Shadows Of Physis
 itemGroup.physis_socketable=Shadows Of Physis Socketable
 itemGroup.physis_digsite=Shadows Of Physis Dig Sites
 
-item.physis:journal.name=Research Journal
+item.physis:journal.name=Research Journal [WIP]
 
 physis.journal.category.item=Items
 physis.journal.title.item=Items
@@ -34,11 +34,13 @@ tile.physis:jukebox.name=Augmented Jukebox
 tile.physis:jukebox.tooltip=Projects the periodic effects of socketed records played upon it to all nearby living things.
 tile.physis:jukebox.recordtip=Socketed records project their periodic effects when played in an @3Augmented Jukebox@r.
 
-item.physis:trowel.name=Trowel
-item.physis:trowel.regex=(^\w*)(?=\sPick(axe)?)
-item.physis:trowel.leveltooltip=Maximum dig site level
+item.physis:material.regex=(^\w*)(?=\sPick(axe)?)
 
-item.physis:addsocket.name=Add Socket (Not Final)
+item.physis:trowel.name=Trowel
+item.physis:trowel.tooltip.creative=@4Creative only@7\nCompletes dig sites in a single click.
+item.physis:trowel.creative=Creative
+
+item.physis:addsocket.name=Add Socket [Not Final]
 item.physis:addsocket.tooltip=Craft this with any eligible item to add a socket, up to a limit of two.\nHold in your hand to highlight valid items.\n\n@oThis item is consumed in the process.
 
 item.physis:socketable.name=Socketable Item
@@ -47,6 +49,8 @@ item.physis:component0.theme.0.name=Arcane Dust
 item.physis:component0.tooltip=@3Small crafting component
 item.physis:component1.theme.0.name=Crystal Cluster
 item.physis:component1.tooltip=@3Medium crafting component
+
+item.physis:baublering.name=Ring
 
 physis.artifact.theme.0.type.0.name=%1$s Shard %2$s
 

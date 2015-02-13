@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ChestGenHooks;
 
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.api.internal.LootList;
@@ -26,6 +27,11 @@ public class LootSystem {
 		digSiteLootList.addItemStackChestGen(new ItemStack(PhysisItems.socketable), 1, 1, 1000);
 		
 		digSiteLootList.addItemStackChestGen(new ItemStack(Items.enchanted_book), 1, 1, 400);
+		
+		digSiteLootList.addChest(ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST), 350);
+		digSiteLootList.addChest(ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST), 250, 0.3);
+		digSiteLootList.addChest(ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR), 200, 0.1);
+		digSiteLootList.addChest(ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST), 200, 0.2);
 		
 		digSiteLootList.addItemStack(new ItemStack(PhysisItems.component, 1, 0), 1, 1, 100);
 		

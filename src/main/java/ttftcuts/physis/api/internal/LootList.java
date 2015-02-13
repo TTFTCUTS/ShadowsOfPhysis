@@ -10,16 +10,25 @@ import net.minecraftforge.common.ChestGenHooks;
 
 public class LootList {
 
+	public void addItemStack(ItemStack stack, int minCount, int maxCount, int price, double weight) {
+		this.list.add(new LootEntry(stack, minCount, maxCount, price, weight));
+	}
 	public void addItemStack(ItemStack stack, int minCount, int maxCount, int price) {
-		this.list.add(new LootEntry(stack, minCount, maxCount, price));
+		this.addItemStack(stack, minCount, maxCount, price, 1.0);
 	}
 	
+	public void addItemStackChestGen(ItemStack stack, int minCount, int maxCount, int price, double weight) {
+		this.list.add(new LootEntry(stack, minCount, maxCount, price, weight, true));
+	}
 	public void addItemStackChestGen(ItemStack stack, int minCount, int maxCount, int price) {
-		this.list.add(new LootEntry(stack, minCount, maxCount, price, true));
+		this.addItemStackChestGen(stack, minCount, maxCount, price, 1.0);
 	}
 	
+	public void addChest(ChestGenHooks chest, int price, double weight) {
+		this.list.add(new LootEntry(chest, price, weight));
+	}
 	public void addChest(ChestGenHooks chest, int price) {
-		this.list.add(new LootEntry(chest, price));
+		this.addChest(chest, price, 1.0);
 	}
 	
 	// -------------------------------------
@@ -46,7 +55,7 @@ public class LootList {
 		boolean first = true;
 		
 		while (budget > 0) {
-			int min = Math.min(budget, (first) ? primeMinValue : minValue);
+			int min = (first) ? primeMinValue : minValue;//Math.min(budget, (first) ? primeMinValue : minValue);
 			int max = Math.min(budget, maxValue);
 			
 			List<LootEntry> lootlist = getLootRange(min, max);
@@ -56,7 +65,23 @@ public class LootList {
 			
 			if (lootlist.size() == 0) { break; }
 			
-			LootEntry lootitem = lootlist.get(rand.nextInt(lootlist.size()));
+			double totalweight = 0;
+			for (int i=0; i<lootlist.size(); i++) {
+				totalweight += lootlist.get(i).weight;
+			}
+			double roll = rand.nextDouble() * totalweight;
+			double currentweight = 0;
+			LootEntry lootitem = null;
+			
+			for (int i=0; i<lootlist.size(); i++) {
+				LootEntry e = lootlist.get(i);
+				currentweight += e.weight;
+				if (currentweight >= roll) {
+					lootitem = e;
+					break;
+				}
+			}
+			if (lootitem == null) { continue; }
 			
 			loot.addAll(lootitem.getLoot(rand));
 			
@@ -78,29 +103,31 @@ public class LootList {
 		
 		public LootType type = LootType.NONE;
 		public int price = 0;
+		public double weight = 1.0;
 		
 		public ItemStack stack;
 		public ChestGenHooks chest;
 		public int min, max;
 		
-		public LootEntry(int min, int max, int price) {
+		public LootEntry(int min, int max, int price, double weight) {
 			this.min = min;
 			this.max = max;
 			this.price = price;
+			this.weight = weight;
 		}
 		
-		public LootEntry(ItemStack stack, int min, int max, int price) {
-			this(stack, min, max, price, false);
+		public LootEntry(ItemStack stack, int min, int max, int price, double weight) {
+			this(stack, min, max, price, weight, false);
 		}
-		public LootEntry(ItemStack stack, int min, int max, int price, boolean chestGen) {
-			this(min, max, price);
+		public LootEntry(ItemStack stack, int min, int max, int price, double weight, boolean chestGen) {
+			this(min, max, price, weight);
 			this.type = chestGen ? LootType.ITEMSTACKCHESTGEN : LootType.ITEMSTACK;
 			this.stack = stack;
 		}
 		
-		public LootEntry(ChestGenHooks chest, int price) {
-			this(1, 1, price);
-			this.type = LootType.ITEMSTACK;
+		public LootEntry(ChestGenHooks chest, int price, double weight) {
+			this(1, 1, price, weight);
+			this.type = LootType.CHEST;
 			this.chest = chest;
 		}
 		

@@ -17,6 +17,7 @@ public class PhysisIntegration {
 	
 	public static void loadModules() {
 		registerModule(CompatBaubles.class, "Baubles");
+		registerModule(CompatTravellersGear.class, "TravellersGear");
 	}
 	
 	public static void registerModule(Class<? extends CompatModule> clazz, String modid) {

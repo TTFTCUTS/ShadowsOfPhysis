@@ -30,7 +30,7 @@ public class RenderSocketable implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		
-		PhysisRenderHelper.renderItemStack(item, 0, 0, false);
+		PhysisRenderHelper.renderItemStack(item, 0, 0, false, false);
 		
 		boolean crouch = InputHelper.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
 		

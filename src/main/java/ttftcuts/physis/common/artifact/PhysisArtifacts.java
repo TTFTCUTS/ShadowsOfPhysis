@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBed;
 import net.minecraft.item.ItemBlock;
@@ -48,6 +49,8 @@ import ttftcuts.physis.common.artifact.trigger.TriggerOnTakeDamage;
 import ttftcuts.physis.common.artifact.trigger.TriggerOnUpdate;
 import ttftcuts.physis.common.artifact.trigger.UpdateCondition;
 import ttftcuts.physis.common.file.ServerData;
+import ttftcuts.physis.common.network.PhysisPacketHandler;
+import ttftcuts.physis.common.network.packet.PacketPlayerUpdate;
 
 public final class PhysisArtifacts {
 
@@ -146,15 +149,15 @@ public final class PhysisArtifacts {
 			.setDurations(2,3,4,5,6,8,10), 100);
 		
 		// force
-		registerPhysisEffect(new EffectForce("ForceUp", 0.75)
+		registerPhysisEffect(new EffectForce("ForceUp", 1.25)
 			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 10);
 		registerPhysisEffect(new EffectForce("ForceDown", -1.5)
 			.setCooldowns(3, 5, 8, 10, 13, 17, 20), 5);
 		
 		// air
-		registerPhysisEffect(new EffectAir("AirUp", 1)
+		registerPhysisEffect(new EffectAir("AirUp", 30)
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 10);
-		registerPhysisEffect(new EffectAir("AirDown", -1)
+		registerPhysisEffect(new EffectAir("AirDown", -30)
 			.setCooldowns(0.5, 1, 2, 3, 4, 6, 8), 5);
 	}
 	
@@ -555,6 +558,10 @@ public final class PhysisArtifacts {
 				punt.delay--;
 			} else {
 				punt.entity.motionY += punt.force;
+				if (punt.entity instanceof EntityPlayerMP) {
+					EntityPlayerMP p = (EntityPlayerMP)(punt.entity);
+					PhysisPacketHandler.bus.sendTo(PacketPlayerUpdate.createPuntPacket(0, punt.force, 0), p);
+				}
 				entitiesToPunt.remove(i);
 			}
 		}

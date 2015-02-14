@@ -15,9 +15,9 @@ public class TGSaveData extends WorldSavedData
 {
 	private static TGSaveData INSTANCE;
 	/** This is for the server! */
-	public HashMap<UUID, NBTTagCompound> playerData = new HashMap();
+	public HashMap<UUID, NBTTagCompound> playerData = new HashMap<UUID, NBTTagCompound>();
 	/** This is for the client! */
-	public static HashMap<UUID, NBTTagCompound> clientData = new HashMap();
+	public static HashMap<UUID, NBTTagCompound> clientData = new HashMap<UUID, NBTTagCompound>();
 
 	public static final String dataName = "TG-SaveData";
 	public TGSaveData(String s)
@@ -78,14 +78,17 @@ public class TGSaveData extends WorldSavedData
 	}
 	public static void setDirty()
 	{
+		System.out.println("Attempting to mark dirty, instance="+INSTANCE);
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER)
 			if(INSTANCE!=null)
+			{
 				INSTANCE.markDirty();
+				System.out.println("marked dirty.");
+			}
 	}
 	public static void setInstance(TGSaveData in)
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER)
-			if(INSTANCE!=null)
-				INSTANCE = in;
+			INSTANCE = in;
 	}
 }

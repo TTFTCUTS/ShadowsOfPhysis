@@ -20,20 +20,13 @@ public class ContainerSocketTable extends ContainerPhysis {
 	private Slot[] socketSlots;
 	public int activeSlots = 0;
 	
-	private static SlotFilter materialFilter = new SlotFilter() {
-		@Override
-		public boolean isValidStack(ItemStack stack) {
-			return TileEntitySocketTable.checkReagentValidity(stack);
-		}
-	};
-	
 	public ContainerSocketTable(InventoryPlayer inventory, TileEntitySocketTable table) {
 		this.table = table;
 		
 		mainSlot = new SlotFiltered(table, 0, 8, 65, SlotFilter.SOCKETED);
 		addSlotToContainer(mainSlot);
 		
-		materialSlot = new SlotFiltered(table, 1, 8, 101, materialFilter);
+		materialSlot = new SlotFiltered(table, 1, 8, 101, SlotFilter.SOCKETREAGENT);
 		addSlotToContainer(materialSlot);
 		
 		socketSlots = new Slot[5];

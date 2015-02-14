@@ -55,7 +55,7 @@ public class TravellersGearAPI
 		{
 			if(m_isStackPseudoTravellersGear==null)
 			{
-				Class c_ModCompatability = Class.forName("travellersgear.common.util.ModCompatability") ;
+				Class<?> c_ModCompatability = Class.forName("travellersgear.common.util.ModCompatability") ;
 				m_isStackPseudoTravellersGear = c_ModCompatability.getMethod("isStackPseudoTravellersGear", ItemStack.class);
 			}
 			return (Boolean) m_isStackPseudoTravellersGear.invoke(null, stack);
@@ -97,17 +97,20 @@ public class TravellersGearAPI
 	{
 		if(player==null||inv==null)
 			return;
+		System.out.println("Saving data "+(player.worldObj.isRemote?"Client":"Server")+" Side");
 
 		NBTTagList list = new NBTTagList();
 		for (int i=0; i<inv.length; i++)
 			if(inv[i]!=null)
 			{
+				System.out.println(inv[i]);
 				NBTTagCompound invSlot = new NBTTagCompound();
 				invSlot.setByte("Slot", (byte)i);
 				inv[i].writeToNBT(invSlot);
 				list.appendTag(invSlot);
 			}
 		getTravellersNBTData(player).setTag("Inventory", list);
+		System.out.println("Saved data");
 		TGSaveData.setDirty();
 	}
 

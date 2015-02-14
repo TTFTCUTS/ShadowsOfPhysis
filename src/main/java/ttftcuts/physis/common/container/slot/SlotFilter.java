@@ -2,19 +2,20 @@ package ttftcuts.physis.common.container.slot;
 
 import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
+import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class SlotFilter {
+public enum SlotFilter {
 	
-	public static SlotFilter SOCKETABLE = new SlotFilter() {
+	SOCKETABLE {
 		@Override
 		public boolean isValidStack(ItemStack stack) {
 			return stack.getItem() instanceof ISocketable;
 		}
-	};
+	},
 	
-	public static SlotFilter SOCKETED = new SlotFilter() {
+	SOCKETED {
 		@Override
 		public boolean isValidStack(ItemStack stack)
 	    {
@@ -26,9 +27,16 @@ public abstract class SlotFilter {
 			
 	        return false;
 	    }
+	},
+	
+	SOCKETREAGENT {
+		@Override
+		public boolean isValidStack(ItemStack stack) {
+			return TileEntitySocketTable.checkReagentValidity(stack);
+		}
 	};
 	
-	public SlotFilter() {}
+	SlotFilter() {}
 		
 	public boolean isValidStack(ItemStack stack) { return true; }
 

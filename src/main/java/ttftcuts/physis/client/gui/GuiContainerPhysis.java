@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.container.ContainerPhysis;
+import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -13,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class GuiContainerPhysis extends GuiContainer {
 
 	public static ResourceLocation inventoryTexture = new ResourceLocation(Physis.MOD_ID, "textures/gui/inventory.png");
+	public static ResourceLocation slotIcons = new ResourceLocation(Physis.MOD_ID, "textures/gui/sloticons.png");
 	
 	public GuiContainerPhysis(Container container) {
 		super(container);
@@ -60,6 +62,14 @@ public abstract class GuiContainerPhysis extends GuiContainer {
         GL11.glColorMask(true, true, true, true);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+	}
+	
+	protected void drawSlotIcon(int x, int y, int iconx, int icony, int colour) {
+		mc.renderEngine.bindTexture(slotIcons);
+		PhysisRenderHelper.drawColouredTexturedModalRect(this.guiLeft + x, this.guiTop + y, this.zLevel, 16*iconx, 16*icony, 16, 16, colour);
+	}
+	protected void drawSlotIcon(int x, int y, int iconx, int icony) {
+		this.drawSlotIcon(x, y, iconx, icony, 0xFFFFFF);
 	}
 	
 	protected void drawCustomTooltip(int x, int y, List<String> lines) {

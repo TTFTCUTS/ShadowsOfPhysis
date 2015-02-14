@@ -34,6 +34,12 @@ public class PhysisCraftingRecipes {
 			'J', new ItemStack(Blocks.jukebox)
 		);
 		
+		addShapedOreRecipe(new ItemStack(PhysisItems.addsocket),
+			" S ", "SNS", " S ",
+			'S', new ItemStack(PhysisItems.component, 1, 0),
+			'N', new ItemStack(Items.nether_star)
+		);
+		
 		GameRegistry.addSmelting(PhysisItems.socketable, new ItemStack(PhysisItems.component, 3, 0), 25);
 	}
 	

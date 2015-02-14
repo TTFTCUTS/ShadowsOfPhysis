@@ -23,6 +23,7 @@ import ttftcuts.physis.common.item.material.ShapedOreRecipeCT;
 import ttftcuts.physis.common.item.material.ShapedRecipeCT;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
 import ttftcuts.physis.common.network.packet.PacketGuiMessage;
+import ttftcuts.physis.common.network.packet.PacketPlayerUpdate;
 import ttftcuts.physis.common.network.packet.PacketStorySeed;
 import ttftcuts.physis.common.network.packet.PacketWorldTime;
 import ttftcuts.physis.common.story.PhysisStoryVars;
@@ -120,6 +121,7 @@ public class CommonProxy {
 		PhysisPacketHandler.registerPacketHandler(new PacketGuiMessage(), 0);
 		PhysisPacketHandler.registerPacketHandler(new PacketWorldTime(), 1);
 		PhysisPacketHandler.registerPacketHandler(new PacketStorySeed(), 2);
+		PhysisPacketHandler.registerPacketHandler(new PacketPlayerUpdate(), 3);
 		
 		PhysisPacketHandler.init();
 	}

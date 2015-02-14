@@ -6,7 +6,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotFiltered extends Slot {
-
+	
 	public SlotFilter filter;
 	public boolean canTake = true;
 	

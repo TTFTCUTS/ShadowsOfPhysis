@@ -65,10 +65,10 @@ public class PhysisRenderHelper {
 	
 	//private static RenderItem renderItem = new RenderItem();
 	public static void renderItemStack(ItemStack stack, int x, int y) {
-		renderItemStack(stack,x,y,true);
+		renderItemStack(stack,x,y,true, true);
 	}
 	
-	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers) {
+	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay) {
 		RenderItem render = new RenderItem();
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
@@ -80,10 +80,26 @@ public class PhysisRenderHelper {
 			render.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		} else {
 			render.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
+		} 
+		if (overlay) {
+			render.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		}
-		render.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 	}
+	
+	public static void drawColouredTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, int colour)
+    {
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.setColorOpaque_I(colour);
+        tessellator.addVertexWithUV((double)(x + 0), (double)(y + h), (double)z, (double)((float)(u + 0) * f), (double)((float)(v + h) * f1));
+        tessellator.addVertexWithUV((double)(x + w), (double)(y + h), (double)z, (double)((float)(u + w) * f), (double)((float)(v + h) * f1));
+        tessellator.addVertexWithUV((double)(x + w), (double)(y + 0), (double)z, (double)((float)(u + w) * f), (double)((float)(v + 0) * f1));
+        tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)z, (double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
+        tessellator.draw();
+    }
 }

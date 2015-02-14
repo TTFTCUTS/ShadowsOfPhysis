@@ -2,7 +2,6 @@ package ttftcuts.physis.common.worldgen;
 
 import java.util.Random;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
 
@@ -40,8 +39,6 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 		int outof = (int)(chunksPerSiteSealevel * (1.0-fraction) + chunksPerSiteTop * fraction);
 		
 		if (random.nextInt(outof) != 0) { return; }
-		
-		Physis.logger.info("Site height: "+y+", chance at this height: one in "+outof);
 		
 		Block digtype = PhysisBlocks.digSiteDirt;
 		Block topblock = world.getBlock(x, y-1, z);
@@ -128,9 +125,9 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 			}
 		}
 		
-		for (int i=0; i<20; i++) {
+		/*for (int i=0; i<20; i++) {
 			world.setBlock(x, y+i+20, z, Blocks.glowstone);
-		}
+		}*/
 	}
 	
 	private void modifySurface(Random rand, World world, int x, int y, int z) {

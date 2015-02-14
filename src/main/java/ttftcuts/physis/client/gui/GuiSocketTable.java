@@ -28,6 +28,7 @@ public class GuiSocketTable extends GuiContainerPhysis {
 		this.playerinv = inventory;
 		this.ySize = 222;
 		this.cont = (ContainerSocketTable)this.inventorySlots;
+		this.cont.getSlot(1);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -57,9 +58,14 @@ public class GuiSocketTable extends GuiContainerPhysis {
 		
 		this.drawWoodenSlot(8, 101);
 		
+		Slot slot = cont.getSlot(1);
+		if (!slot.getHasStack()) {
+			this.drawSlotIcon(8, 101, 0, 0, 0x372505);
+		}
+		
 		int y = 65 - 9 * (cont.activeSlots-1);
 		
-		Slot slot = cont.getSlot(0);
+		slot = cont.getSlot(0);
 		NBTTagCompound[] sockets = null;
 		
 		if (slot.getHasStack()) {

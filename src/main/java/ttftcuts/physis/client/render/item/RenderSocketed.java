@@ -1,5 +1,8 @@
 package ttftcuts.physis.client.render.item;
 
+import static net.minecraftforge.client.IItemRenderer.ItemRenderType.INVENTORY;
+import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.INVENTORY_BLOCK;
+
 import java.util.Iterator;
 
 import org.lwjgl.opengl.GL11;
@@ -54,19 +57,34 @@ public class RenderSocketed implements IItemRenderer {
 		double usize = iconsize/32.0;
 		double vsize = iconsize/16.0;
 		
+		boolean blockangles = false;
+		
 		if (wrapped != null && wrapped.handleRenderType(item, type)) {
+			if (wrapped.shouldUseRenderHelper(INVENTORY, item, INVENTORY_BLOCK)) {
+				blockangles = true;
+			}
 			GL11.glPushMatrix();
 			this.wrapped.renderItem(type, item, data);
 			GL11.glPopMatrix();
 		} else {
-			PhysisRenderHelper.renderItemStack(item, 0, 0, false);
-			
+			PhysisRenderHelper.renderItemStack(item, 0, 0, false, false);
 		}
 
 		if (type == ItemRenderType.INVENTORY) {
 			RenderHelper.disableStandardItemLighting();
 			boolean drawicon = false;
 			int icon = 0;
+			
+			// un-transform if it's a block...
+			if (blockangles) {
+				GL11.glRotatef(-90F, 0.0F, -1.0F, 0.0F);
+	            GL11.glRotatef(45F, 0.0F, -1.0F, 0.0F);
+	            GL11.glRotatef(210F, -1.0F, 0.0F, 0.0F);
+	            GL11.glScalef(1.0F, 1.0F, -1F);
+	            GL11.glTranslatef(-1.0F, -0.5F, -1.0F);
+	            GL11.glScalef(0.10F, 0.10F, 0.10F);
+	            GL11.glTranslatef(2, -3, 0);
+			}
 			
 			int numsockets = PhysisArtifacts.getSocketCount(item);
 			if (numsockets > 0) {
@@ -135,8 +153,9 @@ public class RenderSocketed implements IItemRenderer {
 				t.addVertexWithUV(x, y, 0, (icon)*usize, 0);
 				t.draw();
 			}
-			RenderHelper.enableGUIStandardItemLighting();
 		}
+		
+		RenderHelper.enableGUIStandardItemLighting();
 	}
 	
 	
@@ -169,6 +188,8 @@ public class RenderSocketed implements IItemRenderer {
 		double x2 = w;
 		double y2 = 0;
 		
+		double z = 0;
+		
 		f = Math.max(0, Math.min(1.0, (1-f)));
 		
 		if (f <= 0.5) {
@@ -190,25 +211,25 @@ public class RenderSocketed implements IItemRenderer {
 		t.startDrawingQuads();
 		t.setColorRGBA(0, 0, 0, 127);
 		if (rotation == 0) {
-			t.addVertexWithUV(x, 		y+h, 		0, u, v);
-			t.addVertexWithUV(x+w, 		y+h, 		0, u, v);
-			t.addVertexWithUV(x+x2, 	y+y2, 		0, u, v);
-			t.addVertexWithUV(x+x1, 	y+y1, 		0, u, v);
+			t.addVertexWithUV(x, 		y+h, 		z, u, v);
+			t.addVertexWithUV(x+w, 		y+h, 		z, u, v);
+			t.addVertexWithUV(x+x2, 	y+y2, 		z, u, v);
+			t.addVertexWithUV(x+x1, 	y+y1, 		z, u, v);
 		} else if (rotation == 1) {
-			t.addVertexWithUV(x, 		y+h, 		0, u, v);
-			t.addVertexWithUV(x+w-y1, 	y+x2, 		0, u, v);
-			t.addVertexWithUV(x+w-y2, 	y+x1,		0, u, v);
-			t.addVertexWithUV(x, 		y, 			0, u, v);
+			t.addVertexWithUV(x, 		y+h, 		z, u, v);
+			t.addVertexWithUV(x+w-y1, 	y+x2, 		z, u, v);
+			t.addVertexWithUV(x+w-y2, 	y+x1,		z, u, v);
+			t.addVertexWithUV(x, 		y, 			z, u, v);
 		} else if (rotation == 2) {
-			t.addVertexWithUV(x+h-x2, 	y+h-y2,		0, u, v);
-			t.addVertexWithUV(x+w-x1,	y+h-y1,		0, u, v);
-			t.addVertexWithUV(x+w, 		y, 			0, u, v);
-			t.addVertexWithUV(x, 		y, 			0, u, v);
+			t.addVertexWithUV(x+h-x2, 	y+h-y2,		z, u, v);
+			t.addVertexWithUV(x+w-x1,	y+h-y1,		z, u, v);
+			t.addVertexWithUV(x+w, 		y, 			z, u, v);
+			t.addVertexWithUV(x, 		y, 			z, u, v);
 		} else {
-			t.addVertexWithUV(x+y1,		y+h-x1, 	0, u, v);
-			t.addVertexWithUV(x+w, 		y+h, 		0, u, v);
-			t.addVertexWithUV(x+w, 		y, 			0, u, v);
-			t.addVertexWithUV(x+y2, 	y+x2-w, 	0, u, v);
+			t.addVertexWithUV(x+y1,		y+h-x1, 	z, u, v);
+			t.addVertexWithUV(x+w, 		y+h, 		z, u, v);
+			t.addVertexWithUV(x+w, 		y, 			z, u, v);
+			t.addVertexWithUV(x+y2, 	y+x2-w, 	z, u, v);
 		}
 		t.draw();
 	}

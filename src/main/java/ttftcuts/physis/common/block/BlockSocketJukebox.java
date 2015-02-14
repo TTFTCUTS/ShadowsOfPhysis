@@ -81,6 +81,17 @@ public class BlockSocketJukebox extends BlockJukebox implements IBlockTooltip {
 					AxisAlignedBB area = AxisAlignedBB.getBoundingBox(dx - range, dy - range, dz - range, dx + range, dy + range, dz + range);
 					List<EntityLivingBase> entities = this.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, area, IEntitySelector.selectAnything);
 					
+					// filter out entities outside sphere range
+					for (EntityLivingBase e : entities) {
+						double xdiff = e.posX - dx;
+						double ydiff = e.posY - dy;
+						double zdiff = e.posZ - dz;
+						if (Math.sqrt(xdiff*xdiff + ydiff*ydiff + zdiff*zdiff) > range) {
+							entities.remove(e);
+						}
+					}
+					
+					// apply effects to the list
 					for(Socket socket : SocketIterator.triggers(record)) {
 						if (socket.trigger != null) {
 							socket.trigger.onTileUpdate(record, entities, this, socket.slot);

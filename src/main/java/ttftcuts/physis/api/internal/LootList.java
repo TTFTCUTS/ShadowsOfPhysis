@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import ttftcuts.physis.api.PhysisAPI;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class LootList {
 
@@ -29,6 +32,13 @@ public class LootList {
 	}
 	public void addChest(ChestGenHooks chest, int price) {
 		this.addChest(chest, price, 1.0);
+	}
+	
+	public void addOrePrefix(String prefix, int minCount, int maxCount, int price, double weight) {
+		this.list.add(new LootEntry(prefix, minCount, maxCount, price, weight));
+	}
+	public void addOrePrefix(String prefix, int minCount, int maxCount, int price) {
+		this.addOrePrefix(prefix, minCount, maxCount, price, 1.0);
 	}
 	
 	// -------------------------------------
@@ -55,7 +65,7 @@ public class LootList {
 		boolean first = true;
 		
 		while (budget > 0) {
-			int min = (first) ? primeMinValue : minValue;//Math.min(budget, (first) ? primeMinValue : minValue);
+			int min = (first) ? primeMinValue : minValue;
 			int max = Math.min(budget, maxValue);
 			
 			List<LootEntry> lootlist = getLootRange(min, max);
@@ -96,7 +106,8 @@ public class LootList {
 		NONE,
 		ITEMSTACK,
 		ITEMSTACKCHESTGEN,
-		CHEST
+		CHEST,
+		OREPREFIX
 	}
 	
 	private class LootEntry {
@@ -107,6 +118,8 @@ public class LootList {
 		
 		public ItemStack stack;
 		public ChestGenHooks chest;
+		public String oreprefix;
+		private List<ItemStack> ores;
 		public int min, max;
 		
 		public LootEntry(int min, int max, int price, double weight) {
@@ -124,11 +137,15 @@ public class LootList {
 			this.type = chestGen ? LootType.ITEMSTACKCHESTGEN : LootType.ITEMSTACK;
 			this.stack = stack;
 		}
-		
 		public LootEntry(ChestGenHooks chest, int price, double weight) {
 			this(1, 1, price, weight);
 			this.type = LootType.CHEST;
 			this.chest = chest;
+		}
+		public LootEntry(String oreprefix, int min, int max, int price, double weight) {
+			this(min, max, price, weight);
+			this.type = LootType.OREPREFIX;
+			this.oreprefix = oreprefix;
 		}
 		
 		public List<ItemStack> getLoot(Random rand) {
@@ -155,6 +172,27 @@ public class LootList {
 				break;
 			case CHEST:
 				lootlist.add(this.chest.getOneItem(rand));
+				break;
+			case OREPREFIX:
+				if (ores == null) {
+					this.ores = new ArrayList<ItemStack>();
+					String[] orenames = OreDictionary.getOreNames();
+					for (String orename : orenames) {
+						if (PhysisAPI.forbiddenOreNames.contains(orename)) {
+							continue;
+						}
+						if (orename.startsWith(this.oreprefix)) {
+							this.ores.addAll(OreDictionary.getOres(orename));
+						}
+					}
+				}
+				if (ores.size() == 0) { break; }
+				
+				ItemStack stack = this.ores.get(rand.nextInt(this.ores.size())).copy();
+				if (stack != null) {
+					stack.stackSize = num;
+					lootlist.add(stack);
+				}
 				break;
 			default:
 			}

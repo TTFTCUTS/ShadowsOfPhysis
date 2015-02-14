@@ -55,7 +55,9 @@ public class RenderSocketed implements IItemRenderer {
 		double vsize = iconsize/16.0;
 		
 		if (wrapped != null && wrapped.handleRenderType(item, type)) {
+			GL11.glPushMatrix();
 			this.wrapped.renderItem(type, item, data);
+			GL11.glPopMatrix();
 		} else {
 			PhysisRenderHelper.renderItemStack(item, 0, 0, false);
 			

@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import scala.util.Random;
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -27,6 +28,7 @@ import ttftcuts.physis.common.network.packet.PacketWorldTime;
 import ttftcuts.physis.common.story.PhysisStoryVars;
 import ttftcuts.physis.common.story.StoryEngine;
 import ttftcuts.physis.common.story.StoryEngine.StorySeedHandler;
+import ttftcuts.physis.common.worldgen.PhysisWorldGen;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -41,7 +43,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
-		//ServerData.init();
+		PhysisAPI.init();
 		
 		PhysisStoryVars.init();
 		
@@ -58,6 +60,8 @@ public class CommonProxy {
     	ChestGenHandler.init();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
+    	
+    	PhysisWorldGen.init();
     	
     	PhysisIntegration.preInit(event, false);
 	}

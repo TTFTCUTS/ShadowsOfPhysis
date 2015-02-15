@@ -6,6 +6,7 @@ import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.INVENTO
 import java.util.Iterator;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.artifact.IArtifactEffect;

@@ -17,20 +17,36 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.0.1"
+ext.configFile = file('build.properties')
+
+ext.config = parseConfig(configFile)
+
+version = "${config.version}-${config.build}"
 group= "ttftcuts.physis" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ShadowsOfPhysis"
 
 minecraft {
     version = "1.7.10-10.13.2.1286"
+    
+    replace '$GRADLEVERSION', "${config.version}-${config.build}"
+    
+    replaceIn 'Physis.java'
 }
+
 processResources {
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand ([
+			'version':project.version, 
+			'mcversion':project.minecraft.version
+		])
     }
 
     // copy everything else, thats not the mcmod.info
@@ -38,6 +54,22 @@ processResources {
         exclude '**/*.info'
     }
 }
+
+task incrementBuildNumber(dependsOn: 'reobf') << {
+    config.build = (config.build.toString().toInteger()) + 1
+    configFile.withWriter {
+        config.toProperties().store(it, "")
+    }
+}
+
+def parseConfig(File config) {
+    config.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        return (new ConfigSlurper().parse(prop))
+    }
+}
+
 jar {
         manifest {
         attributes 'FMLAT': 'physis_at.cfg'

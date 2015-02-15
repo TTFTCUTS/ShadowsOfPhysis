@@ -86,22 +86,22 @@ public class ContainerSocketTable extends ContainerPhysis {
 	@Override
 	public void processMessage(EntityPlayer player, NBTTagCompound tag) {
 		int id = tag.getInteger("id");
-		Physis.logger.info("Button "+id+" pressed");
+		//Physis.logger.info("Button "+id+" pressed");
 		
 		this.updateLayout();
 		
 		ItemStack mainitem = this.mainSlot.getStack();
 		if (mainitem != null) {
 			NBTTagCompound[] sockets = PhysisArtifacts.getSocketablesFromStack(mainitem);
-			Physis.logger.info(mainitem);
-			Physis.logger.info("Active slots: "+this.activeSlots+", Socket length: "+sockets.length);
+			//Physis.logger.info(mainitem);
+			//Physis.logger.info("Active slots: "+this.activeSlots+", Socket length: "+sockets.length);
 			if (id < this.activeSlots && id < sockets.length) {
 				//Physis.logger.info("test");
 				boolean left = sockets[id] != null;
 				boolean right = this.socketSlots[id].getHasStack();
 				
 				int mats = this.getReagentCount();
-				Physis.logger.info(mats);
+				//Physis.logger.info(mats);
 				
 				if (left && !right && mats >= TileEntitySocketTable.REMOVECOST) {
 					// unsocket

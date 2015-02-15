@@ -72,11 +72,8 @@ public final class PhysisArtifacts {
 	public static Map<String, WeightedTrigger> triggers = new HashMap<String, WeightedTrigger>();
 	public static Map<String, WeightedEffect> effects = new HashMap<String, WeightedEffect>();
 	
-	@SideOnly(Side.CLIENT)
 	public static Map<IArtifactTrigger, IIcon> triggerIcons = new HashMap<IArtifactTrigger, IIcon>();
-	@SideOnly(Side.CLIENT)
 	public static Map<IArtifactEffect, IIcon> effectIcons = new HashMap<IArtifactEffect, IIcon>();
-	@SideOnly(Side.CLIENT)
 	public static IIcon defaultIcon;
 	
 	public static void init() {
@@ -507,6 +504,15 @@ public final class PhysisArtifacts {
 			return false;
 		}
 		if (item.getItemStackLimit(stack) > 1) {
+			return false;
+		}
+		if (item.hasContainerItem(stack)){
+			ItemStack container = item.getContainerItem(stack);
+			if (container.getItem() instanceof ItemBucket) {
+				return false;
+			}
+		}
+		if (item.getUnlocalizedName(stack).toLowerCase().contains("bucket")) {
 			return false;
 		}
 		return true;

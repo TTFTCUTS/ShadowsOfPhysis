@@ -24,7 +24,7 @@ import ttftcuts.physis.common.artifact.ArtifactHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 
-@Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$version", dependencies = "")
+@Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$GRADLEVERSION", dependencies = "")
 public class Physis {
 
     public static final String MOD_ID = "physis";

@@ -25,7 +25,7 @@ public class CompatBaubles extends CompatModule {
 	public static Item ring;
 	
 	@Override
-	public void preInit(FMLPreInitializationEvent event, boolean client) {
+	public void preInitEnd(FMLPreInitializationEvent event, boolean client) {
 		if (!client) {
 			MinecraftForge.EVENT_BUS.register(this);
 			
@@ -35,12 +35,12 @@ public class CompatBaubles extends CompatModule {
 	}
 	
 	@Override
-	public void init(FMLInitializationEvent event, boolean client) {
+	public void initEnd(FMLInitializationEvent event, boolean client) {
 		LootSystem.digSiteLootList.addItemStackChestGen(new ItemStack(ring), 1, 1, 600, 0.3);
 	}
 	
 	@Override
-	public void postInit(FMLPostInitializationEvent event, boolean client) {
+	public void postInitEnd(FMLPostInitializationEvent event, boolean client) {
 		if (!client) {
 			for (PhysisToolMaterial mat : PhysisToolMaterial.materials.values()) {
 				if (mat.orename.startsWith("ingot")) {

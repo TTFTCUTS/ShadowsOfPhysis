@@ -1,8 +1,6 @@
 package ttftcuts.physis.common;
 
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import scala.util.Random;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.PhysisAPI;
@@ -19,8 +17,6 @@ import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
 import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
-import ttftcuts.physis.common.item.material.ShapedOreRecipeCT;
-import ttftcuts.physis.common.item.material.ShapedRecipeCT;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
 import ttftcuts.physis.common.network.packet.PacketGuiMessage;
 import ttftcuts.physis.common.network.packet.PacketPlayerUpdate;
@@ -44,6 +40,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
+		PhysisIntegration.preInitStart(event, false);
+		
 		PhysisAPI.init();
 		
 		PhysisStoryVars.init();
@@ -62,12 +60,16 @@ public class CommonProxy {
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
     	
+    	PhysisToolMaterial.initDefaultTranslators();
+    	
     	PhysisWorldGen.init();
     	
-    	PhysisIntegration.preInit(event, false);
+    	PhysisIntegration.preInitEnd(event, false);
 	}
 	
 	public void init(FMLInitializationEvent event) {
+		PhysisIntegration.initStart(event, false);
+		
     	NetworkRegistry.INSTANCE.registerGuiHandler(Physis.instance, new GuiHandler());
     	
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
@@ -79,19 +81,17 @@ public class CommonProxy {
     	networkSetup();
     	LootSystem.init();
     	
-    	PhysisIntegration.init(event, false);
+    	PhysisIntegration.initEnd(event, false);
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
-		
-		PhysisToolMaterial.addRecipeComponentTranslator(ShapedRecipes.class, new ShapedRecipeCT());
-		PhysisToolMaterial.addRecipeComponentTranslator(ShapedOreRecipe.class, new ShapedOreRecipeCT());
+		PhysisIntegration.postInitStart(event, false);
 		
 		PhysisToolMaterial.buildMaterials();
 		
 		ItemTrowel.buildRecipes();
 		
-		PhysisIntegration.postInit(event, false);
+		PhysisIntegration.postInitEnd(event, false);
 	}
 	
 	public void serverPreStarting(FMLServerAboutToStartEvent event) {

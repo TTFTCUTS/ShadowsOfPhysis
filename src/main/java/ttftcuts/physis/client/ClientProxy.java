@@ -32,7 +32,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
-		PhysisIntegration.preInit(event, true);
+		PhysisIntegration.preInitEnd(event, true);
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class ClientProxy extends CommonProxy {
 		// make sure it doesn't come out null in that little while before loading.
 		StoryEngine.reload(-1, true);
 		
-		PhysisIntegration.init(event, true);
+		PhysisIntegration.initEnd(event, true);
 	}
 	
 	@Override
@@ -68,6 +68,6 @@ public class ClientProxy extends CommonProxy {
 		PhysisToolMaterial.buildTintData(10);
 		RenderSocketed.injectRenderer();
 		
-		PhysisIntegration.postInit(event, true);
+		PhysisIntegration.postInitEnd(event, true);
 	}
 }

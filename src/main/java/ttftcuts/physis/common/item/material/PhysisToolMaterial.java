@@ -18,19 +18,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class PhysisToolMaterial {
 	
 	public static final String MATERIALTAG = "physisMaterial";
 	
-	//public static boolean generateTextures = OpenGlHelper.isFramebufferEnabled();
-	
 	public static Map<String,PhysisToolMaterial> materials;
 	private static List<PhysisToolMaterial> materialsById;
-	public static Map<Class<? extends IRecipe>, IRecipeComponentTranslator> handlers = new HashMap<Class<? extends IRecipe>, IRecipeComponentTranslator>();
+	public static List<RecipeListGetter> recipeLists = new ArrayList<RecipeListGetter>();
+	public static RecipeListGetter defaultRecipeList;
 	
 	public static boolean generated = false;
 	private static int nextId = 0;
@@ -55,7 +55,9 @@ public class PhysisToolMaterial {
 	public int[] tints;
 	public int shafttint;
 	
-	public PhysisToolMaterial(String orename, ItemStack ingot, String stickorename, ItemStack stick, ItemStack pick) {
+	public Object sourceRecipe;
+	
+	public PhysisToolMaterial(String orename, ItemStack ingot, String stickorename, ItemStack stick, ItemStack pick, Object source) {
 		//Physis.logger.info("Registering material for "+orename+" with ingot "+ingot+", stick "+stick+" and pick "+pick);
 		this.id = nextId;
 		materialsById.add(this);
@@ -72,6 +74,8 @@ public class PhysisToolMaterial {
 		this.toolmaterial = this.pickitem.func_150913_i();
 		
 		this.maxdamage = this.toolmaterial.getMaxUses();
+		
+		this.sourceRecipe = source;
 	}
 	
 	public String getMaterialName() {
@@ -113,98 +117,96 @@ public class PhysisToolMaterial {
 		}
 		
 		//Physis.logger.info("Cross-checking materials");
-		CraftingManager craft = CraftingManager.getInstance();
-		
-		List<IRecipe> recipes = craft.getRecipeList();
-		
-		for(IRecipe recipe : recipes) {
-			if (recipe.getRecipeOutput() == null || recipe.getRecipeOutput().getItem() == null) {
-				continue;
-			}
-			ItemStack output = recipe.getRecipeOutput();
-			Item out = output.getItem();
+		for (RecipeListGetter list : recipeLists) {
+			Iterator<?> iter = list.getIterator();
 			
-			for(ItemPickaxe pick : picks) {
-				if (out == pick) {
-					ItemStack[] comp = null;
-					boolean stickore = false;
-					for(Entry<Class<? extends IRecipe>, IRecipeComponentTranslator> entry : handlers.entrySet()) {
-						if (entry.getKey().isInstance(recipe)) {
-							IRecipeComponentTranslator trans = entry.getValue();
-							comp = trans.getRecipeComponents(recipe);
-							stickore = trans.hasOreDictStick();
-							break;
-						}
-					}
-					
-					if (comp != null && comp.length == 9) {
-						if (comp[0] != null && comp[1] != null && comp[2] != null && comp[4] != null && comp[7] != null) {
-							// looks pick shaped to me!
-							ItemStack stickitem = comp[4];
-							ItemStack otherstick = comp[7];
-							if (!compareStacks(stickitem, otherstick)) {
-								// but the sticks don't match
-								continue;
-							}
-							
-							// stick processing
-							String stickorename = null;
-							
-							if (stickore) {
-								int[] stickoreids = OreDictionary.getOreIDs(stickitem);
-								if (stickoreids.length > 0) {
-									stickorename = OreDictionary.getOreName(stickoreids[0]);
+			while(iter.hasNext()) {
+				Object recipe = iter.next();
+				IRecipeComponentTranslator translator = getTranslatorForRecipe(list, recipe);
+				
+				if (translator == null || translator.getRecipeOutput(recipe) == null || translator.getRecipeOutput(recipe).getItem() == null) {
+					continue;
+				}
+				ItemStack output = translator.getRecipeOutput(recipe);
+				Item out = output.getItem();
+				
+				for(ItemPickaxe pick : picks) {
+					if (out == pick) {
+						ItemStack[] comp = null;
+						boolean stickore = false;
+						
+						comp = translator.getRecipeComponents(recipe);
+						stickore = translator.hasOreDictStick();
+						
+						if (comp != null && comp.length == 9) {
+							if (comp[0] != null && comp[1] != null && comp[2] != null && comp[4] != null && comp[7] != null) {
+								// looks pick shaped to me!
+								ItemStack stickitem = comp[4];
+								ItemStack otherstick = comp[7];
+								if (!compareStacks(stickitem, otherstick)) {
+									// but the sticks don't match
+									continue;
 								}
-							}
-							
-							// head processing
-							ItemStack[] head = {
-								comp[0], 
-								comp[1], 
-								comp[2]
-							};
-							
-							String orename = "";
-							List<ItemStack> candidates = new ArrayList<ItemStack>();
-							
-							for(int i=0; i<3; i++) {
-								ItemStack h = head[i];
-								int[] oreids = OreDictionary.getOreIDs(h);
-								if (oreids.length > 0) {
-									candidates.add(h);
-								}
-							}
-							
-							ItemStack oreitem = null;
-							if (candidates.size() == 0) {
-								continue;
-							} else { 
-								if (candidates.contains(head[1])) {
-									if (candidates.size() == 3) {
-										if (compareStacks(head[0], head[2])) {
-											oreitem = head[0];
-										} else {
-											oreitem = head[1];
-										}
+								
+								// stick processing
+								String stickorename = null;
+								
+								if (stickore) {
+									int[] stickoreids = OreDictionary.getOreIDs(stickitem);
+									if (stickoreids.length > 0) {
+										stickorename = OreDictionary.getOreName(stickoreids[0]);
 									}
+								}
+								
+								// head processing
+								ItemStack[] head = {
+									comp[0], 
+									comp[1], 
+									comp[2]
+								};
+								
+								String orename = "";
+								List<ItemStack> candidates = new ArrayList<ItemStack>();
+								
+								for(int i=0; i<3; i++) {
+									ItemStack h = head[i];
+									int[] oreids = OreDictionary.getOreIDs(h);
+									if (oreids.length > 0) {
+										candidates.add(h);
+									}
+								}
+								
+								ItemStack oreitem = null;
+								if (candidates.size() == 0) {
+									continue;
+								} else { 
+									if (candidates.contains(head[1])) {
+										if (candidates.size() == 3) {
+											if (compareStacks(head[0], head[2])) {
+												oreitem = head[0];
+											} else {
+												oreitem = head[1];
+											}
+										}
+									} else {
+										oreitem = candidates.get(0);
+									}
+								}
+								
+								if (oreitem != null) {
+									orename = OreDictionary.getOreName(OreDictionary.getOreIDs(oreitem)[0]);
 								} else {
-									oreitem = candidates.get(0);
+									continue;
 								}
-							}
-							
-							if (oreitem != null) {
-								orename = OreDictionary.getOreName(OreDictionary.getOreIDs(oreitem)[0]);
-							} else {
-								continue;
-							}
-							
-							if(materials.containsKey(orename)) {
-								if (materials.get(orename).stickorename == null && stickorename != null) {
-									materials.remove(orename);
+								
+								if(materials.containsKey(orename)) {
+									if (materials.get(orename).stickorename == null && stickorename != null) {
+										materials.remove(orename);
+									}
 								}
-							}
-							if(!materials.containsKey(orename)) {
-								materials.put(orename, new PhysisToolMaterial(orename, oreitem, stickorename, stickitem, output));
+								if(!materials.containsKey(orename)) {
+									materials.put(orename, new PhysisToolMaterial(orename, oreitem, stickorename, stickitem, output, recipe));
+								}
 							}
 						}
 					}
@@ -216,10 +218,46 @@ public class PhysisToolMaterial {
 		//Physis.logger.info("Finished tool material list");
 	}
 	
-	public static void addRecipeComponentTranslator(Class<? extends IRecipe> clazz, IRecipeComponentTranslator trans) {
-		if (!handlers.containsKey(clazz)) {
-			handlers.put(clazz, trans);
+	public static void registerRecipeListGetter(RecipeListGetter list) {
+		recipeLists.add(list);
+	}
+	
+	public static IRecipeComponentTranslator getTranslatorForRecipe(Object recipe) {
+		for(RecipeListGetter list : recipeLists) {
+			IRecipeComponentTranslator t = getTranslatorForRecipe(list, recipe);
+			if (t != null) {
+				return t;
+			}
 		}
+		return null;
+	}
+	
+	public static IRecipeComponentTranslator getTranslatorForRecipe(RecipeListGetter list, Object recipe) {
+		for(Entry<Class<?>, IRecipeComponentTranslator> entry : list.translators.entrySet()) {
+			if (entry.getKey().isInstance(recipe)) {
+				return entry.getValue();
+			}
+		}
+		return null;
+	}
+	
+	public static IRecipeComponentTranslator getTranslatorForMaterial(PhysisToolMaterial mat) {
+		return getTranslatorForRecipe(mat.sourceRecipe);
+	}
+	
+	public static void addRecipeComponentTranslator(Class<?> clazz, IRecipeComponentTranslator trans) {
+		addRecipeComponentTranslator(defaultRecipeList, clazz, trans);
+	}
+	
+	public static void addRecipeComponentTranslator(RecipeListGetter list, Class<?> clazz, IRecipeComponentTranslator trans) {
+		if (!list.translators.containsKey(clazz)) {
+			list.translators.put(clazz, trans);
+		}
+	}
+	
+	public void registerRecipe(ItemStack output, Object... inputs) {
+		IRecipeComponentTranslator translator = getTranslatorForMaterial(this);
+		translator.registerRecipe(this.sourceRecipe, output, inputs);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -309,5 +347,18 @@ public class PhysisToolMaterial {
 	
 	public static PhysisToolMaterial getRandomMaterial(Random rand) {
 		return materialsById.get(rand.nextInt(materialsById.size()));
+	}
+	
+	public static void initDefaultTranslators() {
+		defaultRecipeList = new RecipeListGetter() {
+			@Override
+			public Iterator<?> getIterator() {
+				return CraftingManager.getInstance().getRecipeList().iterator();
+			}
+		};
+		registerRecipeListGetter(defaultRecipeList);
+		
+		PhysisToolMaterial.addRecipeComponentTranslator(ShapedRecipes.class, new ShapedRecipeCT());
+		PhysisToolMaterial.addRecipeComponentTranslator(ShapedOreRecipe.class, new ShapedOreRecipeCT());
 	}
 }

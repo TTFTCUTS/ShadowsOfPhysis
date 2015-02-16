@@ -8,7 +8,10 @@ public class CompatModule {
 	
 	public CompatModule() {}
 	
-	public void preInit(FMLPreInitializationEvent event, boolean client) {}
-	public void init(FMLInitializationEvent event, boolean client) {}
-	public void postInit(FMLPostInitializationEvent event, boolean client) {}
+	public void preInitStart(FMLPreInitializationEvent event, boolean client) {}
+	public void preInitEnd(FMLPreInitializationEvent event, boolean client) {}
+	public void initStart(FMLInitializationEvent event, boolean client) {}
+	public void initEnd(FMLInitializationEvent event, boolean client) {}
+	public void postInitStart(FMLPostInitializationEvent event, boolean client) {}
+	public void postInitEnd(FMLPostInitializationEvent event, boolean client) {}
 }

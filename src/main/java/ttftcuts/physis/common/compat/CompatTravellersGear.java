@@ -12,7 +12,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class CompatTravellersGear extends CompatModule {
 
 	@Override
-	public void preInit(FMLPreInitializationEvent event, boolean client) {
+	public void preInitEnd(FMLPreInitializationEvent event, boolean client) {
 		if (!client) {
 			MinecraftForge.EVENT_BUS.register(this);
 		}

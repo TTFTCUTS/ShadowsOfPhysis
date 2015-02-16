@@ -5,6 +5,7 @@ import java.util.List;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.compat.baubles.CompatBaubles;
+import ttftcuts.physis.common.compat.thaumcraft.CompatThaumcraft;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -18,6 +19,8 @@ public class PhysisIntegration {
 	public static void loadModules() {
 		registerModule(CompatBaubles.class, "Baubles");
 		registerModule(CompatTravellersGear.class, "TravellersGear");
+		registerModule(CompatThaumcraft.class, "Thaumcraft");
+		registerModule(CompatThaumicTinkerer.class, "ThaumicTinkerer");
 	}
 	
 	public static void registerModule(Class<? extends CompatModule> clazz, String modid) {
@@ -31,21 +34,36 @@ public class PhysisIntegration {
 		}
 	}
 	
-	public static void preInit(FMLPreInitializationEvent event, boolean client) {
+	public static void preInitStart(FMLPreInitializationEvent event, boolean client) {
 		for (CompatModule module : modules) {
-			module.preInit(event, client);
+			module.preInitStart(event, client);
+		}
+	}
+	public static void preInitEnd(FMLPreInitializationEvent event, boolean client) {
+		for (CompatModule module : modules) {
+			module.preInitEnd(event, client);
 		}
 	}
 	
-	public static void init(FMLInitializationEvent event, boolean client) {
+	public static void initStart(FMLInitializationEvent event, boolean client) {
 		for (CompatModule module : modules) {
-			module.init(event, client);
+			module.initStart(event, client);
+		}
+	}
+	public static void initEnd(FMLInitializationEvent event, boolean client) {
+		for (CompatModule module : modules) {
+			module.initEnd(event, client);
 		}
 	}
 	
-	public static void postInit(FMLPostInitializationEvent event, boolean client) {
+	public static void postInitStart(FMLPostInitializationEvent event, boolean client) {
 		for (CompatModule module : modules) {
-			module.postInit(event, client);
+			module.postInitStart(event, client);
+		}
+	}
+	public static void postInitEnd(FMLPostInitializationEvent event, boolean client) {
+		for (CompatModule module : modules) {
+			module.postInitEnd(event, client);
 		}
 	}
 }

@@ -32,11 +32,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemPhysis implements ITrowel {
 
@@ -260,7 +257,6 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
         return multimap;
     }
 	
-	@SuppressWarnings("unchecked")
 	public static void buildRecipes() {
 		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
@@ -275,13 +271,12 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 				
 				Object stick = mat.stickorename == null ? mat.stick : mat.stickorename;
 				
-				IRecipe recipe = new ShapedOreRecipe(trowel,
+				mat.registerRecipe(trowel,
 					"HH ", "HS ", "  W",
 					'H', mat.orename,
 					'S', stick,
 					'W', new ItemStack(Blocks.wool, 1, wool)
 				);
-				CraftingManager.getInstance().getRecipeList().add(recipe);
 			}
 			
 			

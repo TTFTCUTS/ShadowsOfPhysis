@@ -8,6 +8,7 @@ import ttftcuts.physis.api.artifact.ISocketable;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.helper.InputHelper;
+import ttftcuts.physis.common.item.INBTDamageItem;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,14 @@ public class TooltipHandler {
 	
 	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent event) {
+		if (event.itemStack.getItem() instanceof INBTDamageItem) {
+			INBTDamageItem nitem = (INBTDamageItem)(event.itemStack.getItem());
+			boolean show = Minecraft.getMinecraft().gameSettings.advancedItemTooltips;
+			if (show && nitem.getNBTDamage(event.itemStack) > 0) {
+				event.toolTip.add("Durability: " + (nitem.getNBTMaxDamage(event.itemStack) - event.itemStack.getItemDamageForDisplay()) + " / " + nitem.getNBTMaxDamage(event.itemStack));
+			}
+		}
+		
 		if (event.itemStack.stackTagCompound != null){
 			if (event.itemStack.stackTagCompound.hasKey(PhysisArtifacts.SOCKETEDTAG)) {
 				int index = -1;

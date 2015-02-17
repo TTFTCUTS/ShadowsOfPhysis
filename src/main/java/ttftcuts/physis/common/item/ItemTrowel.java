@@ -35,7 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
-public class ItemTrowel extends ItemPhysis implements ITrowel {
+public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 
 	public static final String HANDLETAG = "physisTrowelHandle" ;
 	public static final String CREATIVETAG = "physisTrowelCreative";
@@ -51,7 +51,8 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		this.maxStackSize = 1;
 		this.setUnlocalizedName("trowel");
 		this.setTextureName("trowel");
-		this.setMaxDamage(5);
+		this.setMaxDamage(-1);
+		this.setHasSubtypes(true);
 		this.setNoRepair();
 	}
 	
@@ -62,7 +63,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		
 		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
-			ItemStack stack = new ItemStack(this, 1, 0);
+			ItemStack stack = new ItemStack(this, 1, mat.id);
 			PhysisToolMaterial.writeMaterialToStack(mat, stack);
 
 			trowels.add(stack);
@@ -108,7 +109,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		trowel.stackTagCompound.setBoolean(CREATIVETAG, true);
 	}
 	
-	@Override
+	/*@Override
 	public int getMaxDamage(ItemStack stack) {
 		if (stack.getItem() == this) {
 			PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
@@ -117,6 +118,29 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 			}
 		}
 		return this.getMaxDamage();
+	}*/
+	
+	@Override
+	public int getNBTMaxDamage(ItemStack stack) {
+		if (isCreative(stack)) { return -1; }
+		if (stack.getItem() == this) {
+			PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+			if (mat != null) {
+				return mat.maxdamage <= -1 ? -1 : Math.max(1, Math.round(mat.maxdamage / 5));
+			}
+		}
+		return 1;
+	}
+	
+	@Override
+	public int getDamage(ItemStack stack) {
+		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
+		if (mat != null) {
+			int id = mat.id;
+			this.setDamage(stack, id);
+			return id;
+		}
+		return 32767;
 	}
 	
 	@Override
@@ -234,9 +258,11 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 	
 	public void onUseTrowel(ItemStack stack, EntityLivingBase user, boolean success) {
 		if (success) {
-			stack.damageItem(1, user);
+			//stack.damageItem(1, user);
+			this.applyNBTDamage(stack, user, 1);
 		} else {
-			stack.damageItem(3, user);
+			//stack.damageItem(3, user);
+			this.applyNBTDamage(stack, user, 3);
 		}
 	}
 	
@@ -263,7 +289,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 
 			for (int wool = 0; wool<16; wool++) {
 				
-				ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, 0);
+				ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, mat.id);
 				
 				PhysisToolMaterial.writeMaterialToStack(mat, trowel);
 				

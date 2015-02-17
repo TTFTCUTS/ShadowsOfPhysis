@@ -113,7 +113,7 @@ public class ItemTrowel extends ItemPhysis implements ITrowel {
 		if (stack.getItem() == this) {
 			PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
 			if (mat != null) {
-				return Math.max(1, Math.round(mat.maxdamage / 5));
+				return mat.maxdamage <= -1 ? -1 : Math.max(1, Math.round(mat.maxdamage / 5));
 			}
 		}
 		return this.getMaxDamage();

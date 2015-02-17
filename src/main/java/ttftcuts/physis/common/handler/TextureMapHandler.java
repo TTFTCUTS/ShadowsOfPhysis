@@ -4,6 +4,7 @@ import java.util.Map.Entry;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
+import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,5 +22,10 @@ public class TextureMapHandler {
 				event.map.setTextureEntry(entry.getKey(), entry.getValue());
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void onPostStitch(TextureStitchEvent.Post event) {
+		PhysisToolMaterial.buildTintData(10);
 	}
 }

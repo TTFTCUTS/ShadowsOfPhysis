@@ -24,7 +24,6 @@ import ttftcuts.physis.common.handler.ClientTickHandler;
 import ttftcuts.physis.common.handler.TextureMapHandler;
 import ttftcuts.physis.common.handler.TooltipHandler;
 import ttftcuts.physis.common.helper.ShaderHelper;
-import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import ttftcuts.physis.common.story.StoryEngine;
 
 public class ClientProxy extends CommonProxy {
@@ -65,7 +64,6 @@ public class ClientProxy extends CommonProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
 		
-		PhysisToolMaterial.buildTintData(10);
 		RenderSocketed.injectRenderer();
 		
 		PhysisIntegration.postInitEnd(event, true);

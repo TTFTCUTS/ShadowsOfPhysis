@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class TileUtilities {
 	private static Random dropRand = new Random();
 	
-	public static void dropItemInWorld(World world, ItemStack stack, int x, int y, int z) {
+	public static void dropItemInWorld(World world, ItemStack stack, double x, double y, double z) {
 		if (world.isRemote) { return; }
         if (stack != null)
         {

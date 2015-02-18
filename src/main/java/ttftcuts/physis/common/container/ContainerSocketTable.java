@@ -1,6 +1,5 @@
 package ttftcuts.physis.common.container;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.block.tile.TileEntitySocketTable;
 import ttftcuts.physis.common.container.slot.SlotFilter;

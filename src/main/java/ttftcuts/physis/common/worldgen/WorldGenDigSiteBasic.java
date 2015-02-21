@@ -11,7 +11,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenDigSiteBasic implements IWorldGenerator {
@@ -24,7 +23,7 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		if (world != DimensionManager.getWorld(0)) { return; }
+		//if (world != DimensionManager.getWorld(0)) { return; }
 
 		int x = chunkX*16 + random.nextInt(16);
 		int z = chunkZ*16 + random.nextInt(16);
@@ -42,6 +41,15 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 		
 		Block digtype = PhysisBlocks.digSiteDirt;
 		Block topblock = world.getBlock(x, y-1, z);
+		
+		if (!(topblock == Blocks.grass 
+			|| topblock == Blocks.dirt 
+			|| topblock == Blocks.sand 
+			|| topblock == Blocks.clay
+			|| topblock == Blocks.hardened_clay
+		)) 
+		{ return; }
+		
 		Block pillar1 = Blocks.cobblestone;
 		int pillarmeta1 = 0;
 		Block pillar2 = Blocks.mossy_cobblestone;
@@ -138,6 +146,10 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 		} else if (b == Blocks.sand) {
 			if (rand.nextInt(3) == 0) {
 				world.setBlock(x, y, z, Blocks.gravel, 0, 3);
+			}
+		} else if (b == Blocks.hardened_clay) {
+			if (rand.nextInt(2) == 0) {
+				world.setBlock(x, y, z, Blocks.sand, 1, 3);
 			}
 		}
 	}

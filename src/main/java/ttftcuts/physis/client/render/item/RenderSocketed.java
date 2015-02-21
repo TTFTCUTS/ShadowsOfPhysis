@@ -153,9 +153,8 @@ public class RenderSocketed implements IItemRenderer {
 				t.addVertexWithUV(x, y, 0, (icon)*usize, 0);
 				t.draw();
 			}
+			RenderHelper.enableGUIStandardItemLighting();
 		}
-		
-		RenderHelper.enableGUIStandardItemLighting();
 	}
 	
 	

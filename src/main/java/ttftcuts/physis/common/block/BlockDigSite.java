@@ -3,12 +3,14 @@ package ttftcuts.physis.common.block;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.texture.DigStripTexture;
+import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.block.tile.DigSiteLocale;
 import ttftcuts.physis.common.block.tile.DigSiteRenderLayer;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
@@ -248,4 +250,27 @@ public class BlockDigSite extends BlockContainerPhysis {
 		
 		return false;
 	}
+	
+	@Override
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
+    {
+        return PhysisItems.component;
+    }
+
+	@Override
+    public int quantityDroppedWithBonus(int bonus, Random rand)
+    {
+        return this.quantityDropped(rand) + (bonus > 0 ? Math.max(0, rand.nextInt(bonus)-2) : 0);
+    }
+    @Override
+    public int quantityDropped(Random rand)
+    {
+        return 1;
+    }
+    
+    @Override
+    public int damageDropped(int meta)
+    {
+        return 0;
+    }
 }

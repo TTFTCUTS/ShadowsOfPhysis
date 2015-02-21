@@ -85,7 +85,8 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 			}
 		}
 		
-		int level = (int)Math.round(9 * (random.nextDouble()*random.nextDouble()));
+		//int level = (int)Math.round(9 * (random.nextDouble()*random.nextDouble()));
+		int level = random.nextInt(10);
 		
 		world.setBlock(x, y-2, z, digtype);
 		TileEntity t = world.getTileEntity(x, y-2, z);

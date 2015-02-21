@@ -348,7 +348,9 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
     public int getColorFromItemStack(ItemStack stack, int pass)
     {
 		PhysisToolMaterial mat = PhysisToolMaterial.getMaterialFromItemStack(stack);
-		if (mat != null && mat.hastint) {
+		if (mat != null) {// && mat.hastint) {
+			int[] tints = mat.getHeadTints();
+			int shafttint = mat.getShaftTint();
 			if (pass == 0) {
 				if (stack.stackTagCompound.hasKey(HANDLETAG)) {
 					int woolcol = stack.stackTagCompound.getInteger(HANDLETAG);
@@ -362,28 +364,28 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 				return 0x6B6B6B;
 			}
 			else if (pass == 1) {
-	        	return mat.shafttint;
+	        	return shafttint;
 	        }
 	        else if (pass == 2) {
-	        	return mat.tints[0];
+	        	return tints[0];
 	        }
 	        else if (pass == 3) {
-	        	return mat.tints[1];
+	        	return tints[1];
 	        }
 	        else if (pass == 4) {
-	        	return mat.tints[3];
+	        	return tints[3];
 	        }
 	        else if (pass == 5) {
-	        	return mat.tints[4];
+	        	return tints[4];
 	        }
 	        else if (pass == 6) {
-	        	return mat.tints[6];
+	        	return tints[6];
 	        }
 	        else if (pass == 7) {
-	        	return mat.tints[7];
+	        	return tints[7];
 	        } 
 	        else if (pass == 8) {
-	        	return mat.tints[9];
+	        	return tints[9];
 	        }
 		}
 		return 0xFFFFFF;

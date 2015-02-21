@@ -160,4 +160,10 @@ public abstract class ItemPhysisNBTDamage extends ItemPhysis implements INBTDama
     {
         return false;
     }
+	
+	@Override
+	public boolean isRepairable()
+    {
+        return canRepair;
+    }
 }

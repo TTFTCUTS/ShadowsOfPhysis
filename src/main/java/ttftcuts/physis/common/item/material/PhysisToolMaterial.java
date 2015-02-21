@@ -12,6 +12,7 @@ import java.util.Random;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
 
 import net.minecraft.item.Item;
@@ -31,6 +32,9 @@ public class PhysisToolMaterial {
 	private static List<PhysisToolMaterial> materialsById;
 	public static List<RecipeListGetter> recipeLists = new ArrayList<RecipeListGetter>();
 	public static RecipeListGetter defaultRecipeList;
+	
+	public static final int TINTS = 10; 
+	private static int[] defaultTints;
 	
 	public static boolean generated = false;
 	private static int nextId = 0;
@@ -80,6 +84,24 @@ public class PhysisToolMaterial {
 	
 	public String getMaterialName() {
 		return this.orematerial;
+	}
+	
+	public int[] getHeadTints() {
+		if (this.hastint) {
+			return this.tints;
+		}
+		buildTintData(this);
+		if (this.hastint) {
+			return this.tints;
+		}
+		return defaultTints;
+	}
+	
+	public int getShaftTint() {
+		if (this.hastint) {
+			return this.shafttint;
+		}
+		return 0x808080;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -268,20 +290,40 @@ public class PhysisToolMaterial {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void buildTintData(int tintcount) {
+	public static void buildTintData() {
+		defaultTints = new int[TINTS];
+		for (int i=0; i<TINTS; i++) {
+			int c = (int)((i/(double)(TINTS)) * 255);
+			defaultTints[i] = TextureHelper.compose(c, c, c, 255);
+		}
+		
 		for(Entry<String, PhysisToolMaterial> entry : materials.entrySet()) { 
 			PhysisToolMaterial mat = entry.getValue();
 			
-			if (!mat.hastint) {
-				mat.tints = new int[tintcount];
-				
+			buildTintData(mat);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void buildTintData(PhysisToolMaterial mat){
+		if (!mat.hastint) {
+			try {
 				BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
 				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
 				
-				mat.tints[0] = colours.remove(0);
-				mat.tints[tintcount-1] = colours.remove(colours.size()-1);
+				if (colours.isEmpty()) {
+					// something seriously wrong if this happens... unable to get image back out of graphics memory?
+					mat.hastint = true;
+					mat.tints = defaultTints.clone();
+					return;
+				}
 				
-				int avetints = tintcount-2;
+				mat.tints = new int[TINTS];
+				
+				mat.tints[0] = colours.remove(0);
+				mat.tints[TINTS-1] = colours.remove(colours.size()-1);
+				
+				int avetints = TINTS-2;
 				float dper = colours.size() / (float)avetints;
 				
 				for(int i=0; i<avetints; i++) {
@@ -296,6 +338,10 @@ public class PhysisToolMaterial {
 				mat.shafttint = TextureHelper.getAverageColour(TextureHelper.getImageColourRange(stickimage));
 				
 				mat.hastint = true;
+			}
+			catch(Exception e) {
+				Physis.logger.warn("Failed to generate tint data for "+mat.getMaterialName(), e);
+				mat.hastint = false;
 			}
 		}
 	}

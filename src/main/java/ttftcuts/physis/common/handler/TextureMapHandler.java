@@ -26,6 +26,6 @@ public class TextureMapHandler {
 	
 	@SubscribeEvent
 	public void onPostStitch(TextureStitchEvent.Post event) {
-		PhysisToolMaterial.buildTintData(10);
+		PhysisToolMaterial.buildTintData();
 	}
 }

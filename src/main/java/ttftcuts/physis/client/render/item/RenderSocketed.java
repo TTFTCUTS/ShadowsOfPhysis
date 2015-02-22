@@ -3,6 +3,8 @@ package ttftcuts.physis.client.render.item;
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.INVENTORY;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.INVENTORY_BLOCK;
 
+import java.lang.reflect.Field;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 
 import org.lwjgl.opengl.GL11;
@@ -65,6 +67,7 @@ public class RenderSocketed implements IItemRenderer {
 			}
 			GL11.glPushMatrix();
 			this.wrapped.renderItem(type, item, data);
+			//Physis.logger.info(item.getDisplayName());
 			GL11.glPopMatrix();
 		} else {
 			PhysisRenderHelper.renderItemStack(item, 0, 0, false, false);
@@ -234,10 +237,20 @@ public class RenderSocketed implements IItemRenderer {
 	}
 
 	// registering magics
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void injectRenderer() {
 		Iterator iter = Item.itemRegistry.iterator();
-
+		IdentityHashMap<Item, IItemRenderer> renderers = null;
+		
+		try {
+			Field renderList = MinecraftForgeClient.class.getDeclaredField("customItemRenderers");
+			renderList.setAccessible(true);
+			renderers = (IdentityHashMap<Item, IItemRenderer>) renderList.get(null);
+		} catch (Exception e) {
+			Physis.logger.warn("Failed to get renderer list", e);
+			return;
+		}
+		
 		Item item;
 		ItemStack stack;
 		IItemRenderer render;
@@ -248,10 +261,18 @@ public class RenderSocketed implements IItemRenderer {
 			if (!PhysisArtifacts.canItemAcceptSockets(stack)) { 
 				continue; 
 			}
-			
-			render = MinecraftForgeClient.getItemRenderer(stack, ItemRenderType.INVENTORY);
+
+			render = renderers.get(item);
 			
 			MinecraftForgeClient.registerItemRenderer(item, new RenderSocketed(render));
+		}
+	}
+	
+	public static boolean injected = false;
+	public static void tryInjectRenderer() {
+		if (!injected) {
+			injectRenderer();
+			injected = true;
 		}
 	}
 }

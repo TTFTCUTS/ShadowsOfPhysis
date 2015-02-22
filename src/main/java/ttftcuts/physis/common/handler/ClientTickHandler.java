@@ -1,5 +1,6 @@
 package ttftcuts.physis.common.handler;
 
+import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.common.file.ServerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,6 +20,8 @@ public class ClientTickHandler {
 			}
 			
 			ServerData.tick(true);
+			
+			RenderSocketed.tryInjectRenderer();
 		}	
 	}
 }

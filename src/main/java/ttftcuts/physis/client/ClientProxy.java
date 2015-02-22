@@ -64,7 +64,7 @@ public class ClientProxy extends CommonProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
 		
-		RenderSocketed.injectRenderer();
+		//RenderSocketed.injectRenderer();
 		
 		PhysisIntegration.postInitEnd(event, true);
 	}

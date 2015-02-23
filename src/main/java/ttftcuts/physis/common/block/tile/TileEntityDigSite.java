@@ -24,6 +24,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public static final String LAYERTAG = "physisdiglayer";
 	public static final String LAYERLISTTAG = "physisdiglayerlist";
 	public static final String SEEDTAG = "physisoooseed";
+	public static final String MISTAKESTAG = "physisdigmistakes";
 	
 	// this one isn't saved, used for the hacky rendering
 	public int renderlayer = 0;
@@ -31,6 +32,8 @@ public class TileEntityDigSite extends TileEntityPhysis {
 	public int level = 0;
 	public int currentlayer = 0;
 	public int numlayers = 0;
+	
+	public int mistakes = 0;
 	
 	public boolean loadRequestPuzzle = true;
 	public int requestSeed = 0;
@@ -117,18 +120,35 @@ public class TileEntityDigSite extends TileEntityPhysis {
 				}
 				trowel.onUseTrowel(held, player, true);
 			} else {
-				if (this.level > 0 && world.rand.nextInt(3) == 0) {
+				if (this.level > 0 && world.rand.nextDouble() < this.getBreakChance()) {
 					this.level--;
-					this.markTileForUpdate();
 					// STUFF BREAK NOISE
 				} else {
 					// fail noise
 				}
+				this.mistakes++;
+				this.markTileForUpdate();
 				
 				trowel.onUseTrowel(held, player, false);
 			}
 		}
 		return true;
+	}
+	
+	private double getBreakChance() {
+		switch(this.mistakes) {
+		case 0:
+		case 1:
+			return 0.0;
+		case 2:
+			return 0.2;
+		case 3:
+			return 0.25;
+		case 4:
+			return 1.0/3.0;
+		default:
+			return 0.5;
+		}
 	}
 	
 	private void dropLoot(World world, EntityPlayer player) {
@@ -156,6 +176,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		tag.setInteger(LEVELTAG, this.level);
 		tag.setInteger(LAYERTAG, this.currentlayer);
 		tag.setInteger(SEEDTAG, this.requestSeed);
+		tag.setInteger(MISTAKESTAG, this.mistakes);
 		
 		NBTTagCompound layerdata = new NBTTagCompound();
 		for (int i=0; i<numlayers; i++) {
@@ -172,6 +193,7 @@ public class TileEntityDigSite extends TileEntityPhysis {
 		this.level = tag.getInteger(LEVELTAG);
 		this.currentlayer = tag.getInteger(LAYERTAG);
 		this.requestSeed = tag.getInteger(SEEDTAG);
+		this.mistakes = tag.getInteger(MISTAKESTAG);
 		
 		this.layerlist.clear();
 		NBTTagCompound layerdata = tag.getCompoundTag(LAYERLISTTAG);

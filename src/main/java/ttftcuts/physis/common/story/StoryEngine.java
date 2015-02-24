@@ -7,7 +7,6 @@ import java.util.Random;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,10 +23,10 @@ public class StoryEngine {
             instance(false).sendDataToPlayer(event.player);
         }
 
-        @SubscribeEvent
+        /*@SubscribeEvent
         public void onPlayerChangedDimension(PlayerLoggedOutEvent event) {
             instance(false).sendDataToPlayer(event.player);
-        }
+        }*/
 	}
 	
 	private static Map<String, Integer> registry = new HashMap<String, Integer>();

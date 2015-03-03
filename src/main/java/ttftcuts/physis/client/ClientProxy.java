@@ -6,12 +6,12 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
 import ttftcuts.physis.client.render.item.RenderSocketable;
-import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;
 import ttftcuts.physis.common.CommonProxy;
@@ -31,13 +31,15 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
+		PhysisIntegration.preInitStart(event, true);
 		PhysisIntegration.preInitEnd(event, true);
 	}
 	
 	@Override
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
-
+		PhysisIntegration.initStart(event, true);
+		
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());
 		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
@@ -63,9 +65,17 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
+		PhysisIntegration.postInitStart(event, true);
 		
 		//RenderSocketed.injectRenderer();
 		
 		PhysisIntegration.postInitEnd(event, true);
+	}
+	
+	@Override
+	public void loadFinished(FMLLoadCompleteEvent event) {
+		super.loadFinished(event);
+		
+		PhysisIntegration.loadFinished(event, true);
 	}
 }

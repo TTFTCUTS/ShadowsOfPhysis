@@ -3,6 +3,7 @@ package ttftcuts.physis;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
@@ -24,7 +25,7 @@ import ttftcuts.physis.common.artifact.ArtifactHandler;
 import ttftcuts.physis.common.helper.LocalizationHelper;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 
-@Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$GRADLEVERSION", dependencies = "")
+@Mod(modid = Physis.MOD_ID, name = "Shadows Of Physis", version = "$GRADLEVERSION", dependencies = "after:ThermalFoundation;after:ThermalExpansion")
 public class Physis {
 
     public static final String MOD_ID = "physis";
@@ -68,6 +69,11 @@ public class Physis {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
     	proxy.postInit(event);
+    }
+    
+    @Mod.EventHandler
+    public void loadFinished(FMLLoadCompleteEvent event) {
+    	proxy.loadFinished(event);
     }
     
     @Mod.EventHandler

@@ -30,6 +30,7 @@ import ttftcuts.physis.common.worldgen.PhysisWorldGen;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
@@ -88,12 +89,15 @@ public class CommonProxy {
 	
 	public void postInit(FMLPostInitializationEvent event) {
 		PhysisIntegration.postInitStart(event, false);
-		
+
+		PhysisIntegration.postInitEnd(event, false);
+	}
+	
+	public void loadFinished(FMLLoadCompleteEvent event) {
 		PhysisToolMaterial.buildMaterials();
-		
 		ItemTrowel.buildRecipes();
 		
-		PhysisIntegration.postInitEnd(event, false);
+		PhysisIntegration.loadFinished(event, false);
 	}
 	
 	public void serverPreStarting(FMLServerAboutToStartEvent event) {

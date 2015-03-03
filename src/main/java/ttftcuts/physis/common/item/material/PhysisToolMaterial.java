@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,8 +16,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -49,7 +51,7 @@ public class PhysisToolMaterial {
 	public ItemStack stick;
 	public ItemStack pick;
 	
-	public ItemPickaxe pickitem;
+	public ItemTool pickitem;
 	
 	public Item.ToolMaterial toolmaterial;
 	
@@ -73,7 +75,7 @@ public class PhysisToolMaterial {
 		this.stick = stick;
 		this.stickorename = stickorename;
 		this.pick = pick;
-		this.pickitem = (ItemPickaxe)(pick.getItem());
+		this.pickitem = (ItemTool)(pick.getItem());
 		
 		this.toolmaterial = this.pickitem.func_150913_i();
 		
@@ -125,16 +127,29 @@ public class PhysisToolMaterial {
 		
 		//Physis.logger.info("Searching for picks");
 		
-		List<ItemPickaxe> picks = new ArrayList<ItemPickaxe>();
+		List<ItemTool> picks = new ArrayList<ItemTool>();
 		
 		Iterator<Item> ir = Item.itemRegistry.iterator();
+		
+		String pickclass = "pickaxe";
 		
 		while(ir.hasNext()) {
 			Item item = ir.next();
 			
-			if (item instanceof ItemPickaxe) {
-				picks.add((ItemPickaxe)item);
-				//Physis.logger.info(item.getUnlocalizedName());
+			if (item instanceof ItemTool) {
+				ItemTool tool = (ItemTool)item;
+				
+				Physis.logger.info(tool.getUnlocalizedName());
+				
+				ItemStack toolstack = new ItemStack(tool);
+				Set<String> toolclasses = tool.getToolClasses(toolstack);
+				
+				Physis.logger.info(toolclasses);
+				
+				if (toolclasses.contains(pickclass)) {
+					picks.add(tool);
+					Physis.logger.info("added");
+				}
 			}
 		}
 		
@@ -152,7 +167,7 @@ public class PhysisToolMaterial {
 				ItemStack output = translator.getRecipeOutput(recipe);
 				Item out = output.getItem();
 				
-				for(ItemPickaxe pick : picks) {
+				for(ItemTool pick : picks) {
 					if (out == pick) {
 						ItemStack[] comp = null;
 						boolean stickore = false;
@@ -322,6 +337,13 @@ public class PhysisToolMaterial {
 				
 				mat.tints[0] = colours.remove(0);
 				mat.tints[TINTS-1] = colours.remove(colours.size()-1);
+				
+				//Physis.logger.info(mat.orename+": "+Integer.toHexString(mat.tints[0])+", "+Integer.toHexString(mat.tints[TINTS-1]));
+				// If this is the case... we've got some MISSING TEXTURE FUN
+				if ((mat.tints[0] == 0xFFF800F8 && mat.tints[TINTS-1] == 0xFF000000)|| (mat.tints[0] == 0xFF000000 && mat.tints[TINTS-1] == 0xFFF800F8)) {
+					Physis.logger.warn("Missing texture sampled, or this material ("+mat.ingot.getDisplayName()+") has a silly icon. Hoping that it has better colours next time :(");
+					return;
+				}
 				
 				int avetints = TINTS-2;
 				float dper = colours.size() / (float)avetints;

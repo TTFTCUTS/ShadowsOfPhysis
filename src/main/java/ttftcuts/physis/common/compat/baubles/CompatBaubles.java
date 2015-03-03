@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -40,7 +41,7 @@ public class CompatBaubles extends CompatModule {
 	}
 	
 	@Override
-	public void postInitEnd(FMLPostInitializationEvent event, boolean client) {
+	public void loadFinished(FMLLoadCompleteEvent event, boolean client) {
 		if (!client) {
 			for (PhysisToolMaterial mat : PhysisToolMaterial.materials.values()) {
 				if (mat.orename.startsWith("ingot")) {

@@ -9,6 +9,7 @@ import ttftcuts.physis.common.compat.thaumcraft.CompatThaumcraft;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -64,6 +65,12 @@ public class PhysisIntegration {
 	public static void postInitEnd(FMLPostInitializationEvent event, boolean client) {
 		for (CompatModule module : modules) {
 			module.postInitEnd(event, client);
+		}
+	}
+	
+	public static void loadFinished(FMLLoadCompleteEvent event, boolean client) {
+		for (CompatModule module : modules) {
+			module.loadFinished(event, client);
 		}
 	}
 }

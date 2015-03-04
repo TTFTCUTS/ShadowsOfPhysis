@@ -288,4 +288,38 @@ public class TextureHelper {
 		
 		return new int[]{(int)Math.round(r * 255), (int)Math.round(g * 255), (int)Math.round(b * 255)};
 	}
+	
+	public static double[] rgb2hsl(int r, int g, int b) {
+		double dr = r/255.0;
+		double dg = g/255.0;
+		double db = b/255.0;
+		double max = Math.max(dr, Math.max(dg, db));
+		double min = Math.min(dr, Math.min(dg, db));
+		
+		double h, s;
+		double l = (max+min)*0.5;
+		
+		if (max == min) {
+			h = 0;
+			s = 0;
+		} else {
+			double d = max - min;
+			s = l > 0.5 ? d / (2.0 - max - min) : d / (max + min);
+			
+			if (max == dr) {
+				h = (dg - db) / d + (dg < db ? 6 : 0);
+			} else if (max == dg) {
+				h = (db - dr) / d + 2;
+			} else {
+				h = (dr - dg) / d + 4;
+			}
+			h /= 6.0;
+		}
+		
+		return new double[]{h,s,l};
+	}
+	
+	public static double[] rgb2hsl(int colour) {
+		return rgb2hsl(red(colour), green(colour), blue(colour));
+	}
 }

@@ -2,6 +2,8 @@ package ttftcuts.physis.common.item.material;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,6 +62,7 @@ public class PhysisToolMaterial {
 	public int maxdamage;
 	
 	public boolean hastint = false;
+	public Map<ItemStack, int[]> intermediateTints = new HashMap<ItemStack, int[]>();
 	public int[] tints;
 	public int shafttint;
 	
@@ -323,7 +328,51 @@ public class PhysisToolMaterial {
 	public static void buildTintData(PhysisToolMaterial mat){
 		if (!mat.hastint) {
 			try {
+				List<ItemStack> ingots = OreDictionary.getOres(mat.orename);
+				
+				boolean present = true;
+				for (ItemStack stack : ingots) {
+					if (stack == null || stack.getItem() == null) {
+						continue;
+					}
+					if (!mat.intermediateTints.containsKey(stack) || mat.intermediateTints.get(stack) == null) {
+						BufferedImage matimage = TextureHelper.getItemStackImage(stack);
+						List<Integer> colours = TextureHelper.getImageColourRange(matimage);
+						if (colours.isEmpty()) {
+							mat.intermediateTints.put(stack, defaultTints.clone());
+							continue;
+						}
+						int[] mattints = processColourList(colours);
+						mat.intermediateTints.put(stack, mattints);
+						if( mattints == null) { present = false; }
+					}
+				}
+				
+				// if not all of the tints are there, don't bother.
+				if(!present) { return; }
+				
+				// canonical colour
 				BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
+				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
+				int canonical = TextureHelper.getAverageColour(colours);
+				double[] canonicalhsl = TextureHelper.rgb2hsl(canonical);
+				
+				// work out the best tint set
+				List<TintInfo> tintinfos = new ArrayList<TintInfo>();
+				for (Entry<ItemStack, int[]> entry : mat.intermediateTints.entrySet()) {
+					TintInfo info = mat.new TintInfo(entry.getValue(), canonicalhsl, entry.getKey().getDisplayName());
+					tintinfos.add(info);
+				}
+				Collections.sort(tintinfos);
+				
+				Physis.logger.info("Tint prettiness: "+mat.orename+", canonical stack: "+mat.ingot.getDisplayName());
+				for (TintInfo i : tintinfos) {
+					Physis.logger.info(i.name+": "+i.prettiness);
+				}
+				
+				mat.tints = tintinfos.get(0).tints;
+				
+				/*BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
 				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
 				
 				if (colours.isEmpty()) {
@@ -354,7 +403,7 @@ public class PhysisToolMaterial {
 					
 					int tint = TextureHelper.getAverageColour(colours.subList(lower, upper));
 					mat.tints[i+1] = tint;
-				}
+				}*/
 				
 				BufferedImage stickimage = TextureHelper.getItemStackImage(mat.stick);
 				mat.shafttint = TextureHelper.getAverageColour(TextureHelper.getImageColourRange(stickimage));
@@ -366,6 +415,31 @@ public class PhysisToolMaterial {
 				mat.hastint = false;
 			}
 		}
+	}
+	
+	private static int[] processColourList(List<Integer> colours) {
+		int[] tint = new int[TINTS];
+		
+		tint[0] = colours.remove(0);
+		tint[TINTS-1] = colours.remove(colours.size()-1);
+		
+		// If this is the case... we've got some MISSING TEXTURE FUN
+		if ((tint[0] == 0xFFF800F8 && tint[TINTS-1] == 0xFF000000)|| (tint[0] == 0xFF000000 && tint[TINTS-1] == 0xFFF800F8)) {
+			return null;
+		}
+		
+		int avetints = TINTS-2;
+		float dper = colours.size() / (float)avetints;
+		
+		for(int i=0; i<avetints; i++) {
+			int lower = Math.round(dper*i);
+			int upper = Math.round(dper*(i+1));
+			
+			int t = TextureHelper.getAverageColour(colours.subList(lower, upper));
+			tint[i+1] = t;
+		}
+		
+		return tint;
 	}
 	
 	public static boolean compareStacks(ItemStack stack1, ItemStack stack2) {
@@ -428,5 +502,52 @@ public class PhysisToolMaterial {
 		
 		PhysisToolMaterial.addRecipeComponentTranslator(ShapedRecipes.class, new ShapedRecipeCT());
 		PhysisToolMaterial.addRecipeComponentTranslator(ShapedOreRecipe.class, new ShapedOreRecipeCT());
+	}
+	
+	private class TintInfo implements Comparable<TintInfo> {
+		public double prettiness = 0;
+		int[] tints;
+		String name;
+		
+		public TintInfo(int[] tints, double[] canonicalhsl, String name) {
+			this.tints = tints;
+			this.name = name;
+			
+			int dark = tints[0];
+			int light = tints[TINTS-1];
+			
+			int median = tints[(int)Math.floor(TINTS/2.0)];
+			
+			int darkbrightness = TextureHelper.getPerceptualBrightness(dark);
+			int medbrightness = TextureHelper.getPerceptualBrightness(median);
+			int lightbrightness = TextureHelper.getPerceptualBrightness(light);
+			
+			int spread = Math.abs(lightbrightness - darkbrightness);
+			int dmdiff = Math.abs(medbrightness - darkbrightness);
+			int lmdiff = Math.abs(lightbrightness - medbrightness);
+			
+			double centredness = (255 - Math.abs(dmdiff - lmdiff))/255.0;
+			
+			// hsl of median colour
+			double[] medhsl = TextureHelper.rgb2hsl(median);
+			double ldiff = Math.abs(medhsl[2] - canonicalhsl[2]);
+			
+			// hue difference, switching to the other way if big
+			double hdiff = Math.abs(medhsl[0] - canonicalhsl[0]);
+			if (hdiff > 0.5) { hdiff = 1.0 - hdiff; }
+			
+			// average saturation times difference in hue times half of 1-light difference
+			//double colourdiff = (medhsl[1] + canonicalhsl[1]) * 0.5 * hdiff * (0.5 + (1-ldiff)*0.5);
+			double colourdiff = hdiff * 2.0 * (0.5 + (1-ldiff)*0.5);
+			
+			this.prettiness = centredness * (0.5 +spread*0.5) * (1.0-colourdiff);//(0.5 + colourdiff*0.5);
+			
+			Physis.logger.info(name+" canonical: "+Arrays.toString(canonicalhsl)+", median: "+Arrays.toString(medhsl)+", colour diff: "+ colourdiff);
+		}
+		
+		@Override
+		public int compareTo(TintInfo other) {
+			return (int)Math.signum(other.prettiness - this.prettiness);
+		}
 	}
 }

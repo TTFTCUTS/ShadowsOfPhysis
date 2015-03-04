@@ -2,7 +2,6 @@ package ttftcuts.physis.common.item.material;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,15 +11,15 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
+import ttftcuts.physis.utils.ModFinder;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTool;
 import net.minecraft.item.ItemStack;
@@ -33,6 +32,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class PhysisToolMaterial {
 	
 	public static final String MATERIALTAG = "physisMaterial";
+	public static final ImmutableList<String> vanillaOreNames = ImmutableList.of("logWood", "plankWood", "ingotIron", "ingotGold", "gemDiamond", "gemEmerald", "gemQuartz", "blockQuartz", "stone", "cobblestone", "sandstone", "blockGlass");
 	
 	public static Map<String,PhysisToolMaterial> materials;
 	private static List<PhysisToolMaterial> materialsById;
@@ -144,16 +144,16 @@ public class PhysisToolMaterial {
 			if (item instanceof ItemTool) {
 				ItemTool tool = (ItemTool)item;
 				
-				Physis.logger.info(tool.getUnlocalizedName());
+				//Physis.logger.info(tool.getUnlocalizedName());
 				
 				ItemStack toolstack = new ItemStack(tool);
 				Set<String> toolclasses = tool.getToolClasses(toolstack);
 				
-				Physis.logger.info(toolclasses);
+				//Physis.logger.info(toolclasses);
 				
 				if (toolclasses.contains(pickclass)) {
 					picks.add(tool);
-					Physis.logger.info("added");
+					//Physis.logger.info("added");
 				}
 			}
 		}
@@ -329,11 +329,18 @@ public class PhysisToolMaterial {
 		if (!mat.hastint) {
 			try {
 				List<ItemStack> ingots = OreDictionary.getOres(mat.orename);
+				boolean vanilla = vanillaOreNames.contains(mat.orename);
 				
 				boolean present = true;
 				for (ItemStack stack : ingots) {
 					if (stack == null || stack.getItem() == null) {
 						continue;
+					}
+					if (vanilla) {
+						if (!ModFinder.isVanilla(stack.getItem())) {
+							// this is a vanilla ore name and the item isn't vanilla
+							continue;
+						}
 					}
 					if (!mat.intermediateTints.containsKey(stack) || mat.intermediateTints.get(stack) == null) {
 						BufferedImage matimage = TextureHelper.getItemStackImage(stack);
@@ -363,47 +370,22 @@ public class PhysisToolMaterial {
 					TintInfo info = mat.new TintInfo(entry.getValue(), canonicalhsl, entry.getKey().getDisplayName());
 					tintinfos.add(info);
 				}
+				if (tintinfos.isEmpty()) {
+					//no tints, bail
+					Physis.logger.warn("No valid colours for material "+mat.getMaterialName()+", using defaults");
+					mat.tints = defaultTints.clone();
+					mat.hastint = true;
+					return;
+				}
+				
 				Collections.sort(tintinfos);
 				
-				Physis.logger.info("Tint prettiness: "+mat.orename+", canonical stack: "+mat.ingot.getDisplayName());
+				/*Physis.logger.info("Tint prettiness: "+mat.orename+", canonical stack: "+mat.ingot.getDisplayName());
 				for (TintInfo i : tintinfos) {
 					Physis.logger.info(i.name+": "+i.prettiness);
-				}
+				}*/
 				
 				mat.tints = tintinfos.get(0).tints;
-				
-				/*BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
-				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
-				
-				if (colours.isEmpty()) {
-					// something seriously wrong if this happens... unable to get image back out of graphics memory?
-					mat.hastint = true;
-					mat.tints = defaultTints.clone();
-					return;
-				}
-				
-				mat.tints = new int[TINTS];
-				
-				mat.tints[0] = colours.remove(0);
-				mat.tints[TINTS-1] = colours.remove(colours.size()-1);
-				
-				//Physis.logger.info(mat.orename+": "+Integer.toHexString(mat.tints[0])+", "+Integer.toHexString(mat.tints[TINTS-1]));
-				// If this is the case... we've got some MISSING TEXTURE FUN
-				if ((mat.tints[0] == 0xFFF800F8 && mat.tints[TINTS-1] == 0xFF000000)|| (mat.tints[0] == 0xFF000000 && mat.tints[TINTS-1] == 0xFFF800F8)) {
-					Physis.logger.warn("Missing texture sampled, or this material ("+mat.ingot.getDisplayName()+") has a silly icon. Hoping that it has better colours next time :(");
-					return;
-				}
-				
-				int avetints = TINTS-2;
-				float dper = colours.size() / (float)avetints;
-				
-				for(int i=0; i<avetints; i++) {
-					int lower = Math.round(dper*i);
-					int upper = Math.round(dper*(i+1));
-					
-					int tint = TextureHelper.getAverageColour(colours.subList(lower, upper));
-					mat.tints[i+1] = tint;
-				}*/
 				
 				BufferedImage stickimage = TextureHelper.getItemStackImage(mat.stick);
 				mat.shafttint = TextureHelper.getAverageColour(TextureHelper.getImageColourRange(stickimage));
@@ -507,6 +489,7 @@ public class PhysisToolMaterial {
 	private class TintInfo implements Comparable<TintInfo> {
 		public double prettiness = 0;
 		int[] tints;
+		@SuppressWarnings("unused")
 		String name;
 		
 		public TintInfo(int[] tints, double[] canonicalhsl, String name) {
@@ -542,7 +525,7 @@ public class PhysisToolMaterial {
 			
 			this.prettiness = centredness * (0.5 +spread*0.5) * (1.0-colourdiff);//(0.5 + colourdiff*0.5);
 			
-			Physis.logger.info(name+" canonical: "+Arrays.toString(canonicalhsl)+", median: "+Arrays.toString(medhsl)+", colour diff: "+ colourdiff);
+			//Physis.logger.info(name+" canonical: "+Arrays.toString(canonicalhsl)+", median: "+Arrays.toString(medhsl)+", colour diff: "+ colourdiff);
 		}
 		
 		@Override

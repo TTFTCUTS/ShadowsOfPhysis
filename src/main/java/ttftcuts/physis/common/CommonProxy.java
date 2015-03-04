@@ -28,6 +28,7 @@ import ttftcuts.physis.common.story.StoryEngine;
 import ttftcuts.physis.common.story.StoryEngine.StorySeedHandler;
 import ttftcuts.physis.common.worldgen.PhysisWorldGen;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
+import ttftcuts.physis.utils.ModFinder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
@@ -41,9 +42,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class CommonProxy {
 	
-	public void preInit(FMLPreInitializationEvent event) {
+	public void preInit(FMLPreInitializationEvent event) {		
 		PhysisIntegration.preInitStart(event, false);
 		
+		ModFinder.init();		
 		PhysisAPI.init();
 		
 		PhysisStoryVars.init();

@@ -1,7 +1,9 @@
 package ttftcuts.physis.common;
 
+import java.util.Random;
+
 import net.minecraftforge.common.MinecraftForge;
-import scala.util.Random;
+
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.PhysisAPI;
 import ttftcuts.physis.client.gui.journal.PageDefs;

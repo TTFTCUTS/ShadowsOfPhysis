@@ -32,7 +32,10 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class PhysisToolMaterial {
 	
 	public static final String MATERIALTAG = "physisMaterial";
+	// list of ore dict names considered vanilla - will not consider mod items when getting colours
 	public static final ImmutableList<String> vanillaOreNames = ImmutableList.of("logWood", "plankWood", "ingotIron", "ingotGold", "gemDiamond", "gemEmerald", "gemQuartz", "blockQuartz", "stone", "cobblestone", "sandstone", "blockGlass");
+	// list of mods excluded from colour calculation because of issues (e.g. GT items come up as grey)
+	public static final ImmutableList<String> excludedMods = ImmutableList.of("gregtech");
 	
 	public static Map<String,PhysisToolMaterial> materials;
 	private static List<PhysisToolMaterial> materialsById;
@@ -342,6 +345,10 @@ public class PhysisToolMaterial {
 							continue;
 						}
 					}
+					String mod = ModFinder.idFromObject(stack.getItem());
+					if (excludedMods.contains(mod)) {
+						continue;
+					}
 					if (!mat.intermediateTints.containsKey(stack) || mat.intermediateTints.get(stack) == null) {
 						BufferedImage matimage = TextureHelper.getItemStackImage(stack);
 						List<Integer> colours = TextureHelper.getImageColourRange(matimage);
@@ -393,7 +400,7 @@ public class PhysisToolMaterial {
 				mat.hastint = true;
 			}
 			catch(Exception e) {
-				Physis.logger.warn("Failed to generate tint data for "+mat.getMaterialName(), e);
+				Physis.logger.warn("Failed to generate tint data for "+mat.getMaterialName()+", will retry.");
 				mat.hastint = false;
 			}
 		}

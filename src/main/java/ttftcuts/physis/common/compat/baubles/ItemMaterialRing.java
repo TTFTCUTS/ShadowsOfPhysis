@@ -11,15 +11,19 @@ import java.util.regex.PatternSyntaxException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.texture.ToneSplitTexture;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
+import ttftcuts.physis.common.helper.TextureHelper;
 import ttftcuts.physis.common.item.ItemPhysis;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
@@ -197,13 +201,16 @@ public class ItemMaterialRing extends ItemPhysis implements IBauble {
     public void registerIcons(IIconRegister register)
     {
         super.registerIcons(register);
-     
+        ResourceLocation ring = new ResourceLocation(Physis.MOD_ID, "textures/items/baubles/ring.png");
         fallbackicon = register.registerIcon(Physis.MOD_ID+":baubles/ring");
         
         layerIcons = new ArrayList<IIcon>();
         
+        if (!(register instanceof TextureMap)) {return;}
+        TextureMap map = (TextureMap)register;
         for(int i=0; i<9; i++) {
-        	this.layerIcons.add( register.registerIcon(Physis.MOD_ID+":baubles/ring_"+i) );
+        	ResourceLocation t = TextureHelper.loadTexture(Physis.MOD_ID+":baubles/ring_"+i, new ToneSplitTexture(ring, i));
+        	this.layerIcons.add( TextureHelper.getIconForDynamicResource(map, Physis.MOD_ID+":baubles/ring_"+i, t, true) );
         }
 	}
 	

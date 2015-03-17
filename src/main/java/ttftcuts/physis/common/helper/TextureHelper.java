@@ -66,18 +66,23 @@ public class TextureHelper {
 		}
 	}
 	
-	public static Map<String, TextureAtlasSprite> addedIcons; 
+	public static Map<String, TextureAtlasSprite> addedItemIcons; 
+	public static Map<String, TextureAtlasSprite> addedBlockIcons; 
 	
-	public static IIcon getIconForDynamicResource(TextureMap map, String resourcename, ResourceLocation resource) {
-		if (addedIcons == null) {
-			addedIcons = new HashMap<String, TextureAtlasSprite>();
+	public static IIcon getIconForDynamicResource(TextureMap map, String resourcename, ResourceLocation resource, boolean item) {
+		if (addedItemIcons == null) {
+			addedItemIcons = new HashMap<String, TextureAtlasSprite>();
 		}
+		if (addedBlockIcons == null) {
+			addedBlockIcons = new HashMap<String, TextureAtlasSprite>();
+		}
+		Map<String, TextureAtlasSprite> iconlist = item ? addedItemIcons : addedBlockIcons;
 
 		TextureAtlasSprite texture = new PhysisAtlasSprite(resourcename, resource);
-		if (addedIcons.containsKey(resourcename)) {
-			addedIcons.remove(resourcename);
+		if (iconlist.containsKey(resourcename)) {
+			iconlist.remove(resourcename);
 		}
-		addedIcons.put(resourcename, texture);
+		iconlist.put(resourcename, texture);
 		
 		return texture;
 	}

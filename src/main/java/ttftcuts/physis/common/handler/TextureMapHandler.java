@@ -1,8 +1,8 @@
 package ttftcuts.physis.common.handler;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.TextureHelper;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,9 +16,10 @@ public class TextureMapHandler {
 	
 	@SubscribeEvent
 	public void onStitch(TextureStitchEvent.Pre event) {
-		if (TextureHelper.addedIcons != null) {
-			for (Entry<String, TextureAtlasSprite> entry : TextureHelper.addedIcons.entrySet()) {
-				Physis.logger.info("Adding "+entry.getKey()+" to the map");
+		Map<String, TextureAtlasSprite> iconlist = event.map.getTextureType() == 1 ? TextureHelper.addedItemIcons : TextureHelper.addedBlockIcons;
+		if (iconlist != null) {
+			for (Entry<String, TextureAtlasSprite> entry : iconlist.entrySet()) {
+				//Physis.logger.info("Adding "+entry.getKey()+" to the map");
 				event.map.setTextureEntry(entry.getKey(), entry.getValue());
 			}
 		}

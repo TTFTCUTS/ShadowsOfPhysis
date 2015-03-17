@@ -17,11 +17,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.item.ITrowel;
+import ttftcuts.physis.client.texture.ToneSplitTexture;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.handler.TooltipHandler;
+import ttftcuts.physis.common.helper.TextureHelper;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -33,6 +36,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
@@ -401,10 +405,14 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
         handle = register.registerIcon(Physis.MOD_ID+":trowel_handle");
         shaft = register.registerIcon(Physis.MOD_ID+":trowel_shaft");
         
-        headIcons = new ArrayList<IIcon>();
+        ResourceLocation head = new ResourceLocation(Physis.MOD_ID, "textures/items/trowel_head.png");
+        this.headIcons = new ArrayList<IIcon>();
         
+        if (!(register instanceof TextureMap)) {return;}
+        TextureMap map = (TextureMap)register;
         for(int i=0; i<7; i++) {
-        	this.headIcons.add( register.registerIcon(Physis.MOD_ID+":trowel_head_"+i) );
+        	ResourceLocation t = TextureHelper.loadTexture(Physis.MOD_ID+":trowel_head_"+i, new ToneSplitTexture(head, i));
+        	this.headIcons.add( TextureHelper.getIconForDynamicResource(map, Physis.MOD_ID+":trowel_head_"+i, t, true) );
         }
 	}
 	

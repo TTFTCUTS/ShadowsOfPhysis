@@ -32,7 +32,7 @@ public class PhysisAtlasSprite extends TextureAtlasSprite {
 	@Override
 	public boolean load(IResourceManager manager, ResourceLocation defaultlocation) {
 		ResourceLocation location = override == null ? defaultlocation : override;
-		Physis.logger.info("default: "+defaultlocation+", override: "+override);
+		//Physis.logger.info("default: "+defaultlocation+", override: "+override);
 		BufferedImage image;
 		
 		try {

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.apache.logging.log4j.LogManager;
+import ttftcuts.physis.Physis;
 
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
@@ -72,7 +72,7 @@ public class DigStripTexture extends PhysisAbstractTexture {
 		}
 		catch (IOException ioexception)
         {
-        	LogManager.getLogger().error("Couldn\'t load dig strip texture "+name, ioexception);
+        	Physis.logger.error("Couldn\'t load dig strip texture "+name, ioexception);
             return;
         }
 		

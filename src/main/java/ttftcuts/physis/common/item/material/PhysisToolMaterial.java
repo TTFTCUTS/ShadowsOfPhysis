@@ -368,6 +368,13 @@ public class PhysisToolMaterial {
 				// canonical colour
 				BufferedImage matimage = TextureHelper.getItemStackImage(mat.ingot);
 				List<Integer> colours = TextureHelper.getImageColourRange(matimage);
+				if (colours.isEmpty()) {
+					//no canonical tints, bail
+					Physis.logger.warn("No valid colours for material "+mat.getMaterialName()+", using defaults");
+					mat.tints = defaultTints.clone();
+					mat.hastint = true;
+					return;
+				}
 				int canonical = TextureHelper.getAverageColour(colours);
 				double[] canonicalhsl = TextureHelper.rgb2hsl(canonical);
 				

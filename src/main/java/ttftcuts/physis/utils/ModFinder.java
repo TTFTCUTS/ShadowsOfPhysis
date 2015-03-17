@@ -13,12 +13,13 @@ public class ModFinder {
 	private static Map<String, String> modSource_ID = new HashMap<String, String>();
 	
 	public static void init() {
+		
 		for (ModContainer mod : Loader.instance().getModList()){
 	    	modSource_Name.put(mod.getSource().getName(), mod.getName());
 	    	modSource_ID.put(mod.getSource().getName(), mod.getModId());
 	    }
 		
-        modSource_Name.put("1.6.2.jar", "Minecraft");
+        /*modSource_Name.put("1.6.2.jar", "Minecraft");
         modSource_Name.put("1.6.3.jar", "Minecraft");          
         modSource_Name.put("1.6.4.jar", "Minecraft");
         modSource_Name.put("1.7.2.jar", "Minecraft");
@@ -30,7 +31,7 @@ public class ModFinder {
         modSource_ID.put("1.6.4.jar", "Minecraft");
         modSource_ID.put("1.7.2.jar", "Minecraft");
         modSource_ID.put("1.7.10.jar", "Minecraft");
-        modSource_ID.put("Forge", "Minecraft"); 
+        modSource_ID.put("Forge", "Minecraft"); */
 	}
 	
 	public static String nameFromObject(Object obj){
@@ -42,7 +43,7 @@ public class ModFinder {
 			e.printStackTrace();
 		}		
 		
-		String modName = "<Unknown>";
+		String modName = "Minecraft";
 		for (String s: modSource_Name.keySet())
 			if (objPath.contains(s)){
 				modName = modSource_Name.get(s);
@@ -64,7 +65,7 @@ public class ModFinder {
 			e.printStackTrace();
 		}		
 		
-		String modID = "<Unknown>";
+		String modID = "Minecraft";
 		for (String s: modSource_ID.keySet())
 			if (objPath.contains(s)){
 				modID = modSource_ID.get(s);

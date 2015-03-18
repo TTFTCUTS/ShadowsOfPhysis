@@ -16,7 +16,14 @@ public class TextureMapHandler {
 	
 	@SubscribeEvent
 	public void onStitch(TextureStitchEvent.Pre event) {
-		Map<String, TextureAtlasSprite> iconlist = event.map.getTextureType() == 1 ? TextureHelper.addedItemIcons : TextureHelper.addedBlockIcons;
+		Map<String, TextureAtlasSprite> iconlist = null;
+		if (event.map.getTextureType() == 0) {
+			iconlist = TextureHelper.addedBlockIcons;
+		}
+		else if (event.map.getTextureType() == 1) {
+			iconlist = TextureHelper.addedItemIcons;
+		}
+		
 		if (iconlist != null) {
 			for (Entry<String, TextureAtlasSprite> entry : iconlist.entrySet()) {
 				//Physis.logger.info("Adding "+entry.getKey()+" to the map");
@@ -27,6 +34,8 @@ public class TextureMapHandler {
 	
 	@SubscribeEvent
 	public void onPostStitch(TextureStitchEvent.Post event) {
-		PhysisToolMaterial.buildTintData();
+		if (PhysisToolMaterial.materials != null && event.map.getTextureType() == 1) {
+			PhysisToolMaterial.buildTintData();
+		}
 	}
 }

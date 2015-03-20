@@ -2,6 +2,8 @@ package ttftcuts.physis.common;
 
 import java.util.Random;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import ttftcuts.physis.Physis;
@@ -11,6 +13,7 @@ import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
 import ttftcuts.physis.common.compat.PhysisIntegration;
 import ttftcuts.physis.common.crafting.PhysisCraftingRecipes;
+import ttftcuts.physis.common.file.PhysisWorldSavedData;
 import ttftcuts.physis.common.file.ServerData;
 import ttftcuts.physis.common.file.ServerData.ServerDataHandler;
 import ttftcuts.physis.common.handler.ArtifactEventHandler;
@@ -41,6 +44,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy {
 	
@@ -111,6 +115,11 @@ public class CommonProxy {
 	public void serverStarting(FMLServerStartingEvent event) { 
 		Physis.oooBuilder.start();
 
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			World world = MinecraftServer.getServer().worldServers[0];
+			PhysisWorldSavedData.load(world);
+		}
+		
 		// set up the story!
 		long seed = event.getServer().worldServers[0].getWorldInfo().getSeed();
 		Random r = new Random(seed);

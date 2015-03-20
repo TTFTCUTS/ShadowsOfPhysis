@@ -24,6 +24,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 
 public class ServerData {
+	private static final String TIMETAG = "ServerTick";
 	
 	public static class ServerDataHandler {
 		@SubscribeEvent
@@ -33,12 +34,12 @@ public class ServerData {
             }
         }
 
-        @SubscribeEvent
+        /*@SubscribeEvent
         public void onWorldSave(Save event) {
             if (!event.world.isRemote && instance(false) != null) {
             	instance(false).save();
             }
-        }
+        }*/
 
         @SubscribeEvent
         public void onPlayerLogin(PlayerLoggedInEvent event) {
@@ -82,7 +83,10 @@ public class ServerData {
 				}
 			} else {
 				instance.serverTick++;
-			
+				if (PhysisWorldSavedData.instance != null) {
+					PhysisWorldSavedData.instance.setWorldLong(TIMETAG, instance.serverTick);
+				}
+				
 				if (instance.serverTick % 600 == 0) {
 					instance.sendDataToAll();
 				}
@@ -94,6 +98,9 @@ public class ServerData {
 		ServerData instance = ServerData.instance(client);
 		if (instance != null) {
 			instance.serverTick = time;
+			if (!client  && PhysisWorldSavedData.instance != null) {
+				PhysisWorldSavedData.instance.setWorldLong(TIMETAG, instance.serverTick);
+			}
 		}
 	}
 	
@@ -103,7 +110,11 @@ public class ServerData {
 		this.serverTick = 0;
 		
 		if (!client) {
-			this.load();
+			//this.load();
+			if (PhysisWorldSavedData.instance != null) {
+				this.serverTick = PhysisWorldSavedData.instance.getWorldLong(TIMETAG);
+				Physis.logger.info("Loaded server tick: "+this.serverTick);
+			}
 		}
 	}
 	

@@ -27,10 +27,11 @@ import ttftcuts.physis.common.network.PhysisPacketHandler;
 import ttftcuts.physis.common.network.packet.PacketGuiMessage;
 import ttftcuts.physis.common.network.packet.PacketPlayerUpdate;
 import ttftcuts.physis.common.network.packet.PacketStorySeed;
+import ttftcuts.physis.common.network.packet.PacketWorldData;
 import ttftcuts.physis.common.network.packet.PacketWorldTime;
 import ttftcuts.physis.common.story.PhysisStoryVars;
 import ttftcuts.physis.common.story.StoryEngine;
-import ttftcuts.physis.common.story.StoryEngine.StorySeedHandler;
+import ttftcuts.physis.common.file.PhysisWorldSavedData.WorldDataHandler;
 import ttftcuts.physis.common.worldgen.PhysisWorldGen;
 import ttftcuts.physis.puzzle.oddoneout.OddOneOutBuilder;
 import ttftcuts.physis.utils.ModFinder;
@@ -84,9 +85,9 @@ public class CommonProxy {
     	
     	FMLCommonHandler.instance().bus().register(new ServerTickHandler());
     	MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
+    	FMLCommonHandler.instance().bus().register(new WorldDataHandler());
     	MinecraftForge.EVENT_BUS.register(new ServerDataHandler());
     	FMLCommonHandler.instance().bus().register(new ServerDataHandler());
-    	FMLCommonHandler.instance().bus().register(new StorySeedHandler());
     	MinecraftForge.EVENT_BUS.register(new ItemDestructionHandler());
     	
     	networkSetup();
@@ -109,7 +110,7 @@ public class CommonProxy {
 	}
 	
 	public void serverPreStarting(FMLServerAboutToStartEvent event) {
-		ServerData.reload(false);
+		//ServerData.reload(false);
 	}
 	
 	public void serverStarting(FMLServerStartingEvent event) { 
@@ -119,6 +120,7 @@ public class CommonProxy {
 			World world = MinecraftServer.getServer().worldServers[0];
 			PhysisWorldSavedData.load(world);
 		}
+		ServerData.reload(false);
 		
 		// set up the story!
 		long seed = event.getServer().worldServers[0].getWorldInfo().getSeed();
@@ -141,6 +143,7 @@ public class CommonProxy {
 		PhysisPacketHandler.registerPacketHandler(new PacketWorldTime(), 1);
 		PhysisPacketHandler.registerPacketHandler(new PacketStorySeed(), 2);
 		PhysisPacketHandler.registerPacketHandler(new PacketPlayerUpdate(), 3);
+		PhysisPacketHandler.registerPacketHandler(new PacketWorldData(), 4);
 		
 		PhysisPacketHandler.init();
 	}

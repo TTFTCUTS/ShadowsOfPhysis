@@ -5,29 +5,41 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.file.IDataCallback;
+import ttftcuts.physis.common.file.PhysisWorldSavedData;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
 import ttftcuts.physis.common.network.packet.PacketStorySeed;
 
 public class StoryEngine {
-
-	public static class StorySeedHandler {
+	public static final String STORYTAG = "story";
+	
+	/*public static class StorySeedHandler {
         @SubscribeEvent
         public void onPlayerLogin(PlayerLoggedInEvent event) {
         	Physis.logger.info("Logged in: "+event.player.getDisplayName());
             instance(false).sendDataToPlayer(event.player);
         }
+	}*/
+	
+	private static IDataCallback dataCallback = new IDataCallback() {
 
-        /*@SubscribeEvent
-        public void onPlayerChangedDimension(PlayerLoggedOutEvent event) {
-            instance(false).sendDataToPlayer(event.player);
-        }*/
-	}
+		@Override
+		public void dataPacketSending() {
+			PhysisWorldSavedData.getWorldTag(STORYTAG).setLong("seed", instance(false).seed);
+			Physis.logger.info("Adding story seed to packet");
+		}
+
+		@Override
+		public void dataPacketReceived() {
+			long s = PhysisWorldSavedData.getWorldTag(STORYTAG).getLong("seed");
+			StoryEngine.reload(s, true);
+			Physis.logger.info("Loaded story seed from packet");
+		}
+		
+	};
 	
 	private static Map<String, Integer> registry = new HashMap<String, Integer>();
 	
@@ -53,6 +65,7 @@ public class StoryEngine {
 			clientInstance = newengine;
 		} else {
 			serverInstance = newengine;
+			PhysisWorldSavedData.registerCallback(dataCallback);
 		}
 	}
 	

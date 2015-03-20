@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.common.helper.TextureHelper;
 import ttftcuts.physis.utils.ModFinder;
 
@@ -146,8 +147,7 @@ public class PhysisToolMaterial {
 			
 			if (item instanceof ItemTool) {
 				ItemTool tool = (ItemTool)item;
-				
-				//Physis.logger.info(tool.getUnlocalizedName());
+				//Physis.logger.info("Tool: "+tool.getUnlocalizedName());
 				
 				ItemStack toolstack = new ItemStack(tool);
 				Set<String> toolclasses = tool.getToolClasses(toolstack);
@@ -156,7 +156,7 @@ public class PhysisToolMaterial {
 				
 				if (toolclasses.contains(pickclass)) {
 					picks.add(tool);
-					//Physis.logger.info("added");
+					//Physis.logger.info("Pick: "+tool.getUnlocalizedName());
 				}
 			}
 		}
@@ -329,6 +329,7 @@ public class PhysisToolMaterial {
 	
 	@SideOnly(Side.CLIENT)
 	public static void buildTintData(PhysisToolMaterial mat){
+		RenderSocketed.drawSocketIcon = false;
 		if (!mat.hastint) {
 			try {
 				List<ItemStack> ingots = OreDictionary.getOres(mat.orename);
@@ -411,6 +412,7 @@ public class PhysisToolMaterial {
 				mat.hastint = false;
 			}
 		}
+		RenderSocketed.drawSocketIcon = true;
 	}
 	
 	private static int[] processColourList(List<Integer> colours) {

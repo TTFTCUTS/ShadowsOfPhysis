@@ -27,6 +27,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 public class RenderSocketed implements IItemRenderer {
 
+	public static boolean drawSocketIcon = true;
+	
 	public IItemRenderer wrapped;
 	
 	public static ResourceLocation overlay = new ResourceLocation(Physis.MOD_ID +":textures/gui/socketoverlay.png");
@@ -138,7 +140,7 @@ public class RenderSocketed implements IItemRenderer {
 				}
 			}
 			
-			if (drawicon) {
+			if (drawSocketIcon && drawicon) {
 				GL11.glEnable(GL11.GL_ALPHA_TEST);
 				GL11.glColor4f(1f, 1f, 1f, 1f);
 				Tessellator t = Tessellator.instance;

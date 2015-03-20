@@ -23,6 +23,11 @@ public class ShapedOreRecipeCT implements IRecipeComponentTranslator {
 		for (int i=0; i<objects.length; i++) {
 			if (objects[i] == null) { continue; }
 			items[i] = PhysisToolMaterial.getRecipeCompStack(objects[i]);
+			
+			/*int[] ids = OreDictionary.getOreIDs(items[i]);
+			for (int j=0; j<ids.length; j++) {
+				Physis.logger.info("Ore for "+items[i]+": "+OreDictionary.getOreName(ids[j]));
+			}*/
 		}
 		
 		return items;

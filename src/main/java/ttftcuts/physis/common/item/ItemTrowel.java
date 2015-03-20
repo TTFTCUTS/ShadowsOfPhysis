@@ -12,6 +12,7 @@ import java.util.regex.PatternSyntaxException;
 
 import com.google.common.collect.Multimap;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,6 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 
@@ -288,9 +290,24 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
     }
 	
 	public static void buildRecipes() {
+		boolean gt = Loader.isModLoaded("gregtech");
+		
 		for(Entry<String,PhysisToolMaterial> entry : PhysisToolMaterial.materials.entrySet()) {
 			PhysisToolMaterial mat = entry.getValue();
 
+			String headmat = mat.orename;
+			boolean gtvariant = false;
+			if (gt) { // gregtech head check
+				if (mat.orename.startsWith("ingot")) {
+					String plate = "plate" + mat.orename.substring(5);
+					if (OreDictionary.getOres(plate).size() > 0) {
+						headmat = plate;
+					}
+					gtvariant = true;
+				}
+			}
+			
+			// one trowel per wool colour
 			for (int wool = 0; wool<16; wool++) {
 				
 				ItemStack trowel = new ItemStack(PhysisItems.trowel, 1, mat.id);
@@ -301,15 +318,24 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 				
 				Object stick = mat.stickorename == null ? mat.stick : mat.stickorename;
 				
-				mat.registerRecipe(trowel,
-					"HH ", "HS ", "  W",
-					'H', mat.orename,
-					'S', stick,
-					'W', new ItemStack(Blocks.wool, 1, wool)
-				);
+				if (!gt || !gtvariant) { // normal recipe
+					mat.registerRecipe(trowel,
+						"HH ", "HS ", "  W",
+						'H', mat.orename,
+						'S', stick,
+						'W', new ItemStack(Blocks.wool, 1, wool)
+					);
+				} else { // GT recipe for metals, if loaded
+					mat.registerRecipe(trowel,
+						"MMH", "MS ", "F W",
+						'M', headmat,
+						'S', stick,
+						'W', new ItemStack(Blocks.wool, 1, wool),
+						'H', "craftingToolHardHammer",
+						'F', "craftingToolFile"
+					);
+				}
 			}
-			
-			
 		}
 	}
 	

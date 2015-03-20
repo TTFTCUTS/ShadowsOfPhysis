@@ -24,6 +24,7 @@ import ttftcuts.physis.client.texture.PhysisAbstractTexture;
 import ttftcuts.physis.client.texture.PhysisAtlasSprite;
 import ttftcuts.physis.utils.ColourBrightnessComparator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.ITextureObject;
@@ -34,6 +35,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 
 public class TextureHelper {
 
@@ -88,6 +90,8 @@ public class TextureHelper {
 	}
 	
 	public static Framebuffer stackBuffer; 
+	public static RenderItem renderItem = new RenderItem();
+	public static RenderBlocks renderBlocks = new RenderBlocks();
 	public static BufferedImage getItemStackImage(ItemStack stack) {
 		if (stackBuffer == null) {
 			stackBuffer = new Framebuffer(16,16,true);
@@ -115,15 +119,29 @@ public class TextureHelper {
         GL11.glColor3f(1, 0, 0);
 		
 		// draw image
-		RenderItem render = new RenderItem();
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		render.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, 0, 0);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		
+		//render.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, 0, 0);
+		
+		renderItem.zLevel += 50;
+		try
+        {
+            if (!ForgeHooksClient.renderInventoryItem(renderBlocks, mc.getTextureManager(), stack, true, renderItem.zLevel, (float)0, (float)0))
+            {
+                renderItem.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, 0, 0, false);
+            }
+        } catch(Exception e) {}
+		renderItem.zLevel -= 50;
+		
 		RenderHelper.disableStandardItemLighting();
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 		
@@ -158,7 +176,7 @@ public class TextureHelper {
                 image.setRGB(j1, i1 - l, dataarray[i1 * stackBuffer.framebufferTextureWidth + j1]);
             }
         }
-        
+
 		// send out the image
 		return image;
 	}
@@ -205,6 +223,7 @@ public class TextureHelper {
 		int r = 0;
 		int g = 0;
 		int b = 0;
+		int a = 0;
 		int col;
 		
 		int count = colours.size();
@@ -214,9 +233,10 @@ public class TextureHelper {
 			r += red(col);
 			g += green(col);
 			b += blue(col);
+			a += alpha(col);
 		}
 		
-		return compose(r / count, g / count, b / count, 255);
+		return compose(r / count, g / count, b / count, a / count);
 	}
 	
 	public static int getPerceptualBrightness(int col) {

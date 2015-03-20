@@ -11,6 +11,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
+import ttftcuts.physis.client.render.item.RenderItemAlpha;
 import ttftcuts.physis.client.render.item.RenderSocketable;
 import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;

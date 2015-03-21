@@ -5,24 +5,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.file.IDataCallback;
 import ttftcuts.physis.common.file.PhysisWorldSavedData;
-import ttftcuts.physis.common.network.PhysisPacketHandler;
-import ttftcuts.physis.common.network.packet.PacketStorySeed;
 
 public class StoryEngine {
-	public static final String STORYTAG = "story";
-	
-	/*public static class StorySeedHandler {
-        @SubscribeEvent
-        public void onPlayerLogin(PlayerLoggedInEvent event) {
-        	Physis.logger.info("Logged in: "+event.player.getDisplayName());
-            instance(false).sendDataToPlayer(event.player);
-        }
-	}*/
+	private static final String STORYTAG = "story";
+	private static final String SEEDTAG = "seed";
+	private static final String VARIABLETAG = "vars";
+	private static final String VARNAMETAG = "name";
+	private static final String VARVALTAG = "val";
 	
 	private static IDataCallback dataCallback = new IDataCallback() {
 
@@ -48,8 +42,7 @@ public class StoryEngine {
 	
 	public final boolean client;
 	public long seed;
-	private Random rand;
-	private Map<String, Integer> storyVars = new HashMap<String, Integer>();
+	private Map<String, StoryVariable> storyVars = new HashMap<String, StoryVariable>();
 	
 	public static StoryEngine instance(boolean client) {
 		return client ? clientInstance : serverInstance;
@@ -75,17 +68,61 @@ public class StoryEngine {
 		this.seed = seed;
 		this.client = client;
 		
-		this.rand = new Random(this.seed);
-		
 		this.storyVars.clear();
-		
+
 		if (seed != -1) {
-			for(Entry<String, Integer> entry : registry.entrySet()) {
-				this.storyVars.put(entry.getKey(), rand.nextInt(entry.getValue()));
+			NBTTagCompound data = PhysisWorldSavedData.getWorldTag(STORYTAG);
+			this.loadFromNBT(data);
+			if (!this.client) {
+				this.writeToNBT(data);
+				PhysisWorldSavedData.safeMarkDirty();
 			}
 		}
 		
 		//Physis.logger.info("Starting Story Engine: "+seed);
+	}
+	
+	public void loadFromNBT(NBTTagCompound tag) {
+		this.seed = tag.getLong(SEEDTAG);
+		
+		NBTTagList list = tag.getTagList(VARIABLETAG, 10);
+		for (int i=0; i<list.tagCount(); i++) {
+			NBTTagCompound vartag = list.getCompoundTagAt(i);
+			String name = vartag.getString(VARNAMETAG);
+			if (name != null && registry.containsKey(name)) {
+				int val = vartag.getInteger(VARVALTAG);
+				this.storyVars.put(name, new StoryVariable(name, registry.get(name), val));
+			}
+		}
+		
+		boolean dirty = false;
+		for(Entry<String, Integer> entry : registry.entrySet()) {
+			String name = entry.getKey();
+			int max = entry.getValue();
+			
+			if (!storyVars.containsKey(name)) {
+				this.storyVars.put(name, new StoryVariable(name, max));
+				dirty = true;
+			}
+		}
+		
+		if (dirty && !this.client) {
+			this.writeToNBT(tag);
+			PhysisWorldSavedData.safeMarkDirty();
+		}
+	}
+	
+	public void writeToNBT(NBTTagCompound tag) {
+		tag.setLong(SEEDTAG, this.seed);
+		
+		NBTTagList list = new NBTTagList();
+		for(Entry<String, StoryVariable> entry : storyVars.entrySet()) {
+			NBTTagCompound vartag = new NBTTagCompound();
+			vartag.setString(VARNAMETAG, entry.getKey());
+			vartag.setInteger(VARVALTAG, entry.getValue().value);
+			list.appendTag(vartag);
+		}
+		tag.setTag(VARIABLETAG, list);
 	}
 	
 	public static int get(String variable, boolean client) {
@@ -98,7 +135,7 @@ public class StoryEngine {
 	
 	public int get(String variable) {
 		if (storyVars.containsKey(variable)) {
-			return storyVars.get(variable);
+			return storyVars.get(variable).value;
 		}
 		return -1;
 	}
@@ -119,10 +156,26 @@ public class StoryEngine {
 		}
 	}
 	
-	public void sendDataToPlayer(EntityPlayer player) {
-		if (player instanceof EntityPlayerMP) {
-			Physis.logger.info("Sending story packet to "+player.getDisplayName());
-			PhysisPacketHandler.bus.sendTo(PacketStorySeed.createPacket(this.seed), (EntityPlayerMP)player);
+	//----------------
+	
+	private class StoryVariable {
+		public String name;
+		public int value;
+		public int max;
+		
+		public StoryVariable(String name, int max) {
+			this.name = name;
+			this.max = max;
+			
+			Random rand = new Random(StoryEngine.this.seed ^ this.name.hashCode());
+			
+			this.value = rand.nextInt(this.max);
+		}
+		
+		public StoryVariable(String name, int max, int value) {
+			this.name = name;
+			this.value = value;
+			this.max = max;
 		}
 	}
 }

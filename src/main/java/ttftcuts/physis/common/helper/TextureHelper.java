@@ -220,23 +220,31 @@ public class TextureHelper {
 	}
 	
 	public static int getAverageColour(List<Integer> colours) {
-		int r = 0;
-		int g = 0;
-		int b = 0;
+		double r = 0;
+		double g = 0;
+		double b = 0;
 		int a = 0;
 		int col;
 		
 		int count = colours.size();
+		double ir,ig,ib;
 		
 		for (int i=0; i<count; i++) {
 			col = colours.get(i);
-			r += red(col);
-			g += green(col);
-			b += blue(col);
+			ir = red(col) / 255.0;
+			r += ir*ir;
+			ig = green(col) / 255.0;
+			g += ig*ig;
+			ib = blue(col) / 255.0;
+			b += ib*ib;
 			a += alpha(col);
 		}
 		
-		return compose(r / count, g / count, b / count, a / count);
+		int fr = (int)(Math.sqrt(r / count) * 255.0);
+		int fg = (int)(Math.sqrt(g / count) * 255.0);
+		int fb = (int)(Math.sqrt(b / count) * 255.0);
+		
+		return compose(fr, fg, fb, a / count);
 	}
 	
 	public static int getPerceptualBrightness(int col) {

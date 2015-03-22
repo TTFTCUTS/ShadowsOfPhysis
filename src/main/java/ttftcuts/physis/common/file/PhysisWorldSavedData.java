@@ -146,7 +146,12 @@ public class PhysisWorldSavedData extends WorldSavedData {
 			PhysisPacketHandler.bus.sendTo(PacketWorldData.createPacket(getPlayerData(player), worldData), (EntityPlayerMP)player);
 		}
 	}
-
+	
+	public static void safeSendDataToPlayer(EntityPlayer player) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
+		instance.sendDataToPlayer(player);
+	}
+	
 	// data getting/setting
 	
 	public static void setWorldInt(String name, int value) {

@@ -28,6 +28,7 @@ import ttftcuts.physis.common.network.packet.PacketGuiMessage;
 import ttftcuts.physis.common.network.packet.PacketPlayerUpdate;
 import ttftcuts.physis.common.network.packet.PacketWorldData;
 import ttftcuts.physis.common.network.packet.PacketWorldTime;
+import ttftcuts.physis.common.story.Knowledge;
 import ttftcuts.physis.common.story.PhysisStoryVars;
 import ttftcuts.physis.common.story.StoryEngine;
 import ttftcuts.physis.common.file.PhysisWorldSavedData.WorldDataHandler;
@@ -55,6 +56,7 @@ public class CommonProxy {
 		PhysisAPI.init();
 		
 		PhysisStoryVars.init();
+		Knowledge.init();
 		
     	PhysisItems.init();
     	PhysisBlocks.init();

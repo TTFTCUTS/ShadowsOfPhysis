@@ -16,9 +16,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
 public class LocalizationHelper {
-	public final String titlePrefix = "physis.journal.title.";
-	public final String articlePrefix = "physis.journal.text.";	
-	public final String categoryPrefix = "physis.journal.category.";
+	public final String journalPrefix = "physis.journal.";
+	public final String titlePrefix = journalPrefix +"title.";
+	public final String articlePrefix = journalPrefix +"text.";	
+	public final String categoryPrefix = journalPrefix +"category.";
 	
 	public LocalizationHelper() {
 		

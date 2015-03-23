@@ -27,11 +27,13 @@ public class PageDefs {
 		//Physis.logger.info("Pages");
 		
 		test = new JournalArticle("testitem", Category.ITEM, new JournalPageTitle("testitem", "testitem"))
-			.setStack(new ItemStack(Items.apple));
+			.setStack(new ItemStack(Items.apple))
+			.addRequirement("test", 1);
 		
 		for (int i=0; i<100; i++) {
 			new JournalArticle("testitem"+(i+2), Category.ITEM, new JournalPageTitle("testitem", "testitem"))
-				.setStack(new ItemStack(Blocks.bookshelf));
+			.setStack(new ItemStack(Blocks.bookshelf))
+			.addRequirement("test", 1);
 		}
 		
 		//Physis.logger.info("Index next");

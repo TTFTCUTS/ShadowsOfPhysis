@@ -99,9 +99,10 @@ public class JournalPageSubIndex extends JournalPage {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
-
+		
 		for(int i=0; i<articles.size(); i++) {
 			JournalArticle article = articles.get(i);
+			boolean show = article.canView();
 			
 			int posx = i % articlesPerRow;
 			int posy = (int) Math.floor(i / articlesPerRow);
@@ -110,7 +111,11 @@ public class JournalPageSubIndex extends JournalPage {
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
 			if (mousex >= iconx - shadowborder && mousex < iconx + iconsize + shadowborder && mousey >= icony - shadowborder && mousey < icony + iconsize + shadowborder) {
-				journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
+				if (show) {
+					journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
+				} else {
+					journal.setTooltip("\u00a7k" + Physis.text.translate(Physis.text.titlePrefix + article.title) + "\u00a7r");
+				}
 			}
 			
 			GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -120,34 +125,37 @@ public class JournalPageSubIndex extends JournalPage {
 			journal.mc.renderEngine.bindTexture(GuiJournal.bookTextureRight);
 			
 			journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
+
+			if (!show) {
+				journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
+				journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
+				
+				GL11.glColor4f(0F, 0F, 0F, 1.0F);
+			}
 			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			
 			if (article.iconstack != null) {
-				// render item stack as icon
-				/*RenderItem render = new RenderItem();
-				GL11.glPushMatrix();
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				RenderHelper.enableGUIStandardItemLighting();
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glEnable(GL11.GL_DEPTH_TEST);
-				render.renderItemAndEffectIntoGUI(journal.mc.fontRenderer, journal.mc.getTextureManager(), article.iconstack, iconx, icony);
-				render.renderItemOverlayIntoGUI(journal.mc.fontRenderer, journal.mc.getTextureManager(), article.iconstack, iconx, icony);
-				RenderHelper.disableStandardItemLighting();
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glPopMatrix();*/
-				PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony);
+				
+				PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, show);
 				
 			} else if (article.icontexture != null) {
 				// render texture icon
-				GL11.glColor4f(1F, 1F, 1F, 1F);
 				journal.mc.renderEngine.bindTexture(article.icontexture);
 				journal.drawTexturedModalRect(iconx, icony, 0,0, iconsize, iconsize);
 				
 			} else {
 				// render default icon
 			}
+
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			
+			if (!show) {
+				journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.65f);
+				//journal.drawBGOverlay(0,0,500,500,0.95f);
+			}
+			GL11.glColor4f(1F, 1F, 1F, 1F);
+			
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
 	}
 }

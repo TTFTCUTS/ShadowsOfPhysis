@@ -17,8 +17,8 @@ public class GuiJournal extends GuiScreen {
 
 	public static final int bookWidth = 350;
 	public static final int bookHeight = 240;
-	protected int left;
-	protected int top;
+	public int left;
+	public int top;
 	
 	public static final ResourceLocation bookTextureLeft = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_left.png");
 	public static final ResourceLocation bookTextureRight = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_right.png");
@@ -150,28 +150,62 @@ public class GuiJournal extends GuiScreen {
 		super.keyTyped(par1, par2);
 	}
 	
-	@Override
-	public void drawScreen(int par1, int par2, float par3) {
-		this.tooltip.clear();
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+	public void drawBookBackground() {
 		mc.renderEngine.bindTexture(bookTextureLeft);
 		drawTexturedModalRect(left, top, 0, 0, 256, bookHeight);
 		mc.renderEngine.bindTexture(bookTextureRight);
 		drawTexturedModalRect(left + 256, top, 0, 0, bookWidth - 256, bookHeight);
+	}
+	
+	public void drawBookBackground(int x, int y, int w, int h) {
+		if (x <= 256 && x+w > 0) {
+			// texture 1
+			mc.renderEngine.bindTexture(bookTextureLeft);
+			drawTexturedModalRect(left+x, top+y, x, y, Math.min(256-x, w), Math.min(bookHeight-y, h));
+		}
+		if (x+w > 256 && x <= bookWidth) {
+			// texture 2
+			mc.renderEngine.bindTexture(bookTextureRight);
+			int rx = Math.max(0, x-256);
+			drawTexturedModalRect(left + 256 + rx, top+y, rx, y, bookWidth-256-rx, Math.min(bookHeight-y, h));
+		}
+	}
+	
+	public void drawBGOverlay(int x, int y, int w, int h, float alpha) {
+		GL11.glDepthMask(false);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		this.zLevel += 250.0f;
+		
+		GL11.glColor4f(1F, 1F, 1F, alpha);
+		this.drawBookBackground(x,y,w,h);
+		
+		this.zLevel -= 250.0f;
+		
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthMask(true);
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.tooltip.clear();
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		this.drawBookBackground();
 		
 		if ( pages.size() >= currentPage + 1 ) {
 			// render left page
-			pages.get(currentPage).drawPage(this, this.left + pageXLeft, this.top + pageY, par1, par2);
+			pages.get(currentPage).drawPage(this, this.left + pageXLeft, this.top + pageY, mouseX, mouseY);
 		}
 		if ( pages.size() >= currentPage + 2 ) {
 			// render right page
-			pages.get(currentPage + 1).drawPage(this, this.left + pageXRight, this.top + pageY, par1, par2);
+			pages.get(currentPage + 1).drawPage(this, this.left + pageXRight, this.top + pageY, mouseX, mouseY);
 		}
 		
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		if (tooltip.size() > 0) {
-			this.drawCustomTooltip(par1, par2, tooltip);
+			this.drawCustomTooltip(mouseX, mouseY, tooltip);
 		}
 	}
 	
@@ -197,5 +231,12 @@ public class GuiJournal extends GuiScreen {
 			lines.add(line);
 		}
 		this.drawCustomTooltip(x, y, lines);
+	}
+	
+	public float getZLevel() {
+		return this.zLevel;
+	}
+	public void setZLevel(float z) {
+		this.zLevel = z;
 	}
 }

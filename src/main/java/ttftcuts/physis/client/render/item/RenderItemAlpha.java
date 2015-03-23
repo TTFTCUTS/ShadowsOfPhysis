@@ -3,7 +3,6 @@ package ttftcuts.physis.client.render.item;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
 import ttftcuts.physis.common.helper.TextureHelper;
 
@@ -16,6 +15,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 public class RenderItemAlpha implements IItemRenderer {
 
+	@SuppressWarnings("unused")
 	private RenderItem renderItem = new RenderItem();
 	
 	@Override

@@ -65,25 +65,32 @@ public class PhysisRenderHelper {
 	
 	//private static RenderItem renderItem = new RenderItem();
 	public static void renderItemStack(ItemStack stack, int x, int y) {
-		renderItemStack(stack,x,y,true, true);
+		renderItemStack(stack,x,y,true, true, true);
+	}
+	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay) {
+		renderItemStack(stack,x,y, useCustomRenderers, overlay, true);
 	}
 	
-	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay) {
-		RenderItem render = new RenderItem();
+	private static RenderItem renderItem = new RenderItem();
+	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay, boolean colour) {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		if (!colour) {
+			renderItem.renderWithColor = false;
+		}
 		if (useCustomRenderers) {
-			render.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+			renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		} else {
-			render.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
+			renderItem.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
 		} 
 		if (overlay) {
-			render.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+			renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
 		}
+		renderItem.renderWithColor = true;
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();

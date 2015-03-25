@@ -1,5 +1,8 @@
 package ttftcuts.physis.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -9,9 +12,10 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.gui.RuneFontRenderer;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
-import ttftcuts.physis.client.render.item.RenderItemAlpha;
 import ttftcuts.physis.client.render.item.RenderSocketable;
 import ttftcuts.physis.client.render.tile.RenderTileDigSite;
 import ttftcuts.physis.client.render.tile.RenderTileSocketTable;
@@ -40,6 +44,11 @@ public class ClientProxy extends CommonProxy {
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
 		PhysisIntegration.initStart(event, true);
+		Physis.runeFontRenderer = new RuneFontRenderer();
+		IResourceManager m = Minecraft.getMinecraft().getResourceManager();
+		if (m instanceof IReloadableResourceManager) {
+			((IReloadableResourceManager)m).registerReloadListener(Physis.runeFontRenderer);
+		}
 		
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());

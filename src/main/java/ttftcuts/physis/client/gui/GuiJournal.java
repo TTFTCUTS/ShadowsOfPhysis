@@ -9,6 +9,7 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.*;
 import ttftcuts.physis.client.gui.button.*;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -43,6 +44,7 @@ public class GuiJournal extends GuiScreen {
 	protected JournalArticle article;
 	
 	protected List<String> tooltip = new ArrayList<String>();
+	protected FontRenderer tooltipRenderer;
 	
 	public GuiJournal() {}
 	
@@ -205,12 +207,19 @@ public class GuiJournal extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		if (tooltip.size() > 0) {
-			this.drawCustomTooltip(mouseX, mouseY, tooltip);
+			if (this.tooltipRenderer == null) {
+				this.tooltipRenderer = this.mc.fontRenderer;
+			}
+			this.drawCustomTooltip(mouseX, mouseY, this.tooltipRenderer, tooltip);
+			this.tooltipRenderer = this.mc.fontRenderer;
 		}
 	}
 	
 	public void setTooltip(List<String> lines) {
 		this.tooltip = lines;
+	}
+	public void setTooltipRenderer(FontRenderer renderer) {
+		this.tooltipRenderer = renderer;
 	}
 	
 	public void setTooltip(String... args) {
@@ -221,16 +230,21 @@ public class GuiJournal extends GuiScreen {
 		this.setTooltip(lines);
 	}
 	
-	public void drawCustomTooltip(int x, int y, List<String> lines) {
-		this.drawHoveringText(lines, x, y, mc.fontRenderer);
+	public void drawCustomTooltip(int x, int y, FontRenderer renderer, List<String> lines) {
+		this.drawHoveringText(lines, x, y, renderer);
 	}
-	
+	public void drawCustomTooltip(int x, int y, List<String> lines) {
+		this.drawCustomTooltip(x, y, mc.fontRenderer, lines);
+	}
 	public void drawCustomTooltip(int x, int y, String... args) {
+		this.drawCustomTooltip(x, y, mc.fontRenderer, args);
+	}
+	public void drawCustomTooltip(int x, int y, FontRenderer renderer, String... args) {
 		List<String> lines = new ArrayList<String>();
 		for(String line:args) {
 			lines.add(line);
 		}
-		this.drawCustomTooltip(x, y, lines);
+		this.drawCustomTooltip(x, y, renderer, lines);
 	}
 	
 	public float getZLevel() {

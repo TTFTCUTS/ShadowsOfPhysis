@@ -111,10 +111,9 @@ public class JournalPageSubIndex extends JournalPage {
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
 			if (mousex >= iconx - shadowborder && mousex < iconx + iconsize + shadowborder && mousey >= icony - shadowborder && mousey < icony + iconsize + shadowborder) {
-				if (show) {
-					journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
-				} else {
-					journal.setTooltip("\u00a7k" + Physis.text.translate(Physis.text.titlePrefix + article.title) + "\u00a7r");
+				journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
+				if (!show) {
+					journal.setTooltipRenderer(Physis.runeFontRenderer);
 				}
 			}
 			

@@ -2,6 +2,7 @@ package ttftcuts.physis.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -21,8 +22,11 @@ public class GuiJournal extends GuiScreen {
 	public int left;
 	public int top;
 	
-	public static final ResourceLocation bookTextureLeft = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_left.png");
-	public static final ResourceLocation bookTextureRight = new ResourceLocation(Physis.MOD_ID+":textures/gui/journal_right.png");
+	public static final ResourceLocation bookTextureLeft = new ResourceLocation(Physis.MOD_ID,"textures/gui/journal_left.png");
+	public static final ResourceLocation bookTextureRight = new ResourceLocation(Physis.MOD_ID,"textures/gui/journal_right.png");
+	public static final ResourceLocation bookOverlayTextureLeft = new ResourceLocation(Physis.MOD_ID,"textures/gui/journal_overlay_left.png");
+	public static final ResourceLocation bookOverlayTextureRight = new ResourceLocation(Physis.MOD_ID,"textures/gui/journal_overlay_right.png");
+	public static final ResourceLocation encryptionTexture = new ResourceLocation(Physis.MOD_ID,"textures/gui/encryption.png");
 	
 	public static final int pageWidth = 140;
 	public static final int pageHeight = 190;
@@ -33,6 +37,9 @@ public class GuiJournal extends GuiScreen {
 	
 	public static final int bIdOffsetLeft = 100;
 	public static final int bIdOffsetRight = 200;
+	
+	public static final float bgOverlayZ = 0f;//100.0f;
+	public static final float pageMaskZ = 5.0f;
 	
 	public List<JournalPage> pages = new ArrayList<JournalPage>();
 	public int currentPage = 0;
@@ -177,23 +184,127 @@ public class GuiJournal extends GuiScreen {
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDepthFunc(GL11.GL_GREATER);
 		
-		this.zLevel += 250.0f;
+		this.zLevel += bgOverlayZ;
 		
 		GL11.glColor4f(1F, 1F, 1F, alpha);
 		this.drawBookBackground(x,y,w,h);
 		
-		this.zLevel -= 250.0f;
+		this.zLevel -= bgOverlayZ;
 		
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDepthMask(true);
+	}
+	
+	public void drawPageSymbolOverlay(int mouseX, int mouseY, float partialTicks) {
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		this.zLevel += pageMaskZ;
+		JournalPage page;
+		int seed = article.hashCode();
+		boolean view = true;
+		
+		if ( pages.size() >= currentPage + 1 ) {
+			page = pages.get(currentPage);
+			seed = page.hashCode();
+			view = page.canView();
+		}
+		// render left page
+		mc.renderEngine.bindTexture(bookOverlayTextureLeft);
+		GL11.glColorMask(false, false, false, false);
+		GL11.glDepthMask(true);
+		
+		drawTexturedModalRect(left, top, 0, 0, 256, bookHeight);
+		
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_EQUAL);
+		GL11.glColorMask(true, true, true, true);
+		
+		this.drawEncryption(left, top, 185, 256, 25, seed, view);
+		
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		// end left page
+
+		seed = article.hashCode() + 1;
+		view = true;
+		
+		if ( pages.size() >= currentPage + 2 ) {
+			page = pages.get(currentPage+1);
+			seed = page.hashCode();
+			view = page.canView();
+		}
+		// render right page
+		this.zLevel += 0.1f;
+
+		mc.renderEngine.bindTexture(bookOverlayTextureRight);
+		GL11.glColorMask(false, false, false, false);
+		GL11.glDepthMask(true);
+		
+		drawTexturedModalRect(left+ 165, top, 0, 0, 256, bookHeight);
+		
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_EQUAL);
+		GL11.glColorMask(true, true, true, true);
+
+		this.drawEncryption(left+165, top, 185, 256, 25, seed, view);
+		
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+
+		this.zLevel -= 0.1f;
+		// end right page
+		
+		this.zLevel -= pageMaskZ;
+	}
+	
+	public void drawEncryption(int x, int y, int w, int h, int gridsize, int seed, boolean view) {
+		Random rand = new Random(seed);
+		int xsteps = w/gridsize;
+		int ysteps = h/gridsize;
+		
+		int ox = (w - (xsteps*gridsize))/2;
+		int oy = (h - (ysteps*gridsize))/2;
+		
+		mc.renderEngine.bindTexture(encryptionTexture);
+		GL11.glColor4f(1f, 1f, 1f, view ? 0.03f : 0.125f);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		
+		for (int iy=0; iy<ysteps; iy++) {
+			for (int ix=0; ix<xsteps; ix++) {
+				EncryptionSymbol symbol = EncryptionSymbol.getRandomSymbol(rand);
+				
+				int posx = ox + x + ix * gridsize;
+				int posy = oy + y + iy * gridsize;
+				
+				posx += rand.nextInt(gridsize/2) - gridsize/4;
+				posy += rand.nextInt(gridsize/2) - gridsize/4;
+				
+				GL11.glPushMatrix();
+				
+				GL11.glTranslatef(posx, posy, 0);
+				GL11.glRotatef(90 * rand.nextInt(4), 0, 0, 1);
+				
+				//drawTexturedModalRect(posx, posy, symbol.x, symbol.y, symbol.width, symbol.height);
+				drawTexturedModalRect(-symbol.width/2, -symbol.height/2, symbol.x, symbol.y, symbol.width, symbol.height);
+				
+				GL11.glPopMatrix();
+			}
+		}
+		
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(1f, 1f, 1f, 1f);
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.tooltip.clear();
 		GL11.glColor4f(1F, 1F, 1F, 1F);
+		this.zLevel -= 15f;
 		this.drawBookBackground();
+		this.drawPageSymbolOverlay(mouseX, mouseY, partialTicks);
+		this.zLevel += 15f;
 		
 		if ( pages.size() >= currentPage + 1 ) {
 			// render left page
@@ -205,6 +316,7 @@ public class GuiJournal extends GuiScreen {
 		}
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		
 		
 		if (tooltip.size() > 0) {
 			if (this.tooltipRenderer == null) {

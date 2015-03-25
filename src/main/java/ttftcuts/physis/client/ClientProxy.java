@@ -14,6 +14,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.RuneFontRenderer;
+import ttftcuts.physis.client.gui.journal.EncryptionSymbol;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
 import ttftcuts.physis.client.render.item.RenderSocketable;
@@ -49,6 +50,7 @@ public class ClientProxy extends CommonProxy {
 		if (m instanceof IReloadableResourceManager) {
 			((IReloadableResourceManager)m).registerReloadListener(Physis.runeFontRenderer);
 		}
+		EncryptionSymbol.init();
 		
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new TextureMapHandler());

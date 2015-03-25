@@ -99,6 +99,8 @@ public class JournalPageSubIndex extends JournalPage {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
+		float jz = journal.getZLevel();
+		journal.setZLevel(jz+10);
 		
 		for(int i=0; i<articles.size(); i++) {
 			JournalArticle article = articles.get(i);
@@ -126,9 +128,6 @@ public class JournalPageSubIndex extends JournalPage {
 			journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
 
 			if (!show) {
-				journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
-				journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
-				
 				GL11.glColor4f(0F, 0F, 0F, 1.0F);
 			}
 			GL11.glDisable(GL11.GL_BLEND);
@@ -149,12 +148,14 @@ public class JournalPageSubIndex extends JournalPage {
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			
 			if (!show) {
-				journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.65f);
+				journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.55f);
 				//journal.drawBGOverlay(0,0,500,500,0.95f);
 			}
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
+		
+		journal.setZLevel(jz);
 	}
 }

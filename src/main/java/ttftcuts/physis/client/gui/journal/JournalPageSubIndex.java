@@ -56,7 +56,6 @@ public class JournalPageSubIndex extends JournalPage {
 				public int compare(JournalArticle o1, JournalArticle o2) {
 					String t1 = o1.title;
 					String t2 = o2.title;
-					//return t1.compareTo(t2);
 					return comp.compare(t1, t2);
 				}
 			});
@@ -90,7 +89,12 @@ public class JournalPageSubIndex extends JournalPage {
 			int iconx = x + iconsleft + posx * (iconspacing + iconsize);
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
-			buttons.add(new GuiButtonInvisible(id+i, iconx - 2, icony - 2, iconsize + 4, iconsize + 4));
+			GuiButton button = new GuiButtonInvisible(id+i, iconx - 2, icony - 2, iconsize + 4, iconsize + 4);
+			if (!articles.get(i).canView()) {
+				button.enabled = false;
+			}
+			
+			buttons.add(button);
 		}
 		
 		return buttons;
@@ -113,7 +117,7 @@ public class JournalPageSubIndex extends JournalPage {
 			int icony = y + iconstop + posy * (iconspacing + iconsize);
 			
 			if (mousex >= iconx - shadowborder && mousex < iconx + iconsize + shadowborder && mousey >= icony - shadowborder && mousey < icony + iconsize + shadowborder) {
-				journal.setTooltip(Physis.text.translate(Physis.text.titlePrefix + article.title));
+				journal.setTooltip(article.getTranslatedName());
 				if (!show) {
 					journal.setTooltipRenderer(Physis.runeFontRenderer);
 				}
@@ -133,14 +137,12 @@ public class JournalPageSubIndex extends JournalPage {
 			GL11.glDisable(GL11.GL_BLEND);
 			
 			if (article.iconstack != null) {
-				
+				// render stack
 				PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, show);
-				
 			} else if (article.icontexture != null) {
 				// render texture icon
 				journal.mc.renderEngine.bindTexture(article.icontexture);
 				journal.drawTexturedModalRect(iconx, icony, 0,0, iconsize, iconsize);
-				
 			} else {
 				// render default icon
 			}
@@ -149,7 +151,6 @@ public class JournalPageSubIndex extends JournalPage {
 			
 			if (!show) {
 				journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.55f);
-				//journal.drawBGOverlay(0,0,500,500,0.95f);
 			}
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			

@@ -15,6 +15,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.RuneFontRenderer;
 import ttftcuts.physis.client.gui.journal.EncryptionSymbol;
+import ttftcuts.physis.client.gui.journal.JournalArticle;
 import ttftcuts.physis.client.render.RenderDigSite;
 import ttftcuts.physis.client.render.RenderSocketTable;
 import ttftcuts.physis.client.render.item.RenderSocketable;
@@ -89,5 +90,10 @@ public class ClientProxy extends CommonProxy {
 		super.loadFinished(event);
 		
 		PhysisIntegration.loadFinished(event, true);
+	}
+	
+	@Override
+	public void doArticlePopup(JournalArticle article) {
+		ClientTickHandler.setArticlePopup(article);
 	}
 }

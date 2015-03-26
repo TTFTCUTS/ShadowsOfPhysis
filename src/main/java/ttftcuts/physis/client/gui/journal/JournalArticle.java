@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.PageDefs.Category;
 import ttftcuts.physis.common.story.Knowledge;
 
@@ -62,5 +63,9 @@ public class JournalArticle {
 		}
 		
 		return true;
+	}
+	
+	public String getTranslatedName() {
+		return Physis.text.translate(Physis.text.titlePrefix + this.title);
 	}
 }

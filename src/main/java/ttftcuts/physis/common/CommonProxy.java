@@ -8,6 +8,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.api.PhysisAPI;
+import ttftcuts.physis.client.gui.journal.JournalArticle;
 import ttftcuts.physis.client.gui.journal.PageDefs;
 import ttftcuts.physis.common.artifact.LootSystem;
 import ttftcuts.physis.common.artifact.PhysisArtifacts;
@@ -146,5 +147,9 @@ public class CommonProxy {
 		PhysisPacketHandler.registerPacketHandler(new PacketWorldData(), 3);
 		
 		PhysisPacketHandler.init();
+	}
+	
+	public void doArticlePopup(JournalArticle article) {
+		
 	}
 }

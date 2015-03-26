@@ -2,6 +2,7 @@ package ttftcuts.physis.common.story;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -10,7 +11,6 @@ import ttftcuts.physis.common.file.PhysisWorldSavedData;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-
 
 public class Knowledge {
 	public static void init() {
@@ -44,7 +44,6 @@ public class Knowledge {
 		int current = get(player, name);
 		
 		if (clamped != current) {
-		
 			NBTTagCompound tag = PhysisWorldSavedData.getPlayerTag(player, KNOWLEDGETAG);
 			tag.setInteger(name, clamped);
 			PhysisWorldSavedData.safeMarkDirty();
@@ -60,5 +59,17 @@ public class Knowledge {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return false; }
 		
 		return set(player, name, get(player, name) +delta);
+	}
+	
+	public static void giveAll(EntityPlayer player) {
+		for (Entry<String, Integer> entry : registry.entrySet()) {
+			set(player, entry.getKey(), entry.getValue());
+		}
+	}
+	
+	public static void removeAll(EntityPlayer player) {
+		for (Entry<String, Integer> entry : registry.entrySet()) {
+			set(player, entry.getKey(), 0);
+		}
 	}
 }

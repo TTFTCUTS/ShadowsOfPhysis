@@ -1,5 +1,12 @@
 package ttftcuts.physis.common.network.packet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.gui.journal.JournalArticle;
+import ttftcuts.physis.client.gui.journal.PageDefs;
+import ttftcuts.physis.client.gui.journal.PageDefs.Category;
 import ttftcuts.physis.common.file.PhysisWorldSavedData;
 import ttftcuts.physis.common.network.PacketHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -18,9 +25,25 @@ public class PacketWorldData extends PacketHandler {
 			NBTTagCompound playerdata = tag.getCompoundTag("p");
 			NBTTagCompound worlddata = tag.getCompoundTag("w");
 			
+			List<JournalArticle> locked = new ArrayList<JournalArticle>();
+			for(Category cat : PageDefs.articleMap.keySet()) {
+				for(JournalArticle article : PageDefs.articleMap.get(cat)) {
+					if (!article.canView()) {
+						locked.add(article);
+					}
+				}
+			}
+			
 			PhysisWorldSavedData.clientPlayerData = playerdata;
 			PhysisWorldSavedData.clientWorldData = worlddata;
 			PhysisWorldSavedData.doCallbacksPost();
+			
+			for (JournalArticle article : locked) {
+				if (article.canView()) {
+					Physis.proxy.doArticlePopup(article);
+					//Physis.logger.info("Unlocked article: "+article.getTranslatedName());
+				}
+			}
 		}
 	}
 

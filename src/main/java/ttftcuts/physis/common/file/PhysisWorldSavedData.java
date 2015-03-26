@@ -201,6 +201,9 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	public static NBTTagCompound getPlayerTag(EntityPlayer player, String name) {
 		NBTTagCompound p = getPlayerData(player);
 		if (p != null) {
+			if (!p.hasKey(name)) {
+				p.setTag(name, new NBTTagCompound());
+			}
 			return p.getCompoundTag(name);
 		}
 		return null;

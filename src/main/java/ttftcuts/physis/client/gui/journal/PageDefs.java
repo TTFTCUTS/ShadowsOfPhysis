@@ -32,8 +32,8 @@ public class PageDefs {
 		
 		for (int i=0; i<100; i++) {
 			new JournalArticle("testitem"+(i+2), Category.ITEM, new JournalPageTitle("testitem", "testitem"))
-			.setStack(new ItemStack(Blocks.bookshelf))
-			.addRequirement("test", 1);
+			.setStack(new ItemStack(Blocks.bookshelf));
+			//.addRequirement("test", 1);
 		}
 		
 		//Physis.logger.info("Index next");

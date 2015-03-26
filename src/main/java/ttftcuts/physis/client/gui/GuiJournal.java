@@ -46,6 +46,7 @@ public class GuiJournal extends GuiScreen {
 	
 	protected GuiButtonJournal buttonForward;
 	protected GuiButtonJournal buttonBack;
+	protected GuiButtonJournal buttonReturn;
 	
 	protected boolean isIndex = false;
 	protected JournalArticle article;
@@ -96,6 +97,14 @@ public class GuiJournal extends GuiScreen {
 			}
 		}
 	
+		if (button.id == 2) {
+			if (this.article != null && this.article.category != null) {
+				mc.displayGuiScreen(new GuiJournal(this.article.category.sectionMenu));
+			} else {
+				mc.displayGuiScreen(new GuiJournal(PageDefs.index));
+			}
+		}
+		
 		if (button.id >= bIdOffsetLeft) {
 			if (button.id >= bIdOffsetRight) {
 				pages.get(currentPage+1).actionPerformed(this, bIdOffsetRight, button);
@@ -115,14 +124,22 @@ public class GuiJournal extends GuiScreen {
 		this.buttonList.clear();
 		
 		buttonForward = new GuiButtonJournal(0, left + bookWidth - 35, top + 205, 20,13, 350, 13);
+		buttonForward.setColours(0xFF342C0E, 0xFF64551b);
 		this.buttonList.add(buttonForward);
 		
 		buttonBack = new GuiButtonJournal(1, left + 15, top + 205, 20,13, 350, 0);
+		buttonBack.setColours(0xFF342C0E, 0xFF64551b);
 		this.buttonList.add(buttonBack);
+		
+		buttonReturn = new GuiButtonJournal(2, left-12, top+105, 12,26, 115,0);
+		buttonReturn.setColours(0xFFAF8F22, 0xFFFFBB00);
+		this.buttonList.add(buttonReturn);
 		
 		buttonBack.enabled = buttonBack.visible = !(currentPage == 0 || pages.size() <= 2);
 		
 		buttonForward.enabled = buttonForward.visible = !(currentPage >= pages.size()-2 || pages.size() <= 2);
+		
+		buttonReturn.enabled = buttonReturn.visible = this.article != PageDefs.index;
 		
 		if ( pages.size() >= currentPage + 1 ) {
 			addPageButtons(currentPage, bIdOffsetLeft, pageXLeft);

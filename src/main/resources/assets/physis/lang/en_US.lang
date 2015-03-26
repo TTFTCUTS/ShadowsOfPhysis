@@ -4,6 +4,8 @@ itemGroup.physis_digsite=Shadows Of Physis Dig Sites
 
 item.physis:journal.name=Research Journal [WIP]
 
+physis.journal.newinfo=New Information:
+
 physis.journal.category.item=Items
 physis.journal.title.item=Items
 physis.journal.text.item=Some stuff about items
@@ -39,6 +41,9 @@ item.physis:material.regex=(^\w*)(?=\sPick(axe)?)
 item.physis:trowel.name=Trowel
 item.physis:trowel.tooltip.creative=@4Creative only@7\nCompletes dig sites in a single click.
 item.physis:trowel.creative=Creative
+
+item.physis:knowledgetome.name=Tome of Knowledge
+item.physis:knowledgetome.tooltip=Right click to give all knowledge topics, sneak-right click to remove all knowledge topics.
 
 item.physis:addsocket.name=Add Socket [Not Final]
 item.physis:addsocket.tooltip=Craft this with any eligible item to add a socket, up to a limit of two.\nHold in your hand to highlight valid items.\n\n@oThis item is consumed in the process.

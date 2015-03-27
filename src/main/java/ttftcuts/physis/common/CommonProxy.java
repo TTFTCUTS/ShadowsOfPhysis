@@ -22,6 +22,7 @@ import ttftcuts.physis.common.handler.ChestGenHandler;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ItemDestructionHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
+import ttftcuts.physis.common.helper.recipe.RecipeHelper;
 import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import ttftcuts.physis.common.network.PhysisPacketHandler;
@@ -73,7 +74,7 @@ public class CommonProxy {
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
     	
-    	PhysisToolMaterial.initDefaultTranslators();
+    	RecipeHelper.initDefaultTranslators();
     	
     	PhysisWorldGen.init();
     	
@@ -105,6 +106,7 @@ public class CommonProxy {
 	}
 	
 	public void loadFinished(FMLLoadCompleteEvent event) {
+		//RecipeHelper.parseRecipes();
 		PhysisToolMaterial.buildMaterials();
 		ItemTrowel.buildRecipes();
 		
@@ -116,6 +118,7 @@ public class CommonProxy {
 	}
 	
 	public void serverStarting(FMLServerStartingEvent event) { 
+		RecipeHelper.parseRecipes();
 		Physis.oooBuilder.start();
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {

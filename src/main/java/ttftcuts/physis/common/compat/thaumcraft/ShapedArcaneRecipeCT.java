@@ -6,7 +6,8 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
-import ttftcuts.physis.common.item.material.IRecipeComponentTranslator;
+import ttftcuts.physis.client.gui.journal.JournalPage;
+import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
 import net.minecraft.item.ItemStack;
 
@@ -50,6 +51,11 @@ public class ShapedArcaneRecipeCT implements IRecipeComponentTranslator {
 		}
 		
 		ThaumcraftApi.addArcaneCraftingRecipe(r.research, output, aspectList, inputs);
+	}
+
+	@Override
+	public JournalPage getJournalRecipePage(Object recipe) {
+		return null;
 	}
 
 }

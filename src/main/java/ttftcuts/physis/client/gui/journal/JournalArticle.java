@@ -34,6 +34,10 @@ public class JournalArticle {
 		}
 	}
 	
+	public List<JournalPage> getPages() {
+		return this.pages;
+	}
+	
 	public JournalArticle setStack(ItemStack stack) {
 		this.iconstack = stack;
 		this.icontexture = null;

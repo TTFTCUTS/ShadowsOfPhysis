@@ -1,7 +1,9 @@
-package ttftcuts.physis.common.item.material;
+package ttftcuts.physis.common.helper.recipe;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.gui.journal.JournalPage;
+import ttftcuts.physis.client.gui.journal.JournalPageCraftingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -19,8 +21,6 @@ public class ShapedRecipeCT implements IRecipeComponentTranslator {
 		if (!(recipe instanceof ShapedRecipes)) { return null; }
 		ShapedRecipes r = (ShapedRecipes)recipe;
 		
-		Physis.logger.info("Shaped Recipe - " + r.getRecipeOutput().getDisplayName() +": "+r.recipeItems.length +", "+r.recipeItems.toString());
-		
 		return r.recipeItems;
 	}
 
@@ -34,4 +34,11 @@ public class ShapedRecipeCT implements IRecipeComponentTranslator {
 		GameRegistry.addRecipe(new ShapedOreRecipe(output, inputs));
 	}
 
+	@Override
+	public JournalPage getJournalRecipePage(Object recipe) {
+		if (!(recipe instanceof ShapedRecipes)) { return null; }
+		ShapedRecipes r = (ShapedRecipes)recipe;
+		
+		return new JournalPageCraftingRecipe(this.getRecipeOutput(r), r);
+	}
 }

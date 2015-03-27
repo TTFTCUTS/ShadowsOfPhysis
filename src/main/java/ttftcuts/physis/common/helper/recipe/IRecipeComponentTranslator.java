@@ -1,5 +1,6 @@
-package ttftcuts.physis.common.item.material;
+package ttftcuts.physis.common.helper.recipe;
 
+import ttftcuts.physis.client.gui.journal.JournalPage;
 import net.minecraft.item.ItemStack;
 
 public interface IRecipeComponentTranslator {
@@ -10,4 +11,6 @@ public interface IRecipeComponentTranslator {
 	public boolean hasOreDictStick();
 	
 	public void registerRecipe(Object sourceRecipe, ItemStack output, Object... inputs);
+	
+	public JournalPage getJournalRecipePage(Object recipe);
 }

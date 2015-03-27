@@ -26,13 +26,22 @@ public class PageDefs {
 		
 		//Physis.logger.info("Pages");
 		
-		test = new JournalArticle("testitem", Category.ITEM, new JournalPageTitle("testitem", "testitem"))
-			.setStack(new ItemStack(Items.apple))
+		/*test = new JournalArticle("testitem", Category.ITEM, 
+			new JournalPageTitle("testitem", "testitem"),
+			new JournalPageCraftingRecipe(new ItemStack(Items.iron_pickaxe))
+		).setStack(new ItemStack(Items.apple))
+			.addRequirement("test", 1);*/
+		
+		test = new JournalArticleTrowels("testitem", Category.ITEM, 
+			new JournalPageTitle("testitem", "testitem"),
+			new JournalPageCraftingRecipe(new ItemStack(Items.iron_pickaxe))
+		).setStack(new ItemStack(Items.apple))
 			.addRequirement("test", 1);
 		
 		for (int i=0; i<100; i++) {
-			new JournalArticle("testitem"+(i+2), Category.ITEM, new JournalPageTitle("testitem", "testitem"))
-			.setStack(new ItemStack(Blocks.bookshelf));
+			new JournalArticle("testitem"+(i+2), Category.ITEM, 
+				new JournalPageTitle("testitem", "testitem")
+			).setStack(new ItemStack(Blocks.bookshelf));
 			//.addRequirement("test", 1);
 		}
 		

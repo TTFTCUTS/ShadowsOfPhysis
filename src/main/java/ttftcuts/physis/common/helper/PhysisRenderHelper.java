@@ -2,16 +2,23 @@ package ttftcuts.physis.common.helper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.helper.recipe.ItemStackWrapper;
+
 public class PhysisRenderHelper {
+	public static final ResourceLocation largeGlyphs = new ResourceLocation(Physis.MOD_ID, "textures/gui/glyphs_large.png");
+	public static final int largeGlyphCount = 32;
 	private static Minecraft mc = Minecraft.getMinecraft();
 	
 	public static void renderStandardBlockAsItem(Block block, int metadata, RenderBlocks renderer) {
@@ -65,30 +72,36 @@ public class PhysisRenderHelper {
 	
 	//private static RenderItem renderItem = new RenderItem();
 	public static void renderItemStack(ItemStack stack, int x, int y) {
-		renderItemStack(stack,x,y,true, true, true);
+		renderItemStack(stack,x,y,true, true, false);
 	}
 	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay) {
-		renderItemStack(stack,x,y, useCustomRenderers, overlay, true);
+		renderItemStack(stack,x,y, useCustomRenderers, overlay, false);
 	}
 	
 	private static RenderItem renderItem = new RenderItem();
-	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay, boolean colour) {
+	public static void renderItemStack(ItemStack stack, int x, int y, boolean useCustomRenderers, boolean overlay, boolean encrypt) {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		if (!colour) {
-			renderItem.renderWithColor = false;
-		}
-		if (useCustomRenderers) {
-			renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+		FontRenderer font = encrypt ? Physis.runeFontRenderer : mc.fontRenderer;
+		if (encrypt) {
+			int glyph = stack.hashCode() % largeGlyphCount;
+			int gx = glyph % 8;
+			int gy = (int)Math.floor(glyph / 8);
+			mc.renderEngine.bindTexture(largeGlyphs);
+			drawTexturedModalRect(x,y, renderItem.zLevel+50, gx*16, gy*16, 16, 16, 0.5f);
 		} else {
-			renderItem.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
-		} 
+			if (useCustomRenderers) {
+				renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+			} else {
+				renderItem.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y, true);
+			} 
+		}
 		if (overlay) {
-			renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, x, y);
+			renderItem.renderItemOverlayIntoGUI(font, mc.getTextureManager(), stack, x, y);
 		}
 		renderItem.renderWithColor = true;
 		RenderHelper.disableStandardItemLighting();
@@ -96,10 +109,11 @@ public class PhysisRenderHelper {
 		GL11.glPopMatrix();
 	}
 	
-	public static void drawColouredTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, int colour)
+	public static void drawColouredTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, int colour, float scale)
     {
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
+		if (scale <= 0f) { return; }
+        float f = 0.00390625F / scale;
+        float f1 = 0.00390625F / scale;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.setColorOpaque_I(colour);
@@ -108,5 +122,17 @@ public class PhysisRenderHelper {
         tessellator.addVertexWithUV((double)(x + w), (double)(y + 0), (double)z, (double)((float)(u + w) * f), (double)((float)(v + 0) * f1));
         tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)z, (double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
         tessellator.draw();
+    }
+	public static void drawColouredTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, int colour) {
+		drawColouredTexturedModalRect(x,y,z,u,v,w,h,colour, 1f);
+	}
+	
+	public static void drawTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, float scale)
+    {
+		drawColouredTexturedModalRect(x,y,z,u,v,w,h,0xFFFFFF, scale);
+    }
+	public static void drawTexturedModalRect(int x, int y, float z, int u, int v, int w, int h)
+    {
+		drawColouredTexturedModalRect(x,y,z,u,v,w,h,0xFFFFFF, 1f);
     }
 }

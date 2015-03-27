@@ -71,6 +71,7 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 			PhysisToolMaterial mat = entry.getValue();
 			ItemStack stack = new ItemStack(this, 1, mat.id);
 			PhysisToolMaterial.writeMaterialToStack(mat, stack);
+			stack.stackTagCompound.setInteger(HANDLETAG, 7);
 
 			trowels.add(stack);
 		}

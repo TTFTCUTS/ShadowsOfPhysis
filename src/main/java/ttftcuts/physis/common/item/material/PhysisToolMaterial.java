@@ -19,16 +19,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.render.item.RenderSocketed;
 import ttftcuts.physis.common.helper.TextureHelper;
+import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
+import ttftcuts.physis.common.helper.recipe.RecipeHelper;
+import ttftcuts.physis.common.helper.recipe.RecipeListGetter;
 import ttftcuts.physis.utils.ModFinder;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTool;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class PhysisToolMaterial {
 	
@@ -40,8 +40,6 @@ public class PhysisToolMaterial {
 	
 	public static Map<String,PhysisToolMaterial> materials;
 	private static List<PhysisToolMaterial> materialsById;
-	public static List<RecipeListGetter> recipeLists = new ArrayList<RecipeListGetter>();
-	public static RecipeListGetter defaultRecipeList;
 	
 	public static final int TINTS = 10; 
 	private static int[] defaultTints;
@@ -162,12 +160,12 @@ public class PhysisToolMaterial {
 		}
 		
 		//Physis.logger.info("Cross-checking materials");
-		for (RecipeListGetter list : recipeLists) {
+		for (RecipeListGetter list : RecipeHelper.recipeLists) {
 			Iterator<?> iter = list.getIterator();
 			
 			while(iter.hasNext()) {
 				Object recipe = iter.next();
-				IRecipeComponentTranslator translator = getTranslatorForRecipe(list, recipe);
+				IRecipeComponentTranslator translator = RecipeHelper.getTranslatorForRecipe(list, recipe);
 				
 				if (translator == null || translator.getRecipeOutput(recipe) == null || translator.getRecipeOutput(recipe).getItem() == null) {
 					continue;
@@ -263,41 +261,8 @@ public class PhysisToolMaterial {
 		//Physis.logger.info("Finished tool material list");
 	}
 	
-	public static void registerRecipeListGetter(RecipeListGetter list) {
-		recipeLists.add(list);
-	}
-	
-	public static IRecipeComponentTranslator getTranslatorForRecipe(Object recipe) {
-		for(RecipeListGetter list : recipeLists) {
-			IRecipeComponentTranslator t = getTranslatorForRecipe(list, recipe);
-			if (t != null) {
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	public static IRecipeComponentTranslator getTranslatorForRecipe(RecipeListGetter list, Object recipe) {
-		for(Entry<Class<?>, IRecipeComponentTranslator> entry : list.translators.entrySet()) {
-			if (entry.getKey().isInstance(recipe)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
-	
 	public static IRecipeComponentTranslator getTranslatorForMaterial(PhysisToolMaterial mat) {
-		return getTranslatorForRecipe(mat.sourceRecipe);
-	}
-	
-	public static void addRecipeComponentTranslator(Class<?> clazz, IRecipeComponentTranslator trans) {
-		addRecipeComponentTranslator(defaultRecipeList, clazz, trans);
-	}
-	
-	public static void addRecipeComponentTranslator(RecipeListGetter list, Class<?> clazz, IRecipeComponentTranslator trans) {
-		if (!list.translators.containsKey(clazz)) {
-			list.translators.put(clazz, trans);
-		}
+		return RecipeHelper.getTranslatorForRecipe(mat.sourceRecipe);
 	}
 	
 	public void registerRecipe(ItemStack output, Object... inputs) {
@@ -487,19 +452,6 @@ public class PhysisToolMaterial {
 	
 	public static PhysisToolMaterial getRandomMaterial(Random rand) {
 		return materialsById.get(rand.nextInt(materialsById.size()));
-	}
-	
-	public static void initDefaultTranslators() {
-		defaultRecipeList = new RecipeListGetter() {
-			@Override
-			public Iterator<?> getIterator() {
-				return CraftingManager.getInstance().getRecipeList().iterator();
-			}
-		};
-		registerRecipeListGetter(defaultRecipeList);
-		
-		PhysisToolMaterial.addRecipeComponentTranslator(ShapedRecipes.class, new ShapedRecipeCT());
-		PhysisToolMaterial.addRecipeComponentTranslator(ShapedOreRecipe.class, new ShapedOreRecipeCT());
 	}
 	
 	private class TintInfo implements Comparable<TintInfo> {

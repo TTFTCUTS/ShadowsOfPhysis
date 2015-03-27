@@ -131,25 +131,30 @@ public class JournalPageSubIndex extends JournalPage {
 			
 			journal.drawTexturedModalRect(iconx-shadowborder, icony-shadowborder, 350,50, iconsize+shadowborder*2, iconsize+shadowborder*2);
 
-			if (!show) {
-				GL11.glColor4f(0F, 0F, 0F, 1.0F);
-			}
 			GL11.glDisable(GL11.GL_BLEND);
 			
-			if (article.iconstack != null) {
-				// render stack
-				PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, show);
-			} else if (article.icontexture != null) {
-				// render texture icon
-				journal.mc.renderEngine.bindTexture(article.icontexture);
-				journal.drawTexturedModalRect(iconx, icony, 0,0, iconsize, iconsize);
+			if (show) {
+				if (article.iconstack != null) {
+					// render stack
+					PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, false);
+				} else if (article.icontexture != null) {
+					// render texture icon
+					journal.mc.renderEngine.bindTexture(article.icontexture);
+					journal.drawTexturedModalRect(iconx, icony, 0,0, iconsize, iconsize);
+				} else {
+					// render default icon
+				}
 			} else {
-				// render default icon
+				if (article.iconstack != null) {
+					PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, true);
+				}
 			}
 
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			
 			if (!show) {
+				//journal.silhouette(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, false);
+				//journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.55f, false);
 				journal.drawBGOverlay(iconx-shadowborder-journal.left, icony-shadowborder - journal.top, iconsize+shadowborder*2, iconsize+shadowborder*2, 0.55f);
 			}
 			GL11.glColor4f(1F, 1F, 1F, 1F);

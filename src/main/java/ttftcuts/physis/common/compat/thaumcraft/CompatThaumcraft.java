@@ -6,8 +6,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import ttftcuts.physis.common.compat.CompatModule;
-import ttftcuts.physis.common.item.material.RecipeListGetter;
-import ttftcuts.physis.common.item.material.PhysisToolMaterial;
+import ttftcuts.physis.common.helper.recipe.RecipeHelper;
+import ttftcuts.physis.common.helper.recipe.RecipeListGetter;
 
 public class CompatThaumcraft extends CompatModule {
 
@@ -18,10 +18,10 @@ public class CompatThaumcraft extends CompatModule {
 		thaumcraftRecipeList = new RecipeListGetter() {
 			@Override
 			public Iterator<?> getIterator() {
-				return ThaumcraftApi.getCraftingRecipes().iterator();
+				return ThaumcraftApi.getCraftingRecipes().listIterator();
 			}
 		};
-		PhysisToolMaterial.registerRecipeListGetter(thaumcraftRecipeList);
-		PhysisToolMaterial.addRecipeComponentTranslator(thaumcraftRecipeList, ShapedArcaneRecipe.class, new ShapedArcaneRecipeCT());
+		RecipeHelper.registerRecipeListGetter(thaumcraftRecipeList);
+		RecipeHelper.addRecipeComponentTranslator(thaumcraftRecipeList, ShapedArcaneRecipe.class, new ShapedArcaneRecipeCT());
 	}
 }

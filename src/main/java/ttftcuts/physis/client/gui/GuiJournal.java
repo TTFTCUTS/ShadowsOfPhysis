@@ -67,7 +67,8 @@ public class GuiJournal extends GuiScreen {
 		if (article == PageDefs.index) {
 			this.isIndex = true;
 		}
-		for (JournalPage page : article.pages) {
+		List<JournalPage> apages = article.getPages();
+		for (JournalPage page : apages) {
 			pages.add(page);
 		}
 	}
@@ -176,14 +177,20 @@ public class GuiJournal extends GuiScreen {
 		super.keyTyped(par1, par2);
 	}
 	
-	public void drawBookBackground() {
+	public void drawBookTexture(float alpha) {
+		GL11.glColor4f(1f,1f,1f,alpha);
 		mc.renderEngine.bindTexture(bookTextureLeft);
 		drawTexturedModalRect(left, top, 0, 0, 256, bookHeight);
 		mc.renderEngine.bindTexture(bookTextureRight);
 		drawTexturedModalRect(left + 256, top, 0, 0, bookWidth - 256, bookHeight);
 	}
 	
-	public void drawBookBackground(int x, int y, int w, int h) {
+	public void drawBookBackground(float alpha) {
+		this.drawBookTexture(alpha);
+		this.drawPageSymbolOverlay(alpha);
+	}
+	
+	/*public void drawBookBackground(int x, int y, int w, int h) {
 		if (x <= 256 && x+w > 0) {
 			// texture 1
 			mc.renderEngine.bindTexture(bookTextureLeft);
@@ -195,13 +202,18 @@ public class GuiJournal extends GuiScreen {
 			int rx = Math.max(0, x-256);
 			drawTexturedModalRect(left + 256 + rx, top+y, rx, y, bookWidth-256-rx, Math.min(bookHeight-y, h));
 		}
-	}
+	}*/
 	
-	public void drawBGOverlay(int x, int y, int w, int h, float alpha) {
+	/*public void drawBGOverlay(int x, int y, int w, int h, float alpha, boolean mode) {
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDepthFunc(GL11.GL_GREATER);
+		if(mode) {
+			GL11.glDepthFunc(GL11.GL_GREATER);
+		} else {
+			GL11.glDepthFunc(GL11.GL_EQUAL);
+		}
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		
 		this.zLevel += bgOverlayZ;
 		
@@ -210,12 +222,43 @@ public class GuiJournal extends GuiScreen {
 		
 		this.zLevel -= bgOverlayZ;
 		
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDepthMask(true);
 	}
 	
-	public void drawPageSymbolOverlay(int mouseX, int mouseY, float partialTicks) {
+	public void silhouette(int x, int y, int w, int h, boolean mode) {
+		GL11.glDepthMask(false);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		if(mode) {
+			GL11.glDepthFunc(GL11.GL_GREATER);
+		} else {
+			GL11.glDepthFunc(GL11.GL_EQUAL);
+		}
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		
+		this.zLevel += bgOverlayZ;
+		
+		//GL11.glColor4f(1F, 1F, 1F, 1F);
+		//drawGradientRect(x, y, w, h, 0xFFFFFFFF, 0xFFFFFFFF);
+		GL11.glColor4f(0F,0F,0F,1F);
+		this.drawBookBackground(x,y,w,h);
+		
+		this.zLevel -= bgOverlayZ;
+		
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthMask(true);
+	}*/
+	
+	public void drawBGOverlay(int x, int y, int w, int h, float alpha) {
+		
+	}
+	
+	public void drawPageSymbolOverlay(float alpha) {
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		this.zLevel += pageMaskZ;
 		JournalPage page;
@@ -238,7 +281,7 @@ public class GuiJournal extends GuiScreen {
 		GL11.glDepthFunc(GL11.GL_EQUAL);
 		GL11.glColorMask(true, true, true, true);
 		
-		this.drawEncryption(left, top, 185, 256, 25, seed, view);
+		this.drawEncryption(left, top, 185, 256, 25, seed, view, alpha);
 		
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		// end left page
@@ -264,7 +307,7 @@ public class GuiJournal extends GuiScreen {
 		GL11.glDepthFunc(GL11.GL_EQUAL);
 		GL11.glColorMask(true, true, true, true);
 
-		this.drawEncryption(left+165, top, 185, 256, 25, seed, view);
+		this.drawEncryption(left+165, top, 185, 256, 25, seed, view, alpha);
 		
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 
@@ -274,7 +317,7 @@ public class GuiJournal extends GuiScreen {
 		this.zLevel -= pageMaskZ;
 	}
 	
-	public void drawEncryption(int x, int y, int w, int h, int gridsize, int seed, boolean view) {
+	public void drawEncryption(int x, int y, int w, int h, int gridsize, int seed, boolean view, float alpha) {
 		Random rand = new Random(seed);
 		int xsteps = w/gridsize;
 		int ysteps = h/gridsize;
@@ -283,7 +326,7 @@ public class GuiJournal extends GuiScreen {
 		int oy = (h - (ysteps*gridsize))/2;
 		
 		mc.renderEngine.bindTexture(encryptionTexture);
-		GL11.glColor4f(1f, 1f, 1f, view ? 0.03f : 0.125f);
+		GL11.glColor4f(1f, 1f, 1f, (view ? 0.03f : 0.125f) * alpha);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -319,8 +362,7 @@ public class GuiJournal extends GuiScreen {
 		this.tooltip.clear();
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		this.zLevel -= 15f;
-		this.drawBookBackground();
-		this.drawPageSymbolOverlay(mouseX, mouseY, partialTicks);
+		this.drawBookBackground(1f);
 		this.zLevel += 15f;
 		
 		if ( pages.size() >= currentPage + 1 ) {

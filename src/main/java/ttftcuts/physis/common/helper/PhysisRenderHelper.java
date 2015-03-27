@@ -18,7 +18,7 @@ import ttftcuts.physis.common.helper.recipe.ItemStackWrapper;
 
 public class PhysisRenderHelper {
 	public static final ResourceLocation largeGlyphs = new ResourceLocation(Physis.MOD_ID, "textures/gui/glyphs_large.png");
-	public static final int largeGlyphCount = 32;
+	public static final int largeGlyphCount = 64;
 	private static Minecraft mc = Minecraft.getMinecraft();
 	
 	public static void renderStandardBlockAsItem(Block block, int metadata, RenderBlocks renderer) {
@@ -88,7 +88,7 @@ public class PhysisRenderHelper {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		FontRenderer font = encrypt ? Physis.runeFontRenderer : mc.fontRenderer;
 		if (encrypt) {
-			int glyph = stack.hashCode() % largeGlyphCount;
+			int glyph = Math.abs(stack.getDisplayName().hashCode()) % largeGlyphCount;
 			int gx = glyph % 8;
 			int gy = (int)Math.floor(glyph / 8);
 			mc.renderEngine.bindTexture(largeGlyphs);
@@ -116,7 +116,9 @@ public class PhysisRenderHelper {
         float f1 = 0.00390625F / scale;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.setColorOpaque_I(colour);
+        if (colour >= 0) {
+        	tessellator.setColorOpaque_I(colour);
+        }
         tessellator.addVertexWithUV((double)(x + 0), (double)(y + h), (double)z, (double)((float)(u + 0) * f), (double)((float)(v + h) * f1));
         tessellator.addVertexWithUV((double)(x + w), (double)(y + h), (double)z, (double)((float)(u + w) * f), (double)((float)(v + h) * f1));
         tessellator.addVertexWithUV((double)(x + w), (double)(y + 0), (double)z, (double)((float)(u + w) * f), (double)((float)(v + 0) * f1));
@@ -129,10 +131,10 @@ public class PhysisRenderHelper {
 	
 	public static void drawTexturedModalRect(int x, int y, float z, int u, int v, int w, int h, float scale)
     {
-		drawColouredTexturedModalRect(x,y,z,u,v,w,h,0xFFFFFF, scale);
+		drawColouredTexturedModalRect(x,y,z,u,v,w,h,-1, scale);
     }
 	public static void drawTexturedModalRect(int x, int y, float z, int u, int v, int w, int h)
     {
-		drawColouredTexturedModalRect(x,y,z,u,v,w,h,0xFFFFFF, 1f);
+		drawColouredTexturedModalRect(x,y,z,u,v,w,h,-1, 1f);
     }
 }

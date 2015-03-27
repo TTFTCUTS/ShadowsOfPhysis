@@ -18,5 +18,5 @@ public abstract class JournalPage {
 	
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {}
 	
-	public boolean canView() { return true; }
+	public boolean canView() { return false; }
 }

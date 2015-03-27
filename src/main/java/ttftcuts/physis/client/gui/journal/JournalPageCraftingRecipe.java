@@ -1,7 +1,13 @@
 package ttftcuts.physis.client.gui.journal;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
+import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
 import ttftcuts.physis.common.helper.recipe.RecipeHelper;
@@ -21,6 +27,7 @@ public class JournalPageCraftingRecipe extends JournalPageRecipe {
 		this.recipe = recipe;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void drawRecipe(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		boolean show = this.canView();
@@ -46,6 +53,19 @@ public class JournalPageCraftingRecipe extends JournalPageRecipe {
 		this.drawItemStack(journal, output, x + ox + 24, y + oy, mousex, mousey, !this.canView());
 		
 		oy += 36;
+		
+		if (!this.canView()) {
+			List<ItemStack> extend = new ArrayList<ItemStack>(Arrays.asList(inputs));
+			if (extend.size() < 9) {
+				int add = 9-extend.size();
+				for (int i=0; i<add; i++) {
+					extend.add(null);
+				}
+			}
+			Random rand = new Random(output.getDisplayName().hashCode());
+			Collections.shuffle(extend, rand);
+			inputs = extend.toArray(inputs);
+		}
 		
 		for (int i=0; i<inputs.length; i++) {
 			int gx=i%3;

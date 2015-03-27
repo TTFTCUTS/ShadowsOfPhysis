@@ -25,11 +25,17 @@ public class JournalPageRecipe extends JournalPage {
 	
 	@SuppressWarnings("unchecked")
 	public void drawItemStack(GuiJournal journal, ItemStack stack, int x, int y, int mouseX, int mouseY, boolean encrypt) {
+		if (encrypt) {
+			GL11.glColor4f(1.0f, 0.85f, 0.5f, 1f);
+		}
 		PhysisRenderHelper.renderItemStack(stack, x, y, true, true, encrypt);
 		if (mouseX >= x && mouseX < x+16 && mouseY >= y && mouseY < y+16) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (player != null) {
 				journal.setTooltip(stack.getTooltip(player, false));
+				if (encrypt) {
+					journal.setTooltipRenderer(Physis.runeFontRenderer);
+				}
 			}
 		}
 		GL11.glColor4f(1f, 1f, 1f, 1f);

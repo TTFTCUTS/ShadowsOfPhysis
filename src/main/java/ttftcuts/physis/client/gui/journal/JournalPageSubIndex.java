@@ -145,9 +145,11 @@ public class JournalPageSubIndex extends JournalPage {
 					// render default icon
 				}
 			} else {
+				GL11.glColor4f(1.0f, 0.85f, 0.5f, 1f);
 				if (article.iconstack != null) {
 					PhysisRenderHelper.renderItemStack(article.iconstack, iconx, icony, true, false, true);
 				}
+				GL11.glColor4f(1f, 1f, 1f, 1f);
 			}
 
 			GL11.glDisable(GL11.GL_ALPHA_TEST);

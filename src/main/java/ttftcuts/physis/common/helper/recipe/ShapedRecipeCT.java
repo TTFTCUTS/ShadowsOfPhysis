@@ -1,7 +1,6 @@
 package ttftcuts.physis.common.helper.recipe;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.JournalPage;
 import ttftcuts.physis.client.gui.journal.JournalPageCraftingRecipe;
 import net.minecraft.item.ItemStack;
@@ -21,7 +20,7 @@ public class ShapedRecipeCT implements IRecipeComponentTranslator {
 		if (!(recipe instanceof ShapedRecipes)) { return null; }
 		ShapedRecipes r = (ShapedRecipes)recipe;
 		
-		return r.recipeItems;
+		return r.recipeItems.clone();
 	}
 
 	@Override

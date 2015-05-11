@@ -1,5 +1,7 @@
 package ttftcuts.physis.client.gui.journal;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
@@ -14,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 public class JournalPageRecipe extends JournalPage {
 	public static final ResourceLocation craftingtextures = new ResourceLocation(Physis.MOD_ID, "textures/gui/crafting_overlays.png"); 
 	
+	public List<ItemStack>[] inputstacks;
 	public ItemStack outputstack;
 	
 	public JournalPageRecipe(ItemStack outputstack) {
@@ -22,6 +25,15 @@ public class JournalPageRecipe extends JournalPage {
 	
 	public String getDescription() { return "test recipe description blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah"; }
 	public void drawRecipe(GuiJournal journal, int x, int y, int mousex, int mousey) {};
+	
+	public void getRecipeData() {}
+	
+	public void drawItemStackPerm(GuiJournal journal, List<ItemStack> stacks, int x, int y, int mouseX, int mouseY, boolean encrypt) {
+		if (!stacks.isEmpty()) {
+			int perm = (int) (System.nanoTime()/1000000000 % (stacks.size()));
+			this.drawItemStack(journal, stacks.get(perm), x, y, mouseX, mouseY, encrypt);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void drawItemStack(GuiJournal journal, ItemStack stack, int x, int y, int mouseX, int mouseY, boolean encrypt) {
@@ -45,6 +57,10 @@ public class JournalPageRecipe extends JournalPage {
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		float jz = journal.getZLevel();
 		journal.setZLevel(jz+10);
+		
+		if (this.inputstacks == null) {
+			this.getRecipeData();
+		}
 		
 		FontRenderer renderer = this.canView() ? journal.mc.fontRenderer : Physis.runeFontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();

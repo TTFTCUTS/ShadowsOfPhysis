@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
 import scala.actors.threadpool.Arrays;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
@@ -27,16 +25,18 @@ public class JournalPageCraftingRecipe extends JournalPageRecipe {
 		this.recipe = recipe;
 	}
 
+	@Override
+	public void getRecipeData() {
+		Object r = RecipeHelper.getRecipe(outputstack);
+		if (r instanceof IRecipe) {
+			this.recipe = (IRecipe)r;
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void drawRecipe(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		boolean show = this.canView();
-		if (this.recipe == null) {
-			Object r = RecipeHelper.getRecipe(outputstack);
-			if (r instanceof IRecipe) {
-				this.recipe = (IRecipe)r;
-			}
-		}
 		
 		IRecipeComponentTranslator translator = RecipeHelper.getTranslatorForRecipe(this.recipe);
 		ItemStack[] inputs = translator.getRecipeComponents(this.recipe);

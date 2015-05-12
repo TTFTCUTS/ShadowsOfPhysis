@@ -108,6 +108,19 @@ public class ItemTrowel extends ItemPhysisNBTDamage implements ITrowel {
 		types.add(creativeTrowel);
 	}
 
+	public ItemStack[] getHandleVariantsForStack(ItemStack stack) {
+		if (stack == null || stack.getItem() != this || stack.stackTagCompound == null) { return null; }
+		ItemStack[] variants = new ItemStack[16];
+		
+		for (int i=0; i<16; i++) {
+			ItemStack variant = stack.copy();
+			variant.stackTagCompound.setInteger(HANDLETAG, i);
+			variants[i] = variant;
+		}
+		
+		return variants;
+	}
+	
 	public static boolean isCreative(ItemStack trowel) {
 		return trowel.stackTagCompound.hasKey(CREATIVETAG) && trowel.stackTagCompound.getBoolean(CREATIVETAG);
 	}

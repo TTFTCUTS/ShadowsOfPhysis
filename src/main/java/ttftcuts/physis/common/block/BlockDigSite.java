@@ -42,11 +42,11 @@ public class BlockDigSite extends BlockContainerPhysis {
 	static {
 		locales = new HashMap<String, DigSiteLocale>();
 		locales.put("dirt", new DigSiteLocale("dirt", "dirt", "dig", Material.ground, Block.soundTypeGravel, 
-				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
+				"square", "triangle", "circle", 0xFF0000, 0x80FF80, 0x000080));
 		locales.put("sand", new DigSiteLocale("sand", "sand", "dig", Material.sand, Block.soundTypeSand, 
-				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
+				"square", "triangle", "circle", 0xFF0000, 0x80FF80, 0x000080));
 		locales.put("clay", new DigSiteLocale("clay", "clay", "dig", Material.ground, Block.soundTypeGravel, 
-				"square", "triangle", "circle", 0xFF0000, 0x00FF00, 0x0000FF));
+				"square", "triangle", "circle", 0xFF0000, 0x80FF80, 0x000080));
 	}
 	public static Map<String,ResourceLocation> artifacts;
 	static {

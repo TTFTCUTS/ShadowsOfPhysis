@@ -15,12 +15,15 @@ public class GuiButtonJournal extends GuiButton {
 	
 	private int colour = -1;
 	private int hovercolour = -1;
+	private int disabledcolour = -1;
 	
 	public GuiButtonJournal(int id, int x, int y, int w, int h, int tx, int ty) {
 		super(id, x, y, w, h, "");
 		
 		textureX = tx;
 		textureY = ty;
+		
+		this.zLevel = 10.0f;
 	}
 
 	@Override
@@ -37,6 +40,16 @@ public class GuiButtonJournal extends GuiButton {
 	}
 	
 	protected void setColourFromHover(boolean hover) {
+		if (!this.enabled && this.disabledcolour != -1) {
+			GL11.glColor4f(
+				TextureHelper.red(disabledcolour)/255f, 
+				TextureHelper.green(disabledcolour)/255f, 
+				TextureHelper.blue(disabledcolour)/255f, 
+				TextureHelper.alpha(disabledcolour)/255f
+			);
+			return;
+		}
+		
 		if (hover) {
 			if (hovercolour != -1) {
 				GL11.glColor4f(
@@ -58,11 +71,18 @@ public class GuiButtonJournal extends GuiButton {
 				return;
 			}
 		}
+
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 	}
 	
 	public void setColours(int colour, int hovercolour) {
 		this.colour = colour;
 		this.hovercolour = hovercolour;
+	}
+	
+	public void setColours(int colour, int hovercolour, int disabledcolour) {
+		this.colour = colour;
+		this.hovercolour = hovercolour;
+		this.disabledcolour = disabledcolour;
 	}
 }

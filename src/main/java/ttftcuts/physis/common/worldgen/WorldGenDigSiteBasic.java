@@ -4,6 +4,7 @@ import java.util.Random;
 
 import ttftcuts.physis.common.PhysisBlocks;
 import ttftcuts.physis.common.block.tile.TileEntityDigSite;
+import ttftcuts.physis.common.helper.WorldGenHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -27,7 +28,7 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 
 		int x = chunkX*16 + random.nextInt(16);
 		int z = chunkZ*16 + random.nextInt(16);
-		int y = world.getTopSolidOrLiquidBlock(x, z);
+		int y = WorldGenHelper.getTopGroundBlock(world, x, z);
 		
 		if (y < 63) { return; }
 		
@@ -72,7 +73,7 @@ public class WorldGenDigSiteBasic implements IWorldGenerator {
 			for(int iz=0; iz<r; iz++) {
 				dx = x + ix - siteRadius;
 				dz = z + iz - siteRadius;
-				dy = world.getTopSolidOrLiquidBlock(dx, dz) - 1;
+				dy = WorldGenHelper.getTopGroundBlock(world, dx, dz) - 1;
 				
 				xdiff = dx-x;
 				zdiff = dz-z;

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeHelper {
@@ -162,5 +163,29 @@ public class RecipeHelper {
 		
 		addRecipeComponentTranslator(ShapedRecipes.class, new ShapedRecipeCT());
 		addRecipeComponentTranslator(ShapedOreRecipe.class, new ShapedOreRecipeCT());
+	}
+	
+	public static ItemStack[] getStackVariants(ItemStack... stacks) {
+		List<ItemStack> out = new ArrayList<ItemStack>();
+		for(int j=0; j<stacks.length; j++) {
+			ItemStack stack = stacks[j];
+			
+			if (stack.getItem().getHasSubtypes() && stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+				List<ItemStack> varstacks = new ArrayList<ItemStack>();
+				stack.getItem().getSubItems(stack.getItem(), null, varstacks);
+				
+				for(ItemStack s : varstacks) {
+					s.stackSize = stack.stackSize;
+					out.add(s);
+				}
+			} else {
+				out.add(stack);
+			}
+		}
+		return out.toArray(new ItemStack[out.size()]);
+	}
+	
+	public static ItemStack[] getStackVariants(List<ItemStack> stacks) {
+		return getStackVariants(stacks.toArray(new ItemStack[stacks.size()]));
 	}
 }

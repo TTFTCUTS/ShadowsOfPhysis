@@ -1,5 +1,8 @@
 package ttftcuts.physis.common.helper.recipe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import ttftcuts.physis.client.gui.journal.JournalPage;
 import ttftcuts.physis.client.gui.journal.JournalPageCraftingRecipe;
@@ -22,6 +25,19 @@ public class ShapedRecipeCT implements IRecipeComponentTranslator {
 		
 		return r.recipeItems.clone();
 	}
+	
+	@Override
+	public ItemStack[][] getRecipeComponentVariants(Object recipe) {
+		if (!(recipe instanceof ShapedRecipes)) { return null; }
+		ShapedRecipes r = (ShapedRecipes)recipe;
+		
+		ItemStack[][] out = new ItemStack[r.recipeItems.length][];
+		for (int i=0; i<r.recipeItems.length; i++) {
+			ItemStack[] s = {r.recipeItems[i]};
+			out[i] = s;
+		}
+		return out;
+	}
 
 	@Override
 	public boolean hasOreDictStick() {
@@ -34,10 +50,14 @@ public class ShapedRecipeCT implements IRecipeComponentTranslator {
 	}
 
 	@Override
-	public JournalPage getJournalRecipePage(Object recipe) {
-		if (!(recipe instanceof ShapedRecipes)) { return null; }
-		ShapedRecipes r = (ShapedRecipes)recipe;
+	public JournalPage getJournalRecipePage(Object... recipes) {
+		List<ItemStack> stacks = new ArrayList<ItemStack>();
+		for (Object recipe : recipes) {
+			if (!(recipe instanceof ShapedRecipes)) { return null; }
+			ShapedRecipes r = (ShapedRecipes)recipe;
+			stacks.add(this.getRecipeOutput(r));
+		}
 		
-		return new JournalPageCraftingRecipe(this.getRecipeOutput(r), r);
+		return new JournalPageCraftingRecipe(stacks.toArray(new ItemStack[stacks.size()]));
 	}
 }

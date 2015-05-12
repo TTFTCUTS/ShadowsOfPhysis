@@ -51,10 +51,10 @@ public class RenderTileDigSite extends TileEntitySpecialRenderer {
 		{{0.5,1},{0.5,1}}
 	};
 	
-	private static final int[] shapecolours = {
-		0xFF3333,
-		0x33FF33,
-		0x3333FF,
+	private static int[] shapecolours = {
+		0x901277,//0xFF1111,//0xFF3333,
+		0xffee66,//0x66FF44,//0x33FF33,
+		0x292844,//0x000099,//0x3333FF,
 		0xFFFFFF
 	};
 	

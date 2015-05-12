@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
-import ttftcuts.physis.common.helper.recipe.ItemStackWrapper;
 
 public class PhysisRenderHelper {
 	public static final ResourceLocation largeGlyphs = new ResourceLocation(Physis.MOD_ID, "textures/gui/glyphs_large.png");

@@ -12,6 +12,7 @@ import ttftcuts.physis.client.gui.journal.PageDefs.Category;
 import ttftcuts.physis.common.PhysisItems;
 import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
 import ttftcuts.physis.common.helper.recipe.RecipeHelper;
+import ttftcuts.physis.common.item.ItemTrowel;
 
 public class JournalArticleTrowels extends JournalArticle {
 
@@ -29,20 +30,34 @@ public class JournalArticleTrowels extends JournalArticle {
 		Item titem = PhysisItems.trowel;
 		List<ItemStack> trowels = new ArrayList<ItemStack>();
 		titem.getSubItems(titem, titem.getCreativeTab(), trowels);
-		
-		for (ItemStack trowel : trowels) {
-			Object recipe = RecipeHelper.getRecipe(trowel);
+
+		for (ItemStack troweltype : trowels) {
+			List<Object> recipes = new ArrayList<Object>();
+			ItemStack[] handlevariants = ((ItemTrowel)titem).getHandleVariantsForStack(troweltype);
+			
+			Object recipe = RecipeHelper.getRecipe(troweltype);
 			if (recipe == null) { continue; }
 			
 			IRecipeComponentTranslator translator = RecipeHelper.getTranslatorForRecipe(recipe);
 			if (translator == null) { continue; }
 			
-			JournalPage page = translator.getJournalRecipePage(recipe);
+			for (ItemStack trowel : handlevariants) {
+				Object hrecipe = RecipeHelper.getRecipe(trowel);
+				if (hrecipe == null) { continue; }
+				
+				IRecipeComponentTranslator htranslator = RecipeHelper.getTranslatorForRecipe(hrecipe);
+				
+				if (htranslator == translator) {
+					recipes.add(hrecipe);
+					Physis.logger.info("Adding trowel recipe for "+trowel.getDisplayName()+", wool colour: "+trowel.getTagCompound().getInteger(ItemTrowel.HANDLETAG));
+				}
+			}
+			
+			JournalPage page = translator.getJournalRecipePage(recipes.toArray());
 			if (page != null) {
 				modified.add(page);
 			}
 		}
-		Physis.logger.info(modified.size());
 		return modified;
 	}
 

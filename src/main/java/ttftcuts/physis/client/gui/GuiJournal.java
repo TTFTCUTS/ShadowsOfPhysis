@@ -190,70 +190,6 @@ public class GuiJournal extends GuiScreen {
 		this.drawPageSymbolOverlay(alpha);
 	}
 	
-	/*public void drawBookBackground(int x, int y, int w, int h) {
-		if (x <= 256 && x+w > 0) {
-			// texture 1
-			mc.renderEngine.bindTexture(bookTextureLeft);
-			drawTexturedModalRect(left+x, top+y, x, y, Math.min(256-x, w), Math.min(bookHeight-y, h));
-		}
-		if (x+w > 256 && x <= bookWidth) {
-			// texture 2
-			mc.renderEngine.bindTexture(bookTextureRight);
-			int rx = Math.max(0, x-256);
-			drawTexturedModalRect(left + 256 + rx, top+y, rx, y, bookWidth-256-rx, Math.min(bookHeight-y, h));
-		}
-	}*/
-	
-	/*public void drawBGOverlay(int x, int y, int w, int h, float alpha, boolean mode) {
-		GL11.glDepthMask(false);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		if(mode) {
-			GL11.glDepthFunc(GL11.GL_GREATER);
-		} else {
-			GL11.glDepthFunc(GL11.GL_EQUAL);
-		}
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		
-		this.zLevel += bgOverlayZ;
-		
-		GL11.glColor4f(1F, 1F, 1F, alpha);
-		this.drawBookBackground(x,y,w,h);
-		
-		this.zLevel -= bgOverlayZ;
-		
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDepthMask(true);
-	}
-	
-	public void silhouette(int x, int y, int w, int h, boolean mode) {
-		GL11.glDepthMask(false);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		if(mode) {
-			GL11.glDepthFunc(GL11.GL_GREATER);
-		} else {
-			GL11.glDepthFunc(GL11.GL_EQUAL);
-		}
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		
-		this.zLevel += bgOverlayZ;
-		
-		//GL11.glColor4f(1F, 1F, 1F, 1F);
-		//drawGradientRect(x, y, w, h, 0xFFFFFFFF, 0xFFFFFFFF);
-		GL11.glColor4f(0F,0F,0F,1F);
-		this.drawBookBackground(x,y,w,h);
-		
-		this.zLevel -= bgOverlayZ;
-		
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDepthMask(true);
-	}*/
-	
 	public void drawBGOverlay(int x, int y, int w, int h, float alpha) {
 		
 	}
@@ -375,7 +311,6 @@ public class GuiJournal extends GuiScreen {
 		}
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		
 		
 		if (tooltip.size() > 0) {
 			if (this.tooltipRenderer == null) {

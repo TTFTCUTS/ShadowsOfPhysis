@@ -1,5 +1,8 @@
 package ttftcuts.physis.common.helper.recipe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ttftcuts.physis.client.gui.journal.JournalPage;
 import ttftcuts.physis.client.gui.journal.JournalPageCraftingRecipe;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
@@ -35,6 +38,34 @@ public class ShapedOreRecipeCT implements IRecipeComponentTranslator {
 		
 		return items;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public ItemStack[][] getRecipeComponentVariants(Object recipe) {
+		if (!(recipe instanceof ShapedOreRecipe)) { return null; }
+		ShapedOreRecipe r = (ShapedOreRecipe)recipe;
+		
+		Object[] objects = r.getInput();
+		ItemStack[][] items = new ItemStack[objects.length][];
+		
+		for (int i=0; i<objects.length; i++) {
+			if (objects[i] == null) { 
+				items[i] = new ItemStack[1];
+				continue;	
+			}
+			
+			if (objects[i] instanceof ItemStack) {
+				ItemStack[] l = {(ItemStack)objects[i]};
+				items[i] = l;
+			}
+			else if (objects[i] instanceof List) {
+				List<ItemStack> l = (List<ItemStack>)objects[i];
+				items[i] = RecipeHelper.getStackVariants(l);
+			}
+		}
+		
+		return items;
+	}
 
 	@Override
 	public boolean hasOreDictStick() {
@@ -47,11 +78,15 @@ public class ShapedOreRecipeCT implements IRecipeComponentTranslator {
 	}
 
 	@Override
-	public JournalPage getJournalRecipePage(Object recipe) {
-		if (!(recipe instanceof ShapedOreRecipe)) { return null; }
-		ShapedOreRecipe r = (ShapedOreRecipe)recipe;
+	public JournalPage getJournalRecipePage(Object... recipes) {
+		List<ItemStack> stacks = new ArrayList<ItemStack>();
+		for (Object recipe : recipes) {
+			if (!(recipe instanceof ShapedOreRecipe)) { return null; }
+			ShapedOreRecipe r = (ShapedOreRecipe)recipe;
+			stacks.add(this.getRecipeOutput(r));
+		}
 		
-		return new JournalPageCraftingRecipe(this.getRecipeOutput(r), r);
+		return new JournalPageCraftingRecipe(stacks.toArray(new ItemStack[stacks.size()]));
 	}
 
 }

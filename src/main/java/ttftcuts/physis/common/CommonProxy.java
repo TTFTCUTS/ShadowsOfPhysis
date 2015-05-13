@@ -70,7 +70,7 @@ public class CommonProxy {
     	
     	PhysisCraftingRecipes.init();    	
     	
-    	ChestGenHandler.init();
+    	//ChestGenHandler.init();
     	
     	Physis.oooBuilder = new OddOneOutBuilder();
     	

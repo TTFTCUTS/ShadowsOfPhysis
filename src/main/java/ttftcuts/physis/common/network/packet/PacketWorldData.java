@@ -52,6 +52,8 @@ public class PacketWorldData extends PacketHandler {
 		
 		PhysisWorldSavedData.doCallbacksPre();
 		
+		//Physis.logger.info(worlddata);
+		
 		NBTTagCompound tag = new NBTTagCompound();
 		
 		tag.setTag("p", playerdata);

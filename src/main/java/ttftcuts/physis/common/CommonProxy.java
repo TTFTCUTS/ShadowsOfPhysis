@@ -18,7 +18,6 @@ import ttftcuts.physis.common.file.PhysisWorldSavedData;
 import ttftcuts.physis.common.file.ServerData;
 import ttftcuts.physis.common.file.ServerData.ServerDataHandler;
 import ttftcuts.physis.common.handler.ArtifactEventHandler;
-import ttftcuts.physis.common.handler.ChestGenHandler;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ItemDestructionHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
@@ -130,7 +129,9 @@ public class CommonProxy {
 		// set up the story!
 		long seed = event.getServer().worldServers[0].getWorldInfo().getSeed();
 		Random r = new Random(seed);
-		long storySeed = r.nextLong();
+		long storySeed = Math.abs(r.nextLong());
+		
+		Physis.logger.info("Starting story engine: overworld seed: "+seed+", storyseed: "+storySeed);
 		
 		StoryEngine.reload(storySeed, false);
 	}

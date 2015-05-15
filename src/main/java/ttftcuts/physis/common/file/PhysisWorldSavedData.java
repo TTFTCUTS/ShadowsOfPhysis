@@ -166,6 +166,12 @@ public class PhysisWorldSavedData extends WorldSavedData {
 		safeMarkDirty();
 	}
 	public static NBTTagCompound getWorldTag(String name) {
+		NBTTagCompound wd = getWorldData();
+		if (!wd.hasKey(name)) {
+			NBTTagCompound compound = new NBTTagCompound();
+			wd.setTag(name, compound);
+			return compound;
+		}
 		return getWorldData().getCompoundTag(name);
 	}
 	

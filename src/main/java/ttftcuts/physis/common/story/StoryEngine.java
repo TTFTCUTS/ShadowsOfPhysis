@@ -7,7 +7,6 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.file.IDataCallback;
 import ttftcuts.physis.common.file.PhysisWorldSavedData;
 
@@ -22,15 +21,16 @@ public class StoryEngine {
 
 		@Override
 		public void dataPacketSending() {
-			PhysisWorldSavedData.getWorldTag(STORYTAG).setLong("seed", instance(false).seed);
-			Physis.logger.info("Adding story seed to packet");
+			long s = instance(false).seed;
+			PhysisWorldSavedData.getWorldTag(STORYTAG).setLong("seed", s);
+			//Physis.logger.info("Adding story seed to packet: "+s);
 		}
 
 		@Override
 		public void dataPacketReceived() {
 			long s = PhysisWorldSavedData.getWorldTag(STORYTAG).getLong("seed");
 			StoryEngine.reload(s, true);
-			Physis.logger.info("Loaded story seed from packet");
+			//Physis.logger.info("Loaded story seed from packet: "+s);
 		}
 		
 	};
@@ -83,7 +83,14 @@ public class StoryEngine {
 	}
 	
 	public void loadFromNBT(NBTTagCompound tag) {
-		this.seed = tag.getLong(SEEDTAG);
+		boolean dirty = false;
+		long loadedseed = tag.getLong(SEEDTAG);
+		if (this.seed != loadedseed) {
+			dirty = true;
+		}
+		if (loadedseed != 0) {
+			this.seed = loadedseed;
+		}
 		
 		NBTTagList list = tag.getTagList(VARIABLETAG, 10);
 		for (int i=0; i<list.tagCount(); i++) {
@@ -94,8 +101,7 @@ public class StoryEngine {
 				this.storyVars.put(name, new StoryVariable(name, registry.get(name), val));
 			}
 		}
-		
-		boolean dirty = false;
+
 		for(Entry<String, Integer> entry : registry.entrySet()) {
 			String name = entry.getKey();
 			int max = entry.getValue();
@@ -167,9 +173,12 @@ public class StoryEngine {
 			this.name = name;
 			this.max = max;
 			
-			Random rand = new Random(StoryEngine.this.seed ^ this.name.hashCode());
+			long seed = StoryEngine.this.seed ^ this.name.hashCode();
+			Random rand = new Random(seed);
 			
 			this.value = rand.nextInt(this.max);
+			
+			//Physis.logger.info("StoryVariable "+this.name+": story seed: "+StoryEngine.this.seed+", seed: "+seed+", max: "+this.max+", val: "+this.value);
 		}
 		
 		public StoryVariable(String name, int max, int value) {

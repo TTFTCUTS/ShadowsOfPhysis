@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.ClientProxy;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.button.GuiButtonInvisible;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
@@ -119,7 +120,7 @@ public class JournalPageSubIndex extends JournalPage {
 			if (mousex >= iconx - shadowborder && mousex < iconx + iconsize + shadowborder && mousey >= icony - shadowborder && mousey < icony + iconsize + shadowborder) {
 				journal.setTooltip(article.getTranslatedName());
 				if (!show) {
-					journal.setTooltipRenderer(Physis.runeFontRenderer);
+					journal.setTooltipRenderer(ClientProxy.runeFontRenderer);
 				}
 			}
 			

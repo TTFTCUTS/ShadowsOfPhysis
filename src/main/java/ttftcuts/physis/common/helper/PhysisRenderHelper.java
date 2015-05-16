@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.ClientProxy;
 
 public class PhysisRenderHelper {
 	public static final ResourceLocation largeGlyphs = new ResourceLocation(Physis.MOD_ID, "textures/gui/glyphs_large.png");
@@ -85,7 +86,7 @@ public class PhysisRenderHelper {
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		FontRenderer font = encrypt ? Physis.runeFontRenderer : mc.fontRenderer;
+		FontRenderer font = encrypt ? ClientProxy.runeFontRenderer : mc.fontRenderer;
 		if (encrypt) {
 			int glyph = Math.abs(stack.getDisplayName().hashCode()) % largeGlyphCount;
 			int gx = glyph % 8;

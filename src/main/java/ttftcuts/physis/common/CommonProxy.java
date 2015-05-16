@@ -21,6 +21,7 @@ import ttftcuts.physis.common.handler.ArtifactEventHandler;
 import ttftcuts.physis.common.handler.GuiHandler;
 import ttftcuts.physis.common.handler.ItemDestructionHandler;
 import ttftcuts.physis.common.handler.ServerTickHandler;
+import ttftcuts.physis.common.handler.StructureHandler;
 import ttftcuts.physis.common.helper.recipe.RecipeHelper;
 import ttftcuts.physis.common.item.ItemTrowel;
 import ttftcuts.physis.common.item.material.PhysisToolMaterial;
@@ -91,6 +92,12 @@ public class CommonProxy {
     	MinecraftForge.EVENT_BUS.register(new ServerDataHandler());
     	FMLCommonHandler.instance().bus().register(new ServerDataHandler());
     	MinecraftForge.EVENT_BUS.register(new ItemDestructionHandler());
+    	
+    	Physis.logger.info("registering structure handler");
+    	StructureHandler structureHandler = new StructureHandler();
+    	MinecraftForge.EVENT_BUS.register(structureHandler);
+    	MinecraftForge.TERRAIN_GEN_BUS.register(structureHandler);
+    	Physis.logger.info("registered structure handler");
     	
     	networkSetup();
     	LootSystem.init();

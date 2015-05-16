@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import ttftcuts.physis.Physis;
+import ttftcuts.physis.client.ClientProxy;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.button.GuiButtonJournal;
 import ttftcuts.physis.common.helper.PhysisRenderHelper;
@@ -48,6 +49,7 @@ public class JournalPageRecipe extends JournalPage {
 	
 	public void getRecipeData() {}
 	
+	@SideOnly(Side.CLIENT)
 	public void drawItemStackPerm(GuiJournal journal, ItemStack[] stacks, int x, int y, int mouseX, int mouseY, boolean encrypt) {
 		if (stacks.length>0) {
 			int perm = (int) (System.nanoTime()/1000000000 % (stacks.length));
@@ -56,6 +58,7 @@ public class JournalPageRecipe extends JournalPage {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@SideOnly(Side.CLIENT)
 	public void drawItemStack(GuiJournal journal, ItemStack stack, int x, int y, int mouseX, int mouseY, boolean encrypt) {
 		if (stack == null) { return; }
 		if (encrypt) {
@@ -67,7 +70,7 @@ public class JournalPageRecipe extends JournalPage {
 			if (player != null) {
 				journal.setTooltip(stack.getTooltip(player, false));
 				if (encrypt) {
-					journal.setTooltipRenderer(Physis.runeFontRenderer);
+					journal.setTooltipRenderer(ClientProxy.runeFontRenderer);
 				}
 			}
 		}
@@ -75,6 +78,7 @@ public class JournalPageRecipe extends JournalPage {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		float jz = journal.getZLevel();
 		journal.setZLevel(jz+10);
@@ -84,7 +88,7 @@ public class JournalPageRecipe extends JournalPage {
 			this.getRecipeData();
 		}
 		
-		FontRenderer renderer = this.canView() ? journal.mc.fontRenderer : Physis.runeFontRenderer;
+		FontRenderer renderer = this.canView() ? journal.mc.fontRenderer : ClientProxy.runeFontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();
 		
 		renderer.setUnicodeFlag(false);

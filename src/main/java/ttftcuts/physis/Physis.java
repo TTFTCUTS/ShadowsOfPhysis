@@ -10,6 +10,8 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
@@ -36,7 +38,6 @@ public class Physis {
     public static PhysisCreativeTab socketableTab;
     public static PhysisCreativeTab digsiteTab;
     public static OddOneOutBuilder oooBuilder;
-    public static FontRenderer runeFontRenderer;
     
     @Mod.Instance
     public static Physis instance;

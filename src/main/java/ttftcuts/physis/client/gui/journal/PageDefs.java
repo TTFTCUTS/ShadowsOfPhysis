@@ -19,9 +19,9 @@ public class PageDefs {
 		
 		//Physis.logger.info("Intro pages");
 		
-		introduction = new JournalArticle("intro", null,
-			new JournalPageText("intro1"),
-			new JournalPageText("intro2")
+		introduction = new JournalArticle("intro", null//,
+			//new JournalPageText("intro1"),
+			//new JournalPageText("intro2")
 		);
 		
 		//Physis.logger.info("Pages");

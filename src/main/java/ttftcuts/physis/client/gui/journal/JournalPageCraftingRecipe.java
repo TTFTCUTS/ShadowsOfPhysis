@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.common.helper.recipe.IRecipeComponentTranslator;
 import ttftcuts.physis.common.helper.recipe.RecipeDisplayData;
@@ -37,6 +40,7 @@ public class JournalPageCraftingRecipe extends JournalPageRecipe {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void drawRecipe(GuiJournal journal, RecipeDisplayData recipe, int x, int y, int mousex, int mousey) {
 		boolean show = this.canView();
 		

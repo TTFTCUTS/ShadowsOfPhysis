@@ -24,11 +24,12 @@ public class StructureLayout {
 	protected void generate() {
 		this.nodes = new ArrayList<LayoutNode>();
 		
-		int o = 5;
-		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z-o));
-		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z-o));
-		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z+o));
-		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z+o));
+		int o = 7;
+		int s = 10;
+		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z-o, this.x-o+s-1, this.y+s-1, this.z-o+s-1));
+		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z-o, this.x+o+s-1, this.y+s-1, this.z-o+s-1));
+		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z+o, this.x-o+s-1, this.y+s-1, this.z+o+s-1));
+		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z+o, this.x+o+s-1, this.y+s-1, this.z+o+s-1));
 	}
 	
 	public List<StructureComponent> exportToStructureParts(Random rand) {

@@ -508,7 +508,7 @@ public final class PhysisArtifacts {
 		}
 		if (item.hasContainerItem(stack)){
 			ItemStack container = item.getContainerItem(stack);
-			if (container.getItem() instanceof ItemBucket) {
+			if (container != null && container.getItem() instanceof ItemBucket) {
 				return false;
 			}
 		}

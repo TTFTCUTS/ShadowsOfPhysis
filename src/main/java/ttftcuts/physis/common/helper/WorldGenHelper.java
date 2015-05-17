@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class WorldGenHelper {
 	public static int getTopGroundBlock(World world, int x, int z) {
@@ -28,5 +29,9 @@ public class WorldGenHelper {
         }
 
         return -1;
+	}
+	
+	public static StructureBoundingBox cloneBounds(StructureBoundingBox b) {
+		return new StructureBoundingBox(b.minX, b.minY, b.minZ, b.maxX, b.maxY, b.maxZ);
 	}
 }

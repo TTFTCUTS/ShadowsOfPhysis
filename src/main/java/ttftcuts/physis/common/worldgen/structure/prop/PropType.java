@@ -27,7 +27,7 @@ public class PropType {
 	
 	public void buildProp(ComponentSiteRoom component, Prop prop, World world, StructureBoundingBox limit, Random rand) {
 		//BlockPalette p = BlockPalette.defaultPalette;
-		int top = 9;
+		/*int top = 9;
 		for (int i=0; i<=top; i++) {
 			prop.placeBlock(world, limit, component, 0, i, 0, BlockPalette.BlockTypes.log_oak, 0);
 		}
@@ -58,6 +58,6 @@ public class PropType {
 		prop.placeBlock(world, limit, component, 1, top, 0, BlockPalette.BlockTypes.stairs_cobble, 5);
 		prop.placeBlock(world, limit, component, 1, top, 1, BlockPalette.BlockTypes.stairs_cobble, 5);
 		prop.placeBlock(world, limit, component, 0, top, -1, BlockPalette.BlockTypes.stairs_cobble, 4);
-		prop.placeBlock(world, limit, component, 0, top, 1, BlockPalette.BlockTypes.stairs_cobble, 6);
+		prop.placeBlock(world, limit, component, 0, top, 1, BlockPalette.BlockTypes.stairs_cobble, 6);*/
 	}
 }

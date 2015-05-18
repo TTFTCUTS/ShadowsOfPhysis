@@ -24,15 +24,15 @@ public class LayoutNode {
 	}
 	
 	public void placeProps() {
-		this.props.add(new Prop(PropTypes.testProp, 1,1,1).setFlip(true));
+		this.props.add(new Prop(PropTypes.testProp, 1,1,1).setFlip(true).updateBounds());
 		
-		this.props.add(new Prop(PropTypes.testProp, 8,1,1).setRotation(1));
+		this.props.add(new Prop(PropTypes.testProp, 8,1,1).setRotation(1).updateBounds());
 		
-		this.props.add(new Prop(PropTypes.testProp, 8,1,8).setRotation(2));
+		this.props.add(new Prop(PropTypes.testProp, 8,1,8).setRotation(2).updateBounds());
 		
-		this.props.add(new Prop(PropTypes.testProp, 1,1,8).setRotation(3));
+		this.props.add(new Prop(PropTypes.testProp, 1,1,8).setRotation(3).updateBounds());
 		
-		this.props.add(new Prop(PropTypes.testProp, 6,1,4).setRotation(1).setFlip(true));
+		this.props.add(new Prop(PropTypes.testProp, 6,1,4).setRotation(1).setFlip(true).updateBounds());
 	}
 	
 	public StructureComponent getComponent(int id, Random rand) {

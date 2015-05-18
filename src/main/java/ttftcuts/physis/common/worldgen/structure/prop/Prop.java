@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
+import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 public class Prop {
 
@@ -19,6 +19,7 @@ public class Prop {
 	public int x,y,z;
 	public int rotation;
 	public boolean flipped;
+	public StructureBoundingBox bounds = PropType.defaultBounds;
 	
 	public Prop(PropType type, int x, int y, int z) {
 		this.type = type;
@@ -40,16 +41,41 @@ public class Prop {
 		return this;
 	}
 	
+	public Prop setData(Object... args) {
+		for (int i=0; i<args.length; i+=2) {
+			if (i+1 < args.length) {
+				if (args[i] instanceof String && args[i+1] instanceof Integer) {
+					String key = (String)args[i];
+					Integer val = (int)args[i+1];
+					
+					this.extraData.put(key, val);
+				}
+			}
+		}
+		
+		return this;
+	}
+	
+	public Prop updateBounds() {
+		StructureBoundingBox newbounds = this.type.getBoundingBoxForProp(this);
+		
+		this.rotateBoundingBox(newbounds);
+		
+		this.bounds = newbounds;
+		
+		return this;
+	}
+
 	// ##### instance-level utils ###############################################
-	protected void placeBlock(World world, StructureBoundingBox limit, StructureComponent component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
+	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
 		this.placeBlock(world, limit, component, x, y, z, block, metaoffset, 0);
 	}
 	
-	protected void placeBlock(World world, StructureBoundingBox limit, StructureComponent component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
+	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
 		this.placeBlock(world, limit, component, x, y, z, block.getBlock(), block.getMeta(this.rotation, this.flipped, metaoffset, colour));
 	}
 
-	protected void placeBlock(World world, StructureBoundingBox limit, StructureComponent component, int x, int y, int z, Block block, int meta) {
+	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, Block block, int meta) {
 		int tx = transformX(x,y,z, component);
 		int ty = transformY(x,y,z, component);
 		int tz = transformZ(x,y,z, component);
@@ -59,7 +85,7 @@ public class Prop {
 		}
 	}
 	
-	protected int transformX(int x, int y, int z, StructureComponent component) {
+	protected int localTransformX(int x, int y, int z) {
 		int fx = this.flipped ? -x : x;
 		int rx = fx;
 		
@@ -77,14 +103,20 @@ public class Prop {
 			rx = fx;
 		}
 		
-		return component.getBoundingBox().minX + this.x + rx;
+		return this.x + rx;
+	}
+	protected int transformX(int x, int y, int z, ComponentSiteRoom component) {
+		return this.localTransformX(x, y, z) + component.getBoundingBox().minX + component.layoutOffsetX;
 	}
 	
-	protected int transformY(int x, int y, int z, StructureComponent component) {
-		return component.getBoundingBox().minY + this.y + y;
+	protected int localTransformY(int x, int y, int z) {
+		return this.y + y;
+	}
+	protected int transformY(int x, int y, int z, ComponentSiteRoom component) {
+		return this.localTransformY(x, y, z) + component.getBoundingBox().minY + component.layoutOffsetY;
 	}
 	
-	protected int transformZ(int x, int y, int z, StructureComponent component) {
+	protected int localTransformZ(int x, int y, int z) {
 		int fx = this.flipped ? -x : x;
 		int rz = z;
 		
@@ -102,7 +134,26 @@ public class Prop {
 			rz = z;
 		}
 		
-		return component.getBoundingBox().minZ + this.z + rz;
+		return this.z + rz;
+	}
+	protected int transformZ(int x, int y, int z, ComponentSiteRoom component) {
+		return this.localTransformZ(x, y, z) + component.getBoundingBox().minZ + component.layoutOffsetZ;
+	}
+	
+	protected void rotateBoundingBox(StructureBoundingBox b) {
+		int rminx = this.localTransformX(b.minX, b.minY, b.minZ);
+		int rminy = this.localTransformY(b.minX, b.minY, b.minZ);
+		int rminz = this.localTransformZ(b.minX, b.minY, b.minZ);
+		int rmaxx = this.localTransformX(b.maxX, b.maxY, b.maxZ);
+		int rmaxy = this.localTransformY(b.maxX, b.maxY, b.maxZ);
+		int rmaxz = this.localTransformZ(b.maxX, b.maxY, b.maxZ);
+		
+		b.minX = Math.min(rminx, rmaxx);
+		b.minY = Math.min(rminy, rmaxy);
+		b.minZ = Math.min(rminz, rmaxz);
+		b.maxX = Math.max(rminx, rmaxx);
+		b.maxY = Math.max(rminy, rmaxy);
+		b.maxZ = Math.max(rminz, rmaxz);
 	}
 	
 	// ##### static utils #######################################################

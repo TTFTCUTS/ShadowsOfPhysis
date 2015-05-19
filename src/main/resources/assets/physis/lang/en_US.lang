@@ -26,19 +26,43 @@ physis.journal.text.index=Here, friend, I will keep an index of all the wonders 
 physis.journal.title.testitem=Test Item
 physis.journal.text.testitem=Text for the test item?
 
-physis.journal.title.storytest=Wibble
-physis.journal.text.storytest=Wobble $physis.storyname.#story2#.#story1#$
-physis.storyname.0.0=Dave
-physis.storyname.0.1=Jim
-physis.storyname.0.2=Bob
-physis.storyname.0.3=Oswald
-
-physis.storyname.1.0=Dave
-physis.storyname.1.1=Jim
-physis.storyname.1.2=Bob
-physis.storyname.1.3=Oswald
 
 
+
+physis.journal.title.history1=The Ars $physis.themelocal.#themename#$
+physis.journal.text.history1=Ah, Adventurer. So, you begin to discover the roots of the Ars $physis.themelocal.#themename#$. Good. \n\nYou are, of course, only scratching the surface of the wonders my race affected upon the face of this world. Be aware however, friend, that with our power, comes a weight of responsibility you may be unprepared for.\n\n To understand the Great Art, you must first understand it's creation. This world is littered with caches left behind when we... left. Explore these, and I will reward you with the gift of knowledge.
+physis.themelocal.0=Artificium
+physis.themelocal.1=Technica
+physis.themelocal.2=Biologica
+physis.themelocal.3=Arcana
+
+physis.journal.title.history2=In The Beginning
+physis.journal.text.history2=Millenia ago, six warring races inhabited this land. \n\nTheir differences were many and varied, and great conflicts raged as each race pursued dominance. As each race dwindled in size, hunted into extinction by fabricated engines of war, one race, the @4@lMawgrim@r@r, fashioned a device capable of the ultimate destruction. \n\nIt would crack the world, annihilating all in the ultimate display of defiance against life itself. \n\nYet, on the eve of the world's death - an Angel descended to earth.
+
+physis.journal.title.history3=Fallen Angel
+physis.journal.text.history3=The reality of what, or whom, the angel was, I cannot say. \n\nIn the fury of it's descent, the @4@lMawgrim@r simply... disappeared. What became of them was never discovered, but in an instant, the spirit of the world was transformed. \n\nOld rivalries were set aside, as the common threat of mutual annihilation was removed, and the Physians, a conglomerate race of five species, walked the earth in harmony. Science, energy and art became one, and the Ars $physis.themelocal.#themename#$ was born.
+
+physis.journal.title.history4=Prosperity
+physis.journal.text.history4=With renewed peace, the Physians threw their collective minds into the advancement of the Ars $physis.themelocal.#themename#$. $physis.history4.#themename#$ \n\nThis is how we lived. What we lived for. Knowledge. Knowledge and... power.
+physis.history4.0=\n\nGreat spires and smoke-stacks dotted the horizon, while vast machines clunked and whirred, encompassing continents - all created to further understand the nature of the universe.
+physis.history4.1=\n\nLaboratories and shining cities swelled out of nothingness, as the Physians strove to explore the fundamental make-up of the universe.
+physis.history4.2=\n\nHabitats grown from lovingly nurtured forests sprang forth from fertile soil, and great trees were bred to pierce the heavens, as the Physians explored the very meaning of life.
+physis.history4.3=\n\nObsidian towers and ritual circles were built in their thousands as the Physians devoured knowledge, hungry for discovery. 
+
+physis.journal.title.race1=The @a@lLi'rael@r
+physis.journal.text.race1=The @a@lLi'rael@r were a race of builders, possessed of a preternatural sense for gravity and design. Their structures grew and soared above the mountain ranges in which they dwelled, seemingly at home amongst the clouds. \n\nIt was the @a@lLi'rael@r who constructed the cities and habitats of the Physians after the Angel fell. During the Wars of Tranquility, it was the @a@lLi'rael@r who constructed the great fortresses and bastions to stand against the foe. \n\nNone of their earthly constructions ever fell. Until they wished them to. 
+
+physis.journal.title.race2=The @b@lMa'rael@r
+physis.journal.text.race2=Denizens of the ocean, the @b@lMa'rael@r were rarely seen, preferring instead to spend their time musing on the movements of celestial bodies, spending aeons constructing great omniscopes to peer far into the endless skies. \n\nThe @b@lMa'rael@r were preoccupied with their belief that somewhere, there was a great cosmic message left by the Angel. Whether they ever found it, I do not know, but testimony to their efforts still stands in the deepest recesses of the ocean. 
+
+physis.journal.title.race3=The @6@lCo'rael@r
+physis.journal.text.race3=Of all the species that made up the Physians, the @6@lCo'rael@r were by far, the most enigmatic, if least numerate. They considered themselves guardians, rather than functional members of society. \n\nCapable of slowing their metabolism to an almost death-like state, the @6@lCo'rael@r awoke only to defend the Physian people against external aggressors. Many of them still stand, now petrified, hidden amongst the ruins of Physis.
+
+physis.journal.title.race4=The @5@lSa'rael@r
+physis.journal.text.race4=The @5@lSa'rael@r made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the @5@lSa'rael@r made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
+
+physis.journal.title.storytest=The @2@lO'rael@r
+physis.journal.text.storytest=In terms you might understand, Adventurer, the @2@lO'rael@r were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to @2@lO'rael@r affinity for logistics. \n\nWithout the @2@lO'rael@r, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the @2@lO'rael@r drove Physis swiftly into a new age of prosperity.
 
 tile.physis:digsite.dirt.name=Buried Artifact
 tile.physis:digsite.sand.name=Buried Artifact

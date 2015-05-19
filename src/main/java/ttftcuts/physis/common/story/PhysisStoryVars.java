@@ -9,7 +9,7 @@ public class PhysisStoryVars {
 
 		// --------------
 		
-		StoryEngine.registerVariable("story1", 4);
+		StoryEngine.registerVariable("themename", 4);
 		StoryEngine.registerVariable("story2", 2);
 	}
 }

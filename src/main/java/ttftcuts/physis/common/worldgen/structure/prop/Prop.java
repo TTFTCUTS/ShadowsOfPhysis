@@ -67,21 +67,70 @@ public class Prop {
 	}
 
 	// ##### instance-level utils ###############################################
-	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
+	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
 		this.placeBlock(world, limit, component, x, y, z, block, metaoffset, 0);
 	}
 	
-	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
-		this.placeBlock(world, limit, component, x, y, z, block.getBlock(), block.getMeta(this.rotation, this.flipped, metaoffset, colour));
+	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
+		int tx = transformX(x,y,z, component);
+		int ty = transformY(x,y,z, component);
+		int tz = transformZ(x,y,z, component);
+		
+		int meta = block.getMeta(this.rotation, this.flipped, metaoffset, colour);
+		
+		if (limit.isVecInside(tx, ty, tz)) {
+			BlockPalette.placeBlock(world, tx, ty, tz, block, meta);
+		}
 	}
 
-	protected void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, Block block, int meta) {
+	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, Block block, int meta) {
 		int tx = transformX(x,y,z, component);
 		int ty = transformY(x,y,z, component);
 		int tz = transformZ(x,y,z, component);
 		
 		if (limit.isVecInside(tx, ty, tz)) {
 			world.setBlock(tx, ty, tz, block, meta, 2);
+		}
+	}
+	
+	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset) {
+		this.fillBlocks(world, limit, component, minx, miny, minz, maxx, maxy, maxz, block, metaoffset, 0);
+	}
+	
+	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset, int colour) {
+		this.fillBlocks(world, limit, component, minx, miny, minz, maxx, maxy, maxz, block.getBlock(), block.getMeta(this.rotation, this.flipped, metaoffset, colour));
+	}
+	
+	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, Block block, int meta) {
+		for (int x = minx; x<=maxx; x++) {
+			for (int y = miny; y<=maxy; y++) {
+				for (int z = minz; z<=maxz; z++) {
+					this.placeBlock(world, limit, component, x, y, z, block, meta);
+				}
+			}
+		}
+	}
+	
+	public void clearBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, boolean force) {
+		int tx = transformX(x,y,z, component);
+		int ty = transformY(x,y,z, component);
+		int tz = transformZ(x,y,z, component);
+		
+		if (limit.isVecInside(tx, ty, tz)) {
+			Block b = world.getBlock(tx, ty, tz);
+			if (force || !b.isAir(world, tx, ty, tz)) {
+				world.setBlockToAir(tx, ty, tz);
+			}
+		}
+	}
+	
+	public void clearFill(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, boolean force) {
+		for (int x = minx; x<=maxx; x++) {
+			for (int y = miny; y<=maxy; y++) {
+				for (int z = minz; z<=maxz; z++) {
+					this.clearBlock(world, limit, component, x, y, z, force);
+				}
+			}
 		}
 	}
 	

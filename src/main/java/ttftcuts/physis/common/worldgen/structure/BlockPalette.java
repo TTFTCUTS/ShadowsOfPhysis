@@ -1,17 +1,56 @@
 package ttftcuts.physis.common.worldgen.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.world.World;
 
 public class BlockPalette {
 	public static BlockPalette defaultPalette = new BlockPalette();
 
-	public Entry test = BlockTypes.cobble;
+	public Entry foundation = BlockTypes.cobble;
 	
+	// floors
+	public Entry floor1 = BlockTypes.planks_birch;
+	public Entry floor2 = BlockTypes.planks_oak;
+	public Entry floor_coloured1 = BlockTypes.wool;
+	
+	// stairs
+	public Entry stairs1 = BlockTypes.stairs_birch;
+	public Entry stairs2 = BlockTypes.stairs_oak;
+	
+	// pillars
+	public Entry pillar1 = BlockTypes.log_oak;
+	public Entry fence = BlockTypes.fence_wood;
+	
+	// walls
+	public Entry wall1 = BlockTypes.planks_oak;
+	public Entry wall_trim1 = BlockTypes.stonebrick;
+	public Entry wall_trim2 = BlockTypes.planks_darkoak;
+	
+	public Entry window_pane = BlockTypes.glass_pane;
+	public Entry window_block = BlockTypes.glass;
+	
+	// roof
+	public Entry roof_block1 = BlockTypes.brick;
+	public Entry roof_stair1 = BlockTypes.stairs_brick;
+	public Entry roof_slab1 = BlockTypes.slab_brick;
+	
+	public Entry roof_block2 = BlockTypes.planks_spruce;
+	public Entry roof_stair2 = BlockTypes.stairs_spruce;
+	public Entry roof_slab2 = BlockTypes.slab_spruce;
+	
+	// misc
+	public Entry ladder = BlockTypes.ladder;
+	public Entry light = BlockTypes.torch;
+	public Entry door = BlockTypes.door_wood;
+	
+	// furniture
+	public Entry goods = BlockTypes.haybale;
+	public Entry chair_body = BlockTypes.stairs_oak;
+	public Entry chair_arm = BlockTypes.sign;
+	public Entry bed = BlockTypes.bed;
+			
 	public static class BlockTypes {
 		// stone and brick
 		public static final Entry cobble 			 = new Entry(Blocks.cobblestone);
@@ -109,7 +148,7 @@ public class BlockPalette {
 		public static final Entry cobweb			 = new Entry(Blocks.web);
 		
 		public static final Entry quartz			 = new Entry(Blocks.quartz_block, 0);
-		public static final Entry quartz_chiselled	 = new Entry(Blocks.quartz_block, 0);
+		public static final Entry quartz_chiselled	 = new Entry(Blocks.quartz_block, 1);
 		public static final Entry quartz_pillar		 = new Entry(Blocks.quartz_block, MetaType.PILLAR);
 		
 		public static final Entry bookshelf			 = new Entry(Blocks.bookshelf);
@@ -120,13 +159,21 @@ public class BlockPalette {
 		
 		public static final Entry ladder			 = new Entry(Blocks.ladder, MetaType.WALLOBJECT);
 		public static final Entry sign				 = new Entry(Blocks.wall_sign, MetaType.WALLOBJECT);
+		
+		public static final Entry haybale 			 = new Entry(Blocks.hay_block, MetaType.LOG);
+		
+		public static final Entry bed				 = new Entry(Blocks.bed, MetaType.BED);
+		
+		// doors
+		public static final Entry door_wood			 = new Entry(Blocks.wooden_door, MetaType.DOOR);
+		public static final Entry door_iron			 = new Entry(Blocks.iron_door, MetaType.DOOR);
 	}
 	
 	public static class Entry {
 		private final Block block;
 		private final int meta;
 		private final MetaType metatype;
-		private final int variants;
+		//private final int variants;
 		
 		public Entry(Block block) {
 			this(block, 0, MetaType.STANDARD);
@@ -145,10 +192,10 @@ public class BlockPalette {
 			this.meta = meta;
 			this.metatype = type;
 			
-			List<ItemStack> list = new ArrayList<ItemStack>();
+			/*List<ItemStack> list = new ArrayList<ItemStack>();
 			this.block.getSubBlocks(null, null, list);
 			
-			this.variants = list.size();
+			this.variants = list.size();*/
 		}
 		
 		public Block getBlock() {
@@ -178,9 +225,9 @@ public class BlockPalette {
 			else if (this.metatype == MetaType.LOG) {
 				if (offset > 0) {
 					if (rotation == 1 || rotation == 3) {
-						return this.meta + (offset == 1 ? this.variants : this.variants*2);
+						return this.meta + (offset == 1 ? 4 : 8);
 					} else {
-						return this.meta + (offset == 1 ? this.variants*2 : this.variants);
+						return this.meta + (offset == 1 ? 8 : 4);
 					}
 				} else {
 					return this.meta;
@@ -217,10 +264,19 @@ public class BlockPalette {
 				return rot == 0 ? 3 : rot == (flipped ? 3 : 1) ? 4 : rot == 2 ? 2 : 5;
 				//return offset == 0 ? 3 : offset == 1 ? 4 : offset == 2 ? 2 : 5;
 			}
+			// doors
+			else if (this.metatype == MetaType.DOOR) {
+				return (rotation + offset + 5) % 4;
+			}
+			// beds
+			else if (this.metatype == MetaType.BED) {
+				return (rotation + offset + 2) % 4;
+			}
 			
 			// default
 			return this.meta;
 		}
+		
 	}
 	
 	public static enum MetaType {
@@ -230,6 +286,32 @@ public class BlockPalette {
 		LOG,
 		PILLAR,
 		SLAB,
-		WALLOBJECT
+		WALLOBJECT,
+		DOOR,
+		BED
+	}
+	
+	public static void placeBlock(World world, int x, int y, int z, Entry block, int meta) {
+		// doors
+		if (block.metatype == MetaType.DOOR) {
+			ItemDoor.placeDoorBlock(world, x, y, z, meta, block.getBlock());
+			return;
+		}
+		// beds
+		else if (block.metatype == MetaType.BED) {
+			byte ox = 0;
+            byte oz = 0;
+            if (meta == 0) { oz =  1; }
+            if (meta == 1) { ox = -1; }
+            if (meta == 2) { oz = -1; }
+            if (meta == 3) { ox =  1; }
+			
+			world.setBlock(x, y, z, block.getBlock(), meta, 2);
+			world.setBlock(x+ox, y, z+oz, block.getBlock(), meta+8, 2);
+			return;
+		}
+		
+		// default
+		world.setBlock(x, y, z, block.getBlock(), meta, 2);
 	}
 }

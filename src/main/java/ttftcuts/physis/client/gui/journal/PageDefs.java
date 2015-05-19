@@ -50,7 +50,8 @@ public class PageDefs {
 		// these should be last - any articles after here won't be indexed!
 		index = new JournalArticle("index", null,
 			new JournalPageText("index"),
-			new JournalPageIndex(0)
+			new JournalPageIndex(0),
+			new JournalPageTitle("storytest", "storytest")
 		);
 		
 		//Physis.logger.info("Categories");

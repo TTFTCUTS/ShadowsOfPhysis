@@ -26,6 +26,20 @@ physis.journal.text.index=Here, friend, I will keep an index of all the wonders 
 physis.journal.title.testitem=Test Item
 physis.journal.text.testitem=Text for the test item?
 
+physis.journal.title.storytest=Wibble
+physis.journal.text.storytest=Wobble $physis.storyname.#story2#.#story1#$
+physis.storyname.0.0=Dave
+physis.storyname.0.1=Jim
+physis.storyname.0.2=Bob
+physis.storyname.0.3=Oswald
+
+physis.storyname.1.0=Dave
+physis.storyname.1.1=Jim
+physis.storyname.1.2=Bob
+physis.storyname.1.3=Oswald
+
+
+
 tile.physis:digsite.dirt.name=Buried Artifact
 tile.physis:digsite.sand.name=Buried Artifact
 tile.physis:digsite.clay.name=Buried Artifact

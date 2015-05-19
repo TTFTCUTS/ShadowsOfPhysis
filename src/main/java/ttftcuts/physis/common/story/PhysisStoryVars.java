@@ -6,7 +6,10 @@ public class PhysisStoryVars {
 		// Number of different story themes. This translates to the number of different
 		// item variations. IMPORTANT. Do not rename.
 		StoryEngine.registerVariable("theme", 1);
-		
+
 		// --------------
+		
+		StoryEngine.registerVariable("story1", 4);
+		StoryEngine.registerVariable("story2", 2);
 	}
 }

@@ -46,7 +46,8 @@ public class PageDefs {
 			new JournalPageTitle("race2", "race2"),
 			new JournalPageTitle("race3", "race3"),
 			new JournalPageTitle("race4", "race4"),
-			new JournalPageTitle("storytest", "storytest")
+			new JournalPageTitle("race5", "race5"),
+			new JournalPageTitle("test", "test")
 		).setStack(new ItemStack(PhysisItems.journal));
 		
 		//Physis.logger.info("Index next");

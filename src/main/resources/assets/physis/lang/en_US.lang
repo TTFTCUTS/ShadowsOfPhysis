@@ -61,8 +61,21 @@ physis.journal.text.race3=Of all the species that made up the Physians, the @6@l
 physis.journal.title.race4=The @5@lSa'rael@r
 physis.journal.text.race4=The @5@lSa'rael@r made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the @5@lSa'rael@r made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
 
-physis.journal.title.storytest=The @2@lO'rael@r
-physis.journal.text.storytest=In terms you might understand, Adventurer, the @2@lO'rael@r were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to @2@lO'rael@r affinity for logistics. \n\nWithout the @2@lO'rael@r, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the @2@lO'rael@r drove Physis swiftly into a new age of prosperity.
+physis.journal.title.race5=The @2@lO'rael@r
+physis.journal.text.race5=In terms you might understand, Adventurer, the @2@lO'rael@r were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to @2@lO'rael@r affinity for logistics. \n\nWithout the @2@lO'rael@r, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the @2@lO'rael@r drove Physis swiftly into a new age of prosperity.
+
+physis.journal.title.mawgrimsite=Engines of War
+physis.journal.text.mawgrimsite=I had... hoped never to see one of these twisted behemoths again. Even broken and forgotten, the spirit of their creators yet inhabits these machines. \n\nAfter the disappearance of the Mawgrim, it took centuries to finally eliminate the threat of their war engines. The @6@lCo'rael@r eventually hunted them down and disabled them in what we called the 'Wars of Tranquility' - but one cannot destroy the fabricated soul of evil itself. \n\nDark intent still slumbers within their rusting carcasses. Be careful, Adventurer.
+
+physis.journal.title.test=The @4@lMawgrim@r
+physis.journal.text.test=I implore you to consider carefully, friend. Down this path lies suffering. \n\nEven so... if you wish truly to learn of the @4@lMawgrim@r, I will aid you. In knowledge there is power, and we will have need of power. \n\nSearch out more of the hulking monstrosities the @4@lMawgrim@r left behind, and unearth their secrets. If your heart is still set on knowledge, I will grant you it. In time.
+
+physis.journal.title.mawgrimreward1=The Broken God
+physis.journal.text.mawgrimreward1=The @4@lMawgrim@r were, to the Physians, the first believers. In a world untouched by the divine, the entire race was visited by a prophetic vision. In a moment, the @4@lMawgrim@r changed. \n\nThe Broken God became a fanatical obsession for their people, and their divine claim to lordship over the world drove them to hideous acts of violence, in the name of subjugation. You will see bloody monuments to their laughing deity within the tombs they left behind.
+
+physis.journal.title.mawgrimreward2=
+physis.journal.text.mawgrimreward2=
+
 
 tile.physis:digsite.dirt.name=Buried Artifact
 tile.physis:digsite.sand.name=Buried Artifact

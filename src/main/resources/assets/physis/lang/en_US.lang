@@ -6,12 +6,12 @@ item.physis:journal.name=Research Journal [WIP]
 
 physis.journal.newinfo=New Information:
 
-physis.journal.category.item=Items
-physis.journal.title.item=Items
-physis.journal.text.item=Some stuff about items
-physis.journal.category.effect=Effects
-physis.journal.title.effect=Effects
-physis.journal.text.effect=Some stuff about effects
+physis.journal.category.story=History
+physis.journal.title.story=History
+physis.journal.text.story=Some story intro stuff here
+physis.journal.category.item=Items and Blocks
+physis.journal.title.item=Items and Blocks
+physis.journal.text.item=Some stuff about items etc etc.
 physis.journal.category.device=Devices
 physis.journal.title.device=Devices
 physis.journal.text.device=Some stuff about devices

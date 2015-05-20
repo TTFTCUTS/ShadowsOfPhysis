@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import ttftcuts.physis.common.worldgen.structure.BlockPalette;
+import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
 import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 import ttftcuts.physis.common.worldgen.structure.prop.Prop;
 import ttftcuts.physis.common.worldgen.structure.prop.PropTypes;
@@ -15,10 +17,12 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class LayoutNode {
 	public StructureBoundingBox bounds;
 	
+	public BlockPalette palette;
 	public List<Prop> props;
 	
-	public LayoutNode(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+	public LayoutNode(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockPalette palette) {
 		this.bounds = new StructureBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+		this.palette = palette;
 		this.props = new ArrayList<Prop>();
 		this.placeProps();
 	}
@@ -53,6 +57,8 @@ public class LayoutNode {
 		tag.setInteger("maxy", node.bounds.maxY);
 		tag.setInteger("maxz", node.bounds.maxZ);
 		
+		tag.setInteger("pal", node.palette.id);
+		
 		NBTTagList list = new NBTTagList();
 		
 		for(Prop p : node.props) {
@@ -73,7 +79,9 @@ public class LayoutNode {
 		int maxy = tag.getInteger("maxy");
 		int maxz = tag.getInteger("maxz");
 		
-		LayoutNode node = new LayoutNode(minx, miny, minz, maxx, maxy, maxz);
+		BlockPalette palette = BlockPalettes.paletteRegistry.get(tag.getInteger("pal"));
+		
+		LayoutNode node = new LayoutNode(minx, miny, minz, maxx, maxy, maxz, palette);
 		
 		NBTTagList list = tag.getTagList("props", 10);
 		

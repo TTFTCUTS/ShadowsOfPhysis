@@ -17,7 +17,7 @@ public class PropTestHouse extends PropType {
 	
 	@Override
 	public void buildProp(ComponentSiteRoom component, Prop prop, World world, StructureBoundingBox limit, Random rand) {
-		BlockPalette p = BlockPalette.defaultPalette;
+		BlockPalette p = component.blueprintNode.palette;
 		
 		// initial clear
 		prop.clearFill(world, limit, component, -3, 1,-4, 3, 11, 3, false);

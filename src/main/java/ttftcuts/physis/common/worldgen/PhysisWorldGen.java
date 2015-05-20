@@ -1,6 +1,6 @@
 package ttftcuts.physis.common.worldgen;
 
-import ttftcuts.physis.Physis;
+import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
 import ttftcuts.physis.common.worldgen.structure.prop.PropTypes;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -13,8 +13,8 @@ public class PhysisWorldGen {
 		basicdigsite = new WorldGenDigSiteBasic();
 		
 		PropTypes.init();
+		BlockPalettes.init();
 		
-		Physis.logger.info("Registering world gen");
 		GameRegistry.registerWorldGenerator(basicdigsite, 1);
 	}
 }

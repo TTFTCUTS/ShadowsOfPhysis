@@ -1,13 +1,14 @@
 package ttftcuts.physis.common.worldgen.structure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.world.World;
 
 public class BlockPalette {
-	public static BlockPalette defaultPalette = new BlockPalette();
-
 	public Entry foundation = BlockTypes.cobble;
 	
 	// floors
@@ -51,6 +52,69 @@ public class BlockPalette {
 	public Entry chair_arm = BlockTypes.sign;
 	public Entry bed = BlockTypes.bed;
 			
+	//###############################################################
+	public final int id;
+	
+	public BlockPalette() {
+		this.id = BlockPalettes.paletteRegistry.size();
+		BlockPalettes.paletteRegistry.add(this);
+	}
+	
+	public static class BlockPalettes {
+		public static List<BlockPalette> paletteRegistry;
+		
+		public static BlockPalette defaultPalette;
+		
+		public static BlockPalette desert;
+		public static BlockPalette nether;
+		
+		public static void init() {
+			paletteRegistry = new ArrayList<BlockPalette>();
+			
+			defaultPalette = new BlockPalette();
+			
+			desert = new BlockPalette();
+			desert.foundation = BlockTypes.sandstone;
+			desert.wall1 = BlockTypes.clay_stained.getColour(8);
+			desert.wall_trim1 = BlockTypes.sandstone_smooth;
+			desert.wall_trim2 = BlockTypes.sandstone_glyph;
+			desert.roof_block1 = BlockTypes.sandstone;
+			desert.roof_slab1 = BlockTypes.slab_sandstone;
+			desert.roof_stair1 = BlockTypes.stairs_sandstone;
+			desert.roof_block2 = BlockTypes.planks_acacia;
+			desert.roof_slab2 = BlockTypes.slab_acacia;
+			desert.roof_stair2 = BlockTypes.stairs_acacia;
+			desert.floor1 = BlockTypes.clay_stained.getColour(9);
+			desert.stairs1 = BlockTypes.stairs_sandstone;
+			desert.floor2 = BlockTypes.sandstone;
+			desert.stairs2 = BlockTypes.stairs_sandstone;
+			desert.goods = BlockTypes.log_acacia;
+			desert.pillar1 = BlockTypes.log_acacia;
+			
+			nether = new BlockPalette();
+			nether.foundation = BlockTypes.netherbrick;
+			nether.wall1 = BlockTypes.stonebrick_cracked;
+			nether.wall_trim1 = BlockTypes.netherbrick;
+			nether.wall_trim2 = BlockTypes.netherbrick;
+			nether.roof_block1 = BlockTypes.netherbrick;
+			nether.roof_slab1 = BlockTypes.slab_netherbrick;
+			nether.roof_stair1 = BlockTypes.stairs_netherbrick;
+			nether.roof_block2 = BlockTypes.netherbrick;
+			nether.roof_slab2 = BlockTypes.slab_netherbrick;
+			nether.roof_stair2 = BlockTypes.stairs_netherbrick;
+			nether.floor1 = BlockTypes.quartz;
+			nether.stairs1 = BlockTypes.stairs_quartz;
+			nether.floor2 = BlockTypes.netherbrick;
+			nether.stairs2 = BlockTypes.stairs_netherbrick;
+			nether.goods = BlockTypes.glowstone;
+			nether.pillar1 = BlockTypes.quartz_pillar;
+			nether.fence = BlockTypes.fence_netherbrick;
+			nether.window_pane = BlockTypes.ironbars;
+			nether.floor_coloured1 = BlockTypes.clay_stained;
+			nether.door = BlockTypes.door_iron;
+		}
+	}
+	
 	public static class BlockTypes {
 		// stone and brick
 		public static final Entry cobble 			 = new Entry(Blocks.cobblestone);
@@ -77,6 +141,7 @@ public class BlockPalette {
 		public static final Entry gravel			 = new Entry(Blocks.gravel);
 		public static final Entry soulsand			 = new Entry(Blocks.soul_sand);
 		public static final Entry clay				 = new Entry(Blocks.clay);
+		public static final Entry clay_hardened 	 = new Entry(Blocks.hardened_clay);
 		
 		public static final Entry grass				 = new Entry(Blocks.grass);
 		public static final Entry podzol			 = new Entry(Blocks.dirt, 2);
@@ -135,12 +200,12 @@ public class BlockPalette {
 		
 		// decoratives
 		public static final Entry glass 			 = new Entry(Blocks.glass);
-		public static final Entry glass_stained		 = new Entry(Blocks.stained_glass, MetaType.COLOURED);
-		public static final Entry wool				 = new Entry(Blocks.wool, MetaType.COLOURED);
-		public static final Entry stained_clay		 = new Entry(Blocks.stained_hardened_clay, MetaType.COLOURED);
+		public static final EntryColour glass_stained= new EntryColour(Blocks.stained_glass);
+		public static final EntryColour wool		 = new EntryColour(Blocks.wool);
+		public static final EntryColour clay_stained = new EntryColour(Blocks.stained_hardened_clay);
 		
 		public static final Entry glass_pane		 = new Entry(Blocks.glass_pane);
-		public static final Entry glass_pane_stained = new Entry(Blocks.stained_glass_pane, MetaType.COLOURED);
+		public static final EntryColour glass_pane_stained = new EntryColour(Blocks.stained_glass_pane);
 		public static final Entry ironbars			 = new Entry(Blocks.iron_bars);
 		
 		public static final Entry carpet			 = new Entry(Blocks.carpet, MetaType.COLOURED);
@@ -170,9 +235,9 @@ public class BlockPalette {
 	}
 	
 	public static class Entry {
-		private final Block block;
-		private final int meta;
-		private final MetaType metatype;
+		protected final Block block;
+		protected final int meta;
+		protected final MetaType metatype;
 		//private final int variants;
 		
 		public Entry(Block block) {
@@ -277,6 +342,34 @@ public class BlockPalette {
 			return this.meta;
 		}
 		
+	}
+	
+	public static class EntryColour extends Entry {
+
+		protected Entry[] colours;
+		
+		public EntryColour(Block block) {
+			this(block, MetaType.STANDARD);
+		}
+		
+		public EntryColour(Block block, MetaType type) {
+			super(block, MetaType.COLOURED);
+			
+			colours = new Entry[16];
+			
+			for(int i=0; i<16; i++) {
+				colours[i] = new Entry(this.block, i, type);
+			}
+		}
+		
+		public Entry getColour(int colour) {
+			return this.colours[colour];
+		}
+		
+		@Override
+		public int getMeta(int rotation, boolean flipped, int offset, int colour) { 
+			return this.colours[colour].getMeta(rotation, flipped, offset, colour);
+		}
 	}
 	
 	public static enum MetaType {

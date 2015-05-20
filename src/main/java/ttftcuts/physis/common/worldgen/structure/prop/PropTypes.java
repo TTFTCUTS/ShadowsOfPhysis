@@ -7,13 +7,11 @@ public class PropTypes {
 
 	public static List<PropType> propTypes;
 	
-	public static PropType testProp;
 	public static PropType paletteTest;
 
 	public static void init() {
 		propTypes = new ArrayList<PropType>();
 		
-		testProp = new PropType();
 		paletteTest = new PropTestHouse();
 	}
 }

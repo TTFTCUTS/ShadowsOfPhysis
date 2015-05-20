@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import ttftcuts.physis.common.worldgen.structure.BlockPalette;
+import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
+
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class StructureLayout {
@@ -23,15 +26,22 @@ public class StructureLayout {
 	
 	protected void generate() {
 		this.nodes = new ArrayList<LayoutNode>();
+
+		int len = BlockPalettes.paletteRegistry.size();
+		int spread = 10;
+		int size = 20;
+		int width = len * size + (len-1) * spread;
 		
-		/*int o = 7;
-		int s = 10;
-		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z-o, this.x-o+s-1, this.y+s-1, this.z-o+s-1));
-		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z-o, this.x+o+s-1, this.y+s-1, this.z-o+s-1));
-		this.nodes.add(new LayoutNode(this.x-o, this.y, this.z+o, this.x-o+s-1, this.y+s-1, this.z+o+s-1));
-		this.nodes.add(new LayoutNode(this.x+o, this.y, this.z+o, this.x+o+s-1, this.y+s-1, this.z+o+s-1));*/
+		for (int i=0; i<len; i++) {
+			int placex = this.x - (width/2) + i * (spread+size);
+			
+			this.nodes.add(new LayoutNode(placex, this.y, this.z-10, placex+size, this.y+20, this.z+10, BlockPalettes.paletteRegistry.get(i)));
+		}
 		
-		this.nodes.add(new LayoutNode(this.x-10, this.y, this.z-10, this.x+10, this.y+20, this.z+10));
+		//this.nodes.add(new LayoutNode(this.x-10, this.y, this.z-10, this.x+10, this.y+20, this.z+10, p));
+		
+		//this.nodes.add(new LayoutNode(this.x-10 - 30, this.y, this.z-10, this.x+10 - 30, this.y+20, this.z+10, p1));
+		//this.nodes.add(new LayoutNode(this.x-10 + 30, this.y, this.z-10, this.x+10 + 30, this.y+20, this.z+10, p));
 	}
 	
 	public List<StructureComponent> exportToStructureParts(Random rand) {

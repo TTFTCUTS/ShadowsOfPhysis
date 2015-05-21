@@ -18,13 +18,13 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class RuneFontRenderer extends FontRenderer {
 
-	private static ResourceLocation glyphSheet = new ResourceLocation(Physis.MOD_ID, "textures/font/runes.png");
-	private static ResourceLocation unicodeGlyphSheet = new ResourceLocation(Physis.MOD_ID, "textures/font/runesunicode.png");
+	protected static ResourceLocation glyphSheet = new ResourceLocation(Physis.MOD_ID, "textures/font/runes.png");
+	protected static ResourceLocation unicodeGlyphSheet = new ResourceLocation(Physis.MOD_ID, "textures/font/runesunicode.png");
 	
-	private Map<Integer, List<Integer>> unicodeCharsByWidth;
-	private Map<Integer, List<Integer>> asciiCharsByWidth;
+	protected Map<Integer, List<Integer>> unicodeCharsByWidth;
+	protected Map<Integer, List<Integer>> asciiCharsByWidth;
 	
-	private int remixoffset = 0;
+	protected int remixoffset = 0;
 	
 	public RuneFontRenderer() {
 		super(Minecraft.getMinecraft().gameSettings, glyphSheet, Minecraft.getMinecraft().renderEngine, false);
@@ -33,15 +33,15 @@ public class RuneFontRenderer extends FontRenderer {
 		this.calculateAsciiWidths();
 	}
 	
-	private static List<Character> forbidden = ImmutableList.of((char)25, (char)26, (char)27, (char)28, (char)29, (char)30, (char)31, (char)32, (char)33, (char)34, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)255);
-	private boolean isCharAllowed(char c, boolean unicode) {
+	protected static List<Character> forbidden = ImmutableList.of((char)25, (char)26, (char)27, (char)28, (char)29, (char)30, (char)31, (char)32, (char)33, (char)34, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)255);
+	protected boolean isCharAllowed(char c, boolean unicode) {
 		if (!unicode) {
 			return !forbidden.contains(c);
 		}
 		return Character.isAlphabetic(c) || Character.isDigit(c);
 	}
 	
-	private void calculateUnicodeWidths() {
+	protected void calculateUnicodeWidths() {
 		this.unicodeFlag = true;
 		unicodeCharsByWidth = new HashMap<Integer, List<Integer>>();
 		for (int i=0; i<256; i++) {
@@ -59,7 +59,7 @@ public class RuneFontRenderer extends FontRenderer {
 		this.unicodeFlag = false;
 	}
 	
-	private void calculateAsciiWidths() {
+	protected void calculateAsciiWidths() {
 		asciiCharsByWidth = new HashMap<Integer, List<Integer>>();
 		for (int i=0; i<256; i++) {
 			if (!isCharAllowed((char)i, false)) {continue;}
@@ -75,7 +75,7 @@ public class RuneFontRenderer extends FontRenderer {
 		}
 	}
 
-	private char replaceChar(char c, boolean unicode) {
+	protected char replaceChar(char c, boolean unicode) {
 		boolean u = this.unicodeFlag;
 		this.unicodeFlag = unicode;
 		int width = this.getCharWidth(c);

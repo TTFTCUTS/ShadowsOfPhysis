@@ -49,29 +49,35 @@ physis.history4.1=\n\nLaboratories and shining cities swelled out of nothingness
 physis.history4.2=\n\nHabitats grown from lovingly nurtured forests sprang forth from fertile soil, and great trees were bred to pierce the heavens, as the Physians explored the very meaning of life.
 physis.history4.3=\n\nObsidian towers and ritual circles were built in their thousands as the Physians devoured knowledge, hungry for discovery. 
 
-physis.journal.title.race1=The @a@lLi'rael@r
-physis.journal.text.race1=The @a@lLi'rael@r were a race of builders, possessed of a preternatural sense for gravity and design. Their structures grew and soared above the mountain ranges in which they dwelled, seemingly at home amongst the clouds. \n\nIt was the @a@lLi'rael@r who constructed the cities and habitats of the Physians after the Angel fell. During the Wars of Tranquility, it was the @a@lLi'rael@r who constructed the great fortresses and bastions to stand against the foe. \n\nNone of their earthly constructions ever fell. Until they wished them to. 
+physis.race1=@6@lLi'rael@r
+physis.journal.title.race1=The $physis.race1$
+physis.journal.text.race1=The $physis.race1$ were a race of builders, possessed of a preternatural sense for gravity and design. Their structures grew and soared above the mountain ranges in which they dwelled, seemingly at home amongst the clouds. \n\nIt was the $physis.race1$ who constructed the cities and habitats of the Physians after the Angel fell. During the Wars of Tranquility, it was the $physis.race1$ who constructed the great fortresses and bastions to stand against the foe. \n\nNone of their earthly constructions ever fell. Until they wished them to. 
 
-physis.journal.title.race2=The @b@lMa'rael@r
-physis.journal.text.race2=Denizens of the ocean, the @b@lMa'rael@r were rarely seen, preferring instead to spend their time musing on the movements of celestial bodies, spending aeons constructing great omniscopes to peer far into the endless skies. \n\nThe @b@lMa'rael@r were preoccupied with their belief that somewhere, there was a great cosmic message left by the Angel. Whether they ever found it, I do not know, but testimony to their efforts still stands in the deepest recesses of the ocean. 
+physis.race2=@3@lMa'rael@r
+physis.journal.title.race2=The $physis.race2$
+physis.journal.text.race2=Denizens of the ocean, the $physis.race2$ were rarely seen, preferring instead to spend their time musing on the movements of celestial bodies, spending aeons constructing great omniscopes to peer far into the endless skies. \n\nThe $physis.race2$ were preoccupied with their belief that somewhere, there was a great cosmic message left by the Angel. Whether they ever found it, I do not know, but testimony to their efforts still stands in the deepest recesses of the ocean. 
 
-physis.journal.title.race3=The @6@lCo'rael@r
-physis.journal.text.race3=Of all the species that made up the Physians, the @6@lCo'rael@r were by far, the most enigmatic, if least numerate. They considered themselves guardians, rather than functional members of society. \n\nCapable of slowing their metabolism to an almost death-like state, the @6@lCo'rael@r awoke only to defend the Physian people against external aggressors. Many of them still stand, now petrified, hidden amongst the ruins of Physis.
+physis.race3=@8@lCo'rael@r
+physis.journal.title.race3=The $physis.race3$
+physis.journal.text.race3=Of all the species that made up the Physians, the $physis.race3$ were by far, the most enigmatic, if least numerate. They considered themselves guardians, rather than functional members of society. \n\nCapable of slowing their metabolism to an almost death-like state, the $physis.race3$ awoke only to defend the Physian people against external aggressors. Many of them still stand, now petrified, hidden amongst the ruins of Physis.
 
-physis.journal.title.race4=The @5@lSa'rael@r
-physis.journal.text.race4=The @5@lSa'rael@r made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the @5@lSa'rael@r made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
+physis.race4=@5@lSa'rael@r
+physis.journal.title.race4=The $physis.race4$
+physis.journal.text.race4=The $physis.race4$ made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the $physis.race4$ made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
 
-physis.journal.title.race5=The @2@lO'rael@r
-physis.journal.text.race5=In terms you might understand, Adventurer, the @2@lO'rael@r were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to @2@lO'rael@r affinity for logistics. \n\nWithout the @2@lO'rael@r, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the @2@lO'rael@r drove Physis swiftly into a new age of prosperity.
+physis.race5=@2@lO'rael@r
+physis.journal.title.race5=The $physis.race5$
+physis.journal.text.race5=In terms you might understand, Adventurer, the $physis.race5$ were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to $physis.race5$ affinity for logistics. \n\nWithout the $physis.race5$, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the $physis.race5$ drove Physis swiftly into a new age of prosperity.
 
 physis.journal.title.mawgrimsite=Engines of War
-physis.journal.text.mawgrimsite=I had... hoped never to see one of these twisted behemoths again. Even broken and forgotten, the spirit of their creators yet inhabits these machines. \n\nAfter the disappearance of the Mawgrim, it took centuries to finally eliminate the threat of their war engines. The @6@lCo'rael@r eventually hunted them down and disabled them in what we called the 'Wars of Tranquility' - but one cannot destroy the fabricated soul of evil itself. \n\nDark intent still slumbers within their rusting carcasses. Be careful, Adventurer.
+physis.journal.text.mawgrimsite=I had... hoped never to see one of these twisted behemoths again. Even broken and forgotten, the spirit of their creators yet inhabits these machines. \n\nAfter the disappearance of the Mawgrim, it took centuries to finally eliminate the threat of their war engines. The $physis.race3$ eventually hunted them down and disabled them in what we called the 'Wars of Tranquility' - but one cannot destroy the fabricated soul of evil itself. \n\nDark intent still slumbers within their rusting carcasses. Be careful, Adventurer.
 
-physis.journal.title.test=The @4@lMawgrim@r
-physis.journal.text.test=I implore you to consider carefully, friend. Down this path lies suffering. \n\nEven so... if you wish truly to learn of the @4@lMawgrim@r, I will aid you. In knowledge there is power, and we will have need of power. \n\nSearch out more of the hulking monstrosities the @4@lMawgrim@r left behind, and unearth their secrets. If your heart is still set on knowledge, I will grant you it. In time.
+physis.race6=@4@lMawgrim@r
+physis.journal.title.test=The $physis.race6$
+physis.journal.text.test=I implore you to consider carefully, friend. Down this path lies suffering. \n\nEven so... if you wish truly to learn of the $physis.race6$, I will aid you. In knowledge there is power, and we will have need of power. \n\nSearch out more of the hulking monstrosities the $physis.race6$ left behind, and unearth their secrets. If your heart is still set on knowledge, I will grant you it. In time.
 
 physis.journal.title.mawgrimreward1=The Broken God
-physis.journal.text.mawgrimreward1=The @4@lMawgrim@r were, to the Physians, the first believers. In a world untouched by the divine, the entire race was visited by a prophetic vision. In a moment, the @4@lMawgrim@r changed. \n\nThe Broken God became a fanatical obsession for their people, and their divine claim to lordship over the world drove them to hideous acts of violence, in the name of subjugation. You will see bloody monuments to their laughing deity within the tombs they left behind.
+physis.journal.text.mawgrimreward1=The $physis.race6$ were, to the Physians, the first believers. In a world untouched by the divine, the entire race was visited by a prophetic vision. In a moment, the $physis.race6$ changed. \n\nThe Broken God became a fanatical obsession for their people, and their divine claim to lordship over the world drove them to hideous acts of violence, in the name of subjugation. You will see bloody monuments to their laughing deity within the tombs they left behind.
 
 physis.journal.title.mawgrimreward2=
 physis.journal.text.mawgrimreward2=

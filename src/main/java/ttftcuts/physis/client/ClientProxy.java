@@ -13,6 +13,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import ttftcuts.physis.client.gui.BookFontRenderer;
+import ttftcuts.physis.client.gui.BookRuneFontRenderer;
 import ttftcuts.physis.client.gui.RuneFontRenderer;
 import ttftcuts.physis.client.gui.journal.EncryptionSymbol;
 import ttftcuts.physis.client.gui.journal.JournalArticle;
@@ -35,6 +37,8 @@ import ttftcuts.physis.common.story.StoryEngine;
 
 public class ClientProxy extends CommonProxy {	
 	public static FontRenderer runeFontRenderer;
+	public static FontRenderer bookFontRenderer;
+	public static FontRenderer bookRuneFontRenderer;
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -48,9 +52,13 @@ public class ClientProxy extends CommonProxy {
 		super.init(event);
 		PhysisIntegration.initStart(event, true);
 		ClientProxy.runeFontRenderer = new RuneFontRenderer();
+		ClientProxy.bookFontRenderer = new BookFontRenderer();
+		ClientProxy.bookRuneFontRenderer = new BookRuneFontRenderer();
 		IResourceManager m = Minecraft.getMinecraft().getResourceManager();
 		if (m instanceof IReloadableResourceManager) {
 			((IReloadableResourceManager)m).registerReloadListener(ClientProxy.runeFontRenderer);
+			((IReloadableResourceManager)m).registerReloadListener(ClientProxy.bookFontRenderer);
+			((IReloadableResourceManager)m).registerReloadListener(ClientProxy.bookRuneFontRenderer);
 		}
 		EncryptionSymbol.init();
 		

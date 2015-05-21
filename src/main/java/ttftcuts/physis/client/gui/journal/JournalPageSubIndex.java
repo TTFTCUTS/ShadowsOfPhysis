@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.ClientProxy;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.button.GuiButtonInvisible;

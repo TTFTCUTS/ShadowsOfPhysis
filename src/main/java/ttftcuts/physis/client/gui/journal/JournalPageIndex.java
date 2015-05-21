@@ -12,7 +12,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 
 import ttftcuts.physis.Physis;
-import ttftcuts.physis.client.ClientProxy;
 import ttftcuts.physis.client.gui.GuiJournal;
 import ttftcuts.physis.client.gui.button.GuiButtonInvisible;
 
@@ -68,7 +67,7 @@ public class JournalPageIndex extends JournalPage {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
-		FontRenderer renderer = this.canView() ? journal.mc.fontRenderer : ClientProxy.runeFontRenderer;
+		FontRenderer renderer = this.getFont();
 		boolean unicode = renderer.getUnicodeFlag();
 		renderer.setUnicodeFlag(false);
 		

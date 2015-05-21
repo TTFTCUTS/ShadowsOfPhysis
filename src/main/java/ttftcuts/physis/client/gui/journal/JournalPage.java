@@ -29,6 +29,5 @@ public abstract class JournalPage {
 	@SideOnly(Side.CLIENT)
 	public FontRenderer getFont() {
 		return this.canView() ? ClientProxy.bookFontRenderer : ClientProxy.bookRuneFontRenderer;
-		//return this.canView() ? Minecraft.getMinecraft().fontRenderer : ClientProxy.runeFontRenderer;
 	}
 }

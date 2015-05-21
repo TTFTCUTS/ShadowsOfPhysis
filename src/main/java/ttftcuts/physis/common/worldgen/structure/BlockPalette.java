@@ -238,7 +238,6 @@ public class BlockPalette {
 		protected final Block block;
 		protected final int meta;
 		protected final MetaType metatype;
-		//private final int variants;
 		
 		public Entry(Block block) {
 			this(block, 0, MetaType.STANDARD);
@@ -341,7 +340,6 @@ public class BlockPalette {
 			// default
 			return this.meta;
 		}
-		
 	}
 	
 	public static class EntryColour extends Entry {

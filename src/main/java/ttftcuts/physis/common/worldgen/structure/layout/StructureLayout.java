@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
 
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -35,7 +34,7 @@ public class StructureLayout {
 		for (int i=0; i<len; i++) {
 			int placex = this.x - (width/2) + i * (spread+size);
 			
-			this.nodes.add(new LayoutNode(placex, this.y, this.z-10, placex+size, this.y+20, this.z+10, BlockPalettes.paletteRegistry.get(i)));
+			this.nodes.add(new LayoutNode(placex, this.y, this.z-10, placex+size, this.y+20, this.z+10, BlockPalettes.paletteRegistry.get(i)).placeProps());
 		}
 		
 		//this.nodes.add(new LayoutNode(this.x-10, this.y, this.z-10, this.x+10, this.y+20, this.z+10, p));

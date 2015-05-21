@@ -5,15 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 import ttftcuts.physis.common.worldgen.structure.MapGenDigSite;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class StructureHandler {
@@ -75,6 +81,53 @@ public class StructureHandler {
 			for (MapGenStructure gen : generators) {
 				gen.generateStructuresInChunk(event.world, event.rand, event.chunkX, event.chunkZ);
 			}
+		}
+	}
+	
+	
+	// #################################################################
+	// Structure protection
+	
+	private boolean shouldProtectStructure(World world, int x, int y, int z) {
+		if (world == null) { return false; }
+		List<MapGenStructure> worldlist = structureMap.get(world);
+		for (MapGenStructure mgs : worldlist) {
+			if (mgs instanceof MapGenDigSite) {
+				MapGenDigSite dig = (MapGenDigSite)mgs;
+				StructureStart start = dig.getStructureAt(x, y, z);
+				
+				if (start != null) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	// block break event for preventing structure meddling
+	@SubscribeEvent
+	public void onBlockBreak(BlockEvent.BreakEvent event) {
+		Physis.logger.info("Break event world: "+event.world);
+		if (this.shouldProtectStructure(event.world, event.x, event.y, event.z)) {
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onAttemptBreak(PlayerEvent.BreakSpeed event) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
+		if (event.entity == null) { return; }
+		Physis.logger.info("Breakspeed event world: "+event.entity.worldObj);
+		if (this.shouldProtectStructure(event.entity.worldObj, event.x, event.y, event.z)) {
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onBlockPlace(BlockEvent.PlaceEvent event) {
+		Physis.logger.info("Place event world: "+event.world);
+		if (this.shouldProtectStructure(event.world, event.x, event.y, event.z)) {
+			event.setCanceled(true);
 		}
 	}
 }

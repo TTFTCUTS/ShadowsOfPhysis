@@ -12,16 +12,15 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 public class MapGenDigSite extends MapGenStructure
 {
-    public MapGenDigSite()
-    {
+    public MapGenDigSite() {}
 
-    }
-
+    @Override
     public String func_143025_a()
     {
         return "PhysisSite";
     }
 
+    @Override
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)
     {
         int k = chunkX >> 4;
@@ -32,11 +31,18 @@ public class MapGenDigSite extends MapGenStructure
         return (Math.abs(chunkX) % 20 == 0) && (Math.abs(chunkZ) % 20 == 0);
     }
 
+    @Override
     protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
     {
         return new MapGenDigSite.Start(this.worldObj, this.rand, p_75049_1_, p_75049_2_);
     }
 
+    public StructureStart getStructureAt(int x, int y, int z)
+    {
+        this.func_143027_a(this.worldObj);
+        return this.func_143028_c(x, y, z);
+    }
+    
     public static class Start extends StructureStart
     {
 

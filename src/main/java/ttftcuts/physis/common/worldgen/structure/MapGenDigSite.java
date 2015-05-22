@@ -39,7 +39,10 @@ public class MapGenDigSite extends MapGenStructure
 
     public StructureStart getStructureAt(int x, int y, int z)
     {
-        this.func_143027_a(this.worldObj);
+    	try {
+    		this.func_143027_a(this.worldObj);
+    	}
+    	catch (Exception e) {}
         return this.func_143028_c(x, y, z);
     }
     

@@ -2,34 +2,64 @@ package ttftcuts.physis.common.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 import ttftcuts.physis.common.worldgen.structure.MapGenDigSite;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureStart;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class StructureHandler {
 	
 	public Map<World, List<MapGenStructure>> structureMap = new HashMap<World, List<MapGenStructure>>();
+	public Set<Block> protectionAllowBreaking = new HashSet<Block>();
+	public Set<Block> protectionAllowPlacement = new HashSet<Block>();
 	
 	public StructureHandler() {
 		MapGenStructureIO.registerStructure(MapGenDigSite.Start.class, "PhysisDigSite");
 		
 		MapGenStructureIO.func_143031_a(ComponentSiteRoom.class, "PhysisSiteRoom");
+		
+		this.addProtectionException(Blocks.torch, true);
+		this.addProtectionException(Blocks.fire, true);
+		this.addProtectionException(Blocks.water, true);
+		this.addProtectionException(Blocks.flowing_water, true);
+		this.addProtectionException(Blocks.lava, true);
+		this.addProtectionException(Blocks.flowing_lava, true);
+		
+		this.addProtectionException(Blocks.wooden_door);
+		this.addProtectionException(Blocks.iron_door);
+		this.addProtectionException(Blocks.mob_spawner);
+		this.addProtectionException(Blocks.tallgrass);
+		this.addProtectionException(Blocks.double_plant);
+	}
+	
+	public void addProtectionException(Block block) {
+		this.addProtectionException(block, false);
+	}
+	
+	public void addProtectionException(Block block, boolean place) {
+		if (!this.protectionAllowBreaking.contains(block)) {
+			this.protectionAllowBreaking.add(block);
+		}
+		if (place && !this.protectionAllowPlacement.contains(block)) {
+			this.protectionAllowPlacement.add(block);
+		}
 	}
 	
 	// world loading for creating the structure systems
@@ -107,13 +137,15 @@ public class StructureHandler {
 	// block break event for preventing structure meddling
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		Physis.logger.info("Break event world: "+event.world);
+		//Physis.logger.info("Break event world: "+event.world);
 		if (this.shouldProtectStructure(event.world, event.x, event.y, event.z)) {
-			event.setCanceled(true);
+			if (!protectionAllowBreaking.contains(event.block)) {
+				event.setCanceled(true);
+			}
 		}
 	}
 	
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void onAttemptBreak(PlayerEvent.BreakSpeed event) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
 		if (event.entity == null) { return; }
@@ -121,13 +153,26 @@ public class StructureHandler {
 		if (this.shouldProtectStructure(event.entity.worldObj, event.x, event.y, event.z)) {
 			event.setCanceled(true);
 		}
-	}
+	}*/
 	
 	@SubscribeEvent
 	public void onBlockPlace(BlockEvent.PlaceEvent event) {
-		Physis.logger.info("Place event world: "+event.world);
+		//Physis.logger.info("Place event world: "+event.world);
 		if (this.shouldProtectStructure(event.world, event.x, event.y, event.z)) {
-			event.setCanceled(true);
+			if (!protectionAllowPlacement.contains(event.block)) {
+				event.setCanceled(true);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onExplosion(ExplosionEvent.Detonate event) {
+		List<ChunkPosition> poslist = event.getAffectedBlocks();
+		for (int i=poslist.size()-1; i > 0; i--) {
+			ChunkPosition pos = poslist.get(i);
+			if (this.shouldProtectStructure(event.world, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ)) {
+				poslist.remove(pos);
+			}
 		}
 	}
 }

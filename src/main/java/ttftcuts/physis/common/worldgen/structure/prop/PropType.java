@@ -9,15 +9,15 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 
 public abstract class PropType {
-	public final int id;
+	public final String id;
 	
 	public static final StructureBoundingBox defaultBounds = new StructureBoundingBox(0,0,0,0,0,0);
 	
 	public StructureBoundingBox bounds = defaultBounds;
 	
-	public PropType() {
-		this.id = PropTypes.propTypes.size();
-		PropTypes.propTypes.add(this);
+	public PropType(String name) {
+		this.id = name;
+		PropTypes.propTypes.put(name,this);
 	}
 	
 	public StructureBoundingBox getBoundingBoxForProp(Prop prop) {

@@ -1,7 +1,7 @@
 package ttftcuts.physis.common.worldgen.structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -53,15 +53,15 @@ public class BlockPalette {
 	public Entry bed = BlockTypes.bed;
 			
 	//###############################################################
-	public final int id;
+	public final String id;
 	
-	public BlockPalette() {
-		this.id = BlockPalettes.paletteRegistry.size();
-		BlockPalettes.paletteRegistry.add(this);
+	public BlockPalette(String name) {
+		this.id = name;
+		BlockPalettes.paletteRegistry.put(name, this);
 	}
 	
 	public static class BlockPalettes {
-		public static List<BlockPalette> paletteRegistry;
+		public static Map<String, BlockPalette> paletteRegistry;
 		
 		public static BlockPalette defaultPalette;
 		
@@ -69,11 +69,11 @@ public class BlockPalette {
 		public static BlockPalette nether;
 		
 		public static void init() {
-			paletteRegistry = new ArrayList<BlockPalette>();
+			paletteRegistry = new HashMap<String, BlockPalette>();
 			
-			defaultPalette = new BlockPalette();
+			defaultPalette = new BlockPalette("default");
 			
-			desert = new BlockPalette();
+			desert = new BlockPalette("desert");
 			desert.foundation = BlockTypes.sandstone;
 			desert.wall1 = BlockTypes.clay_stained.getColour(8);
 			desert.wall_trim1 = BlockTypes.sandstone_smooth;
@@ -91,7 +91,7 @@ public class BlockPalette {
 			desert.goods = BlockTypes.log_acacia;
 			desert.pillar1 = BlockTypes.log_acacia;
 			
-			nether = new BlockPalette();
+			nether = new BlockPalette("nether");
 			nether.foundation = BlockTypes.netherbrick;
 			nether.wall1 = BlockTypes.stonebrick_cracked;
 			nether.wall_trim1 = BlockTypes.netherbrick;

@@ -48,7 +48,7 @@ public class LayoutNode {
 		tag.setInteger("maxy", node.bounds.maxY);
 		tag.setInteger("maxz", node.bounds.maxZ);
 		
-		tag.setInteger("pal", node.palette.id);
+		tag.setString("pal", node.palette.id);
 		
 		NBTTagList list = new NBTTagList();
 		
@@ -70,7 +70,7 @@ public class LayoutNode {
 		int maxy = tag.getInteger("maxy");
 		int maxz = tag.getInteger("maxz");
 		
-		BlockPalette palette = BlockPalettes.paletteRegistry.get(tag.getInteger("pal"));
+		BlockPalette palette = BlockPalettes.paletteRegistry.get(tag.getString("pal"));
 		
 		LayoutNode node = new LayoutNode(minx, miny, minz, maxx, maxy, maxz, palette);
 		

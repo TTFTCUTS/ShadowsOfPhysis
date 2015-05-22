@@ -211,7 +211,7 @@ public class Prop {
 		int x = tag.getInteger("x");
 		int y = tag.getInteger("y");
 		int z = tag.getInteger("z");
-		int id = tag.getInteger("id");
+		String id = tag.getString("id");
 		
 		PropType type = PropTypes.propTypes.get(id);
 		
@@ -241,7 +241,7 @@ public class Prop {
 		tag.setInteger("x", prop.x);
 		tag.setInteger("y", prop.y);
 		tag.setInteger("z", prop.z);
-		tag.setInteger("id", prop.type.id);
+		tag.setString("id", prop.type.id);
 		tag.setInteger("r", prop.rotation);
 		tag.setBoolean("f", prop.flipped);
 		

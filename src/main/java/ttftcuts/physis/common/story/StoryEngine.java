@@ -33,6 +33,10 @@ public class StoryEngine {
 			//Physis.logger.info("Loaded story seed from packet: "+s);
 		}
 		
+		@Override
+		public void dataSaving() {}
+		@Override
+		public void dataLoaded() {}
 	};
 	
 	private static Map<String, Integer> registry = new HashMap<String, Integer>();

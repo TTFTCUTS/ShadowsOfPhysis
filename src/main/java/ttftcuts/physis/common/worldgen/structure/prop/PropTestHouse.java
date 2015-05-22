@@ -10,6 +10,10 @@ import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 
 public class PropTestHouse extends PropType {
 	
+	public PropTestHouse() {
+		super("testhouse");
+	}
+
 	@Override
 	public StructureBoundingBox getBoundingBoxForProp(Prop prop) {
 		return new StructureBoundingBox(-10, 0, -10, 10, 20, 10);

@@ -33,6 +33,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	
 	private static final String PLAYERDATATAG = "PlayerData";
 	private static final String WORLDDATATAG = "WorldData";
+	private static final String SERVERDATATAG = "ServerData";
 	private static final String UUIDTAG1 = "UUIDMost";
 	private static final String UUIDTAG2 = "UUIDLeast";
 	
@@ -41,6 +42,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	
 	private Map<UUID, NBTTagCompound> playerData;
 	private NBTTagCompound worldData;
+	private NBTTagCompound serverData;
 	
 	public static PhysisWorldSavedData instance;
 	private static List<IDataCallback> callbacks = new ArrayList<IDataCallback>();
@@ -52,6 +54,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 		super(Physis.MOD_ID);
 		playerData = new HashMap<UUID, NBTTagCompound>();
 		worldData = new NBTTagCompound();
+		serverData = new NBTTagCompound();
 		
 		instance = this;
 	}
@@ -65,11 +68,14 @@ public class PhysisWorldSavedData extends WorldSavedData {
 			playerData.put(uuid, data);
 		}
 		worldData = tag.getCompoundTag(WORLDDATATAG);
+		serverData = tag.getCompoundTag(SERVERDATATAG);
 		//Physis.logger.info("Read world data from NBT");
+		doCallbacksLoad();
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
+		doCallbacksSave();
 		NBTTagList list = new NBTTagList();
 		for (Entry<UUID, NBTTagCompound> entry : playerData.entrySet()) {
 			NBTTagCompound ptag = entry.getValue();
@@ -79,6 +85,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 		}
 		tag.setTag(PLAYERDATATAG, list);
 		tag.setTag(WORLDDATATAG, worldData);
+		tag.setTag(SERVERDATATAG, serverData);
 		//Physis.logger.info("Saved world data to NBT");
 	}
 	
@@ -135,6 +142,18 @@ public class PhysisWorldSavedData extends WorldSavedData {
 		}
 	}
 	
+	private static void doCallbacksSave() {
+		for (IDataCallback cb : callbacks) {
+			cb.dataSaving();
+		}
+	}
+	
+	private static void doCallbacksLoad() {
+		for (IDataCallback cb : callbacks) {
+			cb.dataLoaded();
+		}
+	}
+	
 	public static void safeMarkDirty() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
 		instance.markDirty();
@@ -154,6 +173,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	
 	// data getting/setting
 	
+	// WORLD DATA
 	public static void setWorldInt(String name, int value) {
 		getWorldData().setInteger(name, value);
 		safeMarkDirty();
@@ -183,6 +203,23 @@ public class PhysisWorldSavedData extends WorldSavedData {
 		return getWorldData().getLong(name);
 	}
 	
+	// SERVER-ONLY DATA
+	public static void setServerTag(String name, NBTTagCompound tag) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
+		instance.serverData.setTag(name, tag);
+		safeMarkDirty();
+	}
+	public static NBTTagCompound getServerTag(String name) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return null; }
+		if (!instance.serverData.hasKey(name)) {
+			NBTTagCompound compound = new NBTTagCompound();
+			instance.serverData.setTag(name, compound);
+			return compound;
+		}
+		return instance.serverData.getCompoundTag(name);
+	}
+	
+	// PLAYER DATA
 	public static void setPlayerInt(EntityPlayer player, String name, int value) {
 		NBTTagCompound p = getPlayerData(player);
 		if (p != null) {

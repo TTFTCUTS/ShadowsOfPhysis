@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
 import ttftcuts.physis.common.worldgen.structure.MapGenDigSite;
+import ttftcuts.physis.common.worldgen.structure.StructureGenerator;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
@@ -98,6 +100,10 @@ public class StructureHandler {
 				gen.func_151539_a(event.chunkProvider, event.world, event.chunkX, event.chunkZ, event.blockArray);
 			}
 		}
+		
+		for(Entry<String, StructureGenerator> e : StructureGenerator.generators.entrySet()) {
+			e.getValue().plan(event.chunkProvider, event.world, event.chunkX, event.chunkZ, event.blockArray);
+		}
 	}
 	
 	// populate event for building the structures
@@ -111,6 +117,10 @@ public class StructureHandler {
 			for (MapGenStructure gen : generators) {
 				gen.generateStructuresInChunk(event.world, event.rand, event.chunkX, event.chunkZ);
 			}
+		}
+		
+		for(Entry<String, StructureGenerator> e : StructureGenerator.generators.entrySet()) {
+			e.getValue().generateStructuresInChunk(event.world, event.rand, event.chunkX, event.chunkZ);
 		}
 	}
 	

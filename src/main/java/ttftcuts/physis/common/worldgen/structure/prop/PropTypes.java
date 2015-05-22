@@ -1,16 +1,16 @@
 package ttftcuts.physis.common.worldgen.structure.prop;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PropTypes {
 
-	public static List<PropType> propTypes;
+	public static Map<String, PropType> propTypes;
 	
 	public static PropType paletteTest;
 
 	public static void init() {
-		propTypes = new ArrayList<PropType>();
+		propTypes = new HashMap<String,PropType>();
 		
 		paletteTest = new PropTestHouse();
 	}

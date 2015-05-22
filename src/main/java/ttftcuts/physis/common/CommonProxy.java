@@ -93,11 +93,9 @@ public class CommonProxy {
     	FMLCommonHandler.instance().bus().register(new ServerDataHandler());
     	MinecraftForge.EVENT_BUS.register(new ItemDestructionHandler());
     	
-    	Physis.logger.info("registering structure handler");
     	StructureHandler structureHandler = new StructureHandler();
     	MinecraftForge.EVENT_BUS.register(structureHandler);
     	MinecraftForge.TERRAIN_GEN_BUS.register(structureHandler);
-    	Physis.logger.info("registered structure handler");
     	
     	networkSetup();
     	LootSystem.init();

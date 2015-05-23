@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.file.IDataCallback;
 import ttftcuts.physis.common.file.PhysisWorldSavedData;
 import ttftcuts.physis.common.helper.WorldGenHelper;
@@ -133,7 +134,7 @@ public class StructureGenerator {
 					
 					//Physis.logger.info("Generating a new structure at chunk "+sdata.x+","+sdata.z);
 					
-					saveGeneratorsToWorldData();
+					//saveGeneratorsToWorldData();
 				}
 			}
 		}
@@ -318,7 +319,15 @@ public class StructureGenerator {
 		}
 		
 		PhysisWorldSavedData.setServerTag(GENERATORTAG, tag);
-		//Physis.logger.info("Saving Structure data");
+		Physis.logger.info("Saving Structure data");
+	}
+	
+	public static void cleanUp() {
+		saveGeneratorsToWorldData();
+		
+		for (StructureGenerator generator : generators.values()) {
+			generator.structureMap.clear();
+		}
 	}
 
 	public static class StructureData {

@@ -32,12 +32,14 @@ public class StructureHandler {
 		this.addProtectionException(Blocks.flowing_water, true);
 		this.addProtectionException(Blocks.lava, true);
 		this.addProtectionException(Blocks.flowing_lava, true);
+		this.addProtectionException(Blocks.snow_layer, true);
 		
 		this.addProtectionException(Blocks.wooden_door);
 		this.addProtectionException(Blocks.iron_door);
 		this.addProtectionException(Blocks.mob_spawner);
 		this.addProtectionException(Blocks.tallgrass);
 		this.addProtectionException(Blocks.double_plant);
+		this.addProtectionException(Blocks.web);
 	}
 	
 	public void addProtectionException(Block block) {
@@ -62,7 +64,7 @@ public class StructureHandler {
 	// world unloading for destroying the structure systems
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-
+		//StructureGenerator.cleanUp();
 	}
 	
 	// biome block replacement for planning structures

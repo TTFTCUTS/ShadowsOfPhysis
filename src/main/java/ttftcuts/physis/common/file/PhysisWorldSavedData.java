@@ -67,7 +67,13 @@ public class PhysisWorldSavedData extends WorldSavedData {
 			UUID uuid = new UUID(data.getLong(UUIDTAG1), data.getLong(UUIDTAG2));
 			playerData.put(uuid, data);
 		}
+		if(!tag.hasKey(WORLDDATATAG)) {
+			tag.setTag(WORLDDATATAG, new NBTTagCompound());
+		}
 		worldData = tag.getCompoundTag(WORLDDATATAG);
+		if(!tag.hasKey(SERVERDATATAG)) {
+			tag.setTag(SERVERDATATAG, new NBTTagCompound());
+		}
 		serverData = tag.getCompoundTag(SERVERDATATAG);
 		//Physis.logger.info("Read world data from NBT");
 		doCallbacksLoad();
@@ -206,6 +212,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	// SERVER-ONLY DATA
 	public static void setServerTag(String name, NBTTagCompound tag) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
+		Physis.logger.info("SERVER TAG SET: name: "+name+", tag: "+tag+", server data: "+instance.serverData);
 		instance.serverData.setTag(name, tag);
 		safeMarkDirty();
 	}

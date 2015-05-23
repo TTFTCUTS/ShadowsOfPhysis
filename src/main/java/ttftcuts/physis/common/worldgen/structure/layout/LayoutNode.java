@@ -6,13 +6,12 @@ import java.util.Random;
 
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
-import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
+import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 import ttftcuts.physis.common.worldgen.structure.prop.Prop;
 import ttftcuts.physis.common.worldgen.structure.prop.PropTypes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 
 public class LayoutNode {
 	public StructureBoundingBox bounds;
@@ -32,8 +31,8 @@ public class LayoutNode {
 		return this;
 	}
 	
-	public StructureComponent getComponent(int id, Random rand) {
-		return new ComponentSiteRoom(id, rand, this);
+	public StructurePiece getPiece(Random rand) {
+		return new StructurePiece(this);
 	}
 	
 	//##### static save/load stuff ##############################################

@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
-import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
+import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
+
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,11 +68,11 @@ public class Prop {
 	}
 
 	// ##### instance-level utils ###############################################
-	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
+	public void placeBlock(World world, StructureBoundingBox limit, StructurePiece component, int x, int y, int z, BlockPalette.Entry block, int metaoffset) {
 		this.placeBlock(world, limit, component, x, y, z, block, metaoffset, 0);
 	}
 	
-	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
+	public void placeBlock(World world, StructureBoundingBox limit, StructurePiece component, int x, int y, int z, BlockPalette.Entry block, int metaoffset, int colour) {
 		int tx = transformX(x,y,z, component);
 		int ty = transformY(x,y,z, component);
 		int tz = transformZ(x,y,z, component);
@@ -83,7 +84,7 @@ public class Prop {
 		}
 	}
 
-	public void placeBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, Block block, int meta) {
+	public void placeBlock(World world, StructureBoundingBox limit, StructurePiece component, int x, int y, int z, Block block, int meta) {
 		int tx = transformX(x,y,z, component);
 		int ty = transformY(x,y,z, component);
 		int tz = transformZ(x,y,z, component);
@@ -93,15 +94,15 @@ public class Prop {
 		}
 	}
 	
-	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset) {
+	public void fillBlocks(World world, StructureBoundingBox limit, StructurePiece component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset) {
 		this.fillBlocks(world, limit, component, minx, miny, minz, maxx, maxy, maxz, block, metaoffset, 0);
 	}
 	
-	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset, int colour) {
+	public void fillBlocks(World world, StructureBoundingBox limit, StructurePiece component, int minx, int miny, int minz, int maxx, int maxy, int maxz, BlockPalette.Entry block, int metaoffset, int colour) {
 		this.fillBlocks(world, limit, component, minx, miny, minz, maxx, maxy, maxz, block.getBlock(), block.getMeta(this.rotation, this.flipped, metaoffset, colour));
 	}
 	
-	public void fillBlocks(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, Block block, int meta) {
+	public void fillBlocks(World world, StructureBoundingBox limit, StructurePiece component, int minx, int miny, int minz, int maxx, int maxy, int maxz, Block block, int meta) {
 		for (int x = minx; x<=maxx; x++) {
 			for (int y = miny; y<=maxy; y++) {
 				for (int z = minz; z<=maxz; z++) {
@@ -111,7 +112,7 @@ public class Prop {
 		}
 	}
 	
-	public void clearBlock(World world, StructureBoundingBox limit, ComponentSiteRoom component, int x, int y, int z, boolean force) {
+	public void clearBlock(World world, StructureBoundingBox limit, StructurePiece component, int x, int y, int z, boolean force) {
 		int tx = transformX(x,y,z, component);
 		int ty = transformY(x,y,z, component);
 		int tz = transformZ(x,y,z, component);
@@ -124,7 +125,7 @@ public class Prop {
 		}
 	}
 	
-	public void clearFill(World world, StructureBoundingBox limit, ComponentSiteRoom component, int minx, int miny, int minz, int maxx, int maxy, int maxz, boolean force) {
+	public void clearFill(World world, StructureBoundingBox limit, StructurePiece component, int minx, int miny, int minz, int maxx, int maxy, int maxz, boolean force) {
 		for (int x = minx; x<=maxx; x++) {
 			for (int y = miny; y<=maxy; y++) {
 				for (int z = minz; z<=maxz; z++) {
@@ -154,15 +155,15 @@ public class Prop {
 		
 		return this.x + rx;
 	}
-	protected int transformX(int x, int y, int z, ComponentSiteRoom component) {
-		return this.localTransformX(x, y, z) + component.getBoundingBox().minX + component.layoutOffsetX;
+	protected int transformX(int x, int y, int z, StructurePiece component) {
+		return this.localTransformX(x, y, z) + component.bounds.minX + component.layoutOffsetX;
 	}
 	
 	protected int localTransformY(int x, int y, int z) {
 		return this.y + y;
 	}
-	protected int transformY(int x, int y, int z, ComponentSiteRoom component) {
-		return this.localTransformY(x, y, z) + component.getBoundingBox().minY + component.layoutOffsetY;
+	protected int transformY(int x, int y, int z, StructurePiece component) {
+		return this.localTransformY(x, y, z) + component.bounds.minY + component.layoutOffsetY;
 	}
 	
 	protected int localTransformZ(int x, int y, int z) {
@@ -185,8 +186,8 @@ public class Prop {
 		
 		return this.z + rz;
 	}
-	protected int transformZ(int x, int y, int z, ComponentSiteRoom component) {
-		return this.localTransformZ(x, y, z) + component.getBoundingBox().minZ + component.layoutOffsetZ;
+	protected int transformZ(int x, int y, int z, StructurePiece component) {
+		return this.localTransformZ(x, y, z) + component.bounds.minZ + component.layoutOffsetZ;
 	}
 	
 	protected void rotateBoundingBox(StructureBoundingBox b) {

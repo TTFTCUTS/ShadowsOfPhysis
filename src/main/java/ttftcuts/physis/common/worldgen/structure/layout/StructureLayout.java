@@ -7,8 +7,7 @@ import java.util.Random;
 
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
-
-import net.minecraft.world.gen.structure.StructureComponent;
+import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 
 public class StructureLayout {
 	int x;
@@ -49,11 +48,11 @@ public class StructureLayout {
 		//this.nodes.add(new LayoutNode(this.x-10 + 30, this.y, this.z-10, this.x+10 + 30, this.y+20, this.z+10, p));
 	}
 	
-	public List<StructureComponent> exportToStructureParts(Random rand) {
-		List<StructureComponent> parts = new ArrayList<StructureComponent>();
+	public List<StructurePiece> exportToStructurePieces(Random rand) {
+		List<StructurePiece> parts = new ArrayList<StructurePiece>();
 		
 		for (int i=0; i<nodes.size(); i++) {
-			parts.add(nodes.get(i).getComponent(i, rand));
+			parts.add(nodes.get(i).getPiece(rand));
 		}
 		
 		return parts;

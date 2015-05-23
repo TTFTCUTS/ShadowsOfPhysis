@@ -6,7 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
-import ttftcuts.physis.common.worldgen.structure.ComponentSiteRoom;
+import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 
 public class PropTestHouse extends PropType {
 	
@@ -20,7 +20,7 @@ public class PropTestHouse extends PropType {
 	}
 	
 	@Override
-	public void buildProp(ComponentSiteRoom component, Prop prop, World world, StructureBoundingBox limit, Random rand) {
+	public void buildProp(StructurePiece component, Prop prop, World world, StructureBoundingBox limit, Random rand) {
 		BlockPalette p = component.blueprintNode.palette;
 		
 		// initial clear

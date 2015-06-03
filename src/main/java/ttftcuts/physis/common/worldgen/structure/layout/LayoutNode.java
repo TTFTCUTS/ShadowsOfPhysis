@@ -26,7 +26,7 @@ public class LayoutNode {
 	}
 	
 	public LayoutNode placeProps() {
-		this.props.add(new Prop(PropTypes.paletteTest, 10,0,10).updateBounds());
+		this.props.add(new Prop(PropTypes.testRoom, 0,0,0).setData("dx", this.bounds.maxX - this.bounds.minX, "dy", this.bounds.maxY - this.bounds.minY, "dz", this.bounds.maxZ - this.bounds.minZ).updateBounds());
 		
 		return this;
 	}

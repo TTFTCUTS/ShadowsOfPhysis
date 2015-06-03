@@ -212,7 +212,7 @@ public class PhysisWorldSavedData extends WorldSavedData {
 	// SERVER-ONLY DATA
 	public static void setServerTag(String name, NBTTagCompound tag) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) { return; }
-		Physis.logger.info("SERVER TAG SET: name: "+name+", tag: "+tag+", server data: "+instance.serverData);
+		//Physis.logger.info("SERVER TAG SET: name: "+name+", tag: "+tag+", server data: "+instance.serverData);
 		instance.serverData.setTag(name, tag);
 		safeMarkDirty();
 	}

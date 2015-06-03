@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 
@@ -28,8 +27,10 @@ public class PropTestRoom extends PropType {
 		int dy = prop.extraData.get("dy");
 		int dz = prop.extraData.get("dz");
 		
-		prop.fillBlocks(world, limit, component, 0, 0, 0, dx, 0, dz, p.foundation, 0);
+		prop.fillBlocks(world, limit, component, 0, 0, 0, dx, 0, dz, p.floor1, 0);
 		
 		//prop.fillBlocks(world, limit, component, 0, dy, 0, dx, dy, dz, p.foundation, 0);
+		
+		prop.fillFoundation(world, limit, component, 0, 0, dx, dz, -1, p.foundation, 0);
 	}
 }

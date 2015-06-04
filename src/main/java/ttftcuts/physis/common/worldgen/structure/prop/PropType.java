@@ -2,6 +2,7 @@ package ttftcuts.physis.common.worldgen.structure.prop;
 
 import java.util.Random;
 
+import ttftcuts.physis.common.helper.WorldGenHelper;
 import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 
 import net.minecraft.world.World;
@@ -13,7 +14,7 @@ public abstract class PropType {
 	
 	public static final StructureBoundingBox defaultBounds = new StructureBoundingBox(0,0,0,0,0,0);
 	
-	public StructureBoundingBox bounds = defaultBounds;
+	//public StructureBoundingBox bounds = defaultBounds;
 	
 	public PropType(String name) {
 		this.id = name;
@@ -21,7 +22,7 @@ public abstract class PropType {
 	}
 	
 	public StructureBoundingBox getBoundingBoxForProp(Prop prop) {
-		return new StructureBoundingBox(-1, 0, -1, 2, 9, 2);
+		return WorldGenHelper.cloneBounds(defaultBounds);
 	}
 	
 	public void buildProp(StructurePiece component, Prop prop, World world, StructureBoundingBox limit, Random rand) {

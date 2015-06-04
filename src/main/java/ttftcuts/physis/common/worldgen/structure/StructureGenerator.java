@@ -218,7 +218,7 @@ public class StructureGenerator {
 	public StructureData createStructureInChunk(World world, int chunkX, int chunkZ) {
 		StructureData structure = new StructureData(world, chunkX, chunkZ);
 		
-		StructureLayout layout = new StructureLayout((chunkX << 4) + 2, 192, (chunkZ << 4) + 2, this.rand);
+		StructureLayout layout = new StructureLayout((chunkX << 4) + 2, 90, (chunkZ << 4) + 2, this.rand);
         List<StructurePiece> parts = layout.exportToStructurePieces(rand);
         
         structure.pieces = parts;

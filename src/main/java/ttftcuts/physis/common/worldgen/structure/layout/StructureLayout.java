@@ -82,12 +82,12 @@ public class StructureLayout {
 		BlockPalette palette = BlockPalette.BlockPalettes.defaultPalette;
 		
 		for (Room r : grid.rooms) {
-			int rxmin = this.x + (r.xmin * grid.gridsize) +1;
+			int rxmin = this.x + (r.xmin * grid.gridsize);// +1;
 			int rymin = this.y;
-			int rzmin = this.z + (r.ymin * grid.gridsize) +1;
-			int rxmax = this.x + ((r.xmax+1) * grid.gridsize) -1 -1;
+			int rzmin = this.z + (r.ymin * grid.gridsize);// +1;
+			int rxmax = this.x + ((r.xmax+1) * grid.gridsize) -1;// -1;
 			int rymax = this.y + 10;
-			int rzmax = this.z + ((r.ymax+1) * grid.gridsize) -1 -1;
+			int rzmax = this.z + ((r.ymax+1) * grid.gridsize) -1;// -1;
 			
 			//Physis.logger.info("room node: "+r.xmin+"-"+r.xmax+","+r.ymin+"-"+r.ymax+" ---> "+rxmin+"-"+rxmax+","+rzmin+"-"+rzmax);
 			

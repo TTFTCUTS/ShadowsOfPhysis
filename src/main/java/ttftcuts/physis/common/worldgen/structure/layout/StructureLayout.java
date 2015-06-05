@@ -27,7 +27,7 @@ public class StructureLayout {
 	protected void generate(Random rand) {
 		this.nodes = new ArrayList<LayoutNode>();
 		
-		LayoutGrid grid = new LayoutGrid(8, 8);
+		LayoutGrid grid = new LayoutGrid(8, 9);
 		
 		Cell origin = grid.put(0,0);
 		
@@ -82,6 +82,9 @@ public class StructureLayout {
 		BlockPalette palette = BlockPalette.BlockPalettes.defaultPalette;
 		
 		for (Room r : grid.rooms) {
+			r.calcDepth();
+			r.calcDoors();
+			
 			int rxmin = this.x + (r.xmin * grid.gridsize);// +1;
 			int rymin = this.y;
 			int rzmin = this.z + (r.ymin * grid.gridsize);// +1;
@@ -91,7 +94,7 @@ public class StructureLayout {
 			
 			//Physis.logger.info("room node: "+r.xmin+"-"+r.xmax+","+r.ymin+"-"+r.ymax+" ---> "+rxmin+"-"+rxmax+","+rzmin+"-"+rzmax);
 			
-			this.nodes.add(new LayoutNode(rxmin, rymin, rzmin, rxmax, rymax, rzmax, palette).placeProps());
+			this.nodes.add(new LayoutNode(rxmin, rymin, rzmin, rxmax, rymax, rzmax, palette).placeProps(r));
 		}
 	}
 	

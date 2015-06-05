@@ -462,6 +462,7 @@ public class LayoutGrid {
 	
 	public static class Room {
 		List<Cell> cells;
+		List<Door> doors;
 		String type;
 		int depth = 0;
 		
@@ -473,6 +474,7 @@ public class LayoutGrid {
 		public Room(String type) {
 			this.type = type;
 			this.cells = new ArrayList<Cell>();
+			this.doors = new ArrayList<Door>();
 		}
 		
 		void addCell(Cell cell) {
@@ -499,6 +501,37 @@ public class LayoutGrid {
 			}
 			total = (int) Math.floor(total / this.cells.size());
 			this.depth = total;
+		}
+		
+		void calcDoors() {
+			this.doors.clear();
+			
+			for (Cell c : this.cells) {
+				if (c.x == this.xmin && c.connectsWest()) {
+					this.doors.add(new Door(c.x-this.xmin, c.y-this.ymin, 3));
+				}
+				if (c.x == this.xmax && c.connectsEast()) {
+					this.doors.add(new Door(c.x-this.xmin, c.y-this.ymin, 1));
+				}
+				if (c.y == this.ymin && c.connectsNorth()) {
+					this.doors.add(new Door(c.x-this.xmin, c.y-this.ymin, 0));
+				}
+				if (c.y == this.ymax && c.connectsSouth()) {
+					this.doors.add(new Door(c.x-this.xmin, c.y-this.ymin, 2));
+				}
+			}
+		}
+		
+		public static class Door {
+			public final int x;
+			public final int y;
+			public final int dir;
+			
+			public Door(int x, int y, int dir) {
+				this.x = x;
+				this.y = y;
+				this.dir = dir;
+			}
 		}
 	}
 }

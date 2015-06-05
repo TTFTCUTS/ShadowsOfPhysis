@@ -207,6 +207,67 @@ public class StructureGenerator {
 		return out;
 	}
 	
+	public List<StructureData> getStructuresInChunk(World world, int chunkX, int chunkZ) {
+		if (!this.allowedWorlds.contains(world.provider.dimensionId)) { return null; }
+		if (!this.structureMap.containsKey(world)) { return null; }
+		Map<Long, StructureData> map = this.structureMap.get(world);
+		
+		List<StructureData> out = new ArrayList<StructureData>();
+		
+		int x = (chunkX << 4) + 8;
+        int z = (chunkZ << 4) + 8;
+		
+		for (int rx=-this.radius; rx<=this.radius; rx++) {
+			for (int rz=-this.radius; rz<=this.radius; rz++) {
+				long coordhash = StructureData.idFromCoords(chunkX+rx, chunkZ+rz);
+				
+				if (map.containsKey(coordhash)) {
+					StructureData structure = map.get(coordhash);
+
+					if(structure.bounds.intersectsWith(x, z, x+15, z+15)) {
+						for (StructurePiece piece : structure.pieces) {
+							if (piece.bounds.intersectsWith(x, z, x+15, z+15)) {
+								out.add(structure);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return out;
+	}
+	
+	public boolean areStructuresInChunk(World world, int chunkX, int chunkZ) {
+		if (!this.allowedWorlds.contains(world.provider.dimensionId)) { return false; }
+		if (!this.structureMap.containsKey(world)) { return false; }
+		Map<Long, StructureData> map = this.structureMap.get(world);
+		
+		int x = (chunkX << 4) + 8;
+        int z = (chunkZ << 4) + 8;
+		
+		for (int rx=-this.radius; rx<=this.radius; rx++) {
+			for (int rz=-this.radius; rz<=this.radius; rz++) {
+				long coordhash = StructureData.idFromCoords(chunkX+rx, chunkZ+rz);
+				
+				if (map.containsKey(coordhash)) {
+					StructureData structure = map.get(coordhash);
+
+					if(structure.bounds.intersectsWith(x, z, x+15, z+15)) {
+						for (StructurePiece piece : structure.pieces) {
+							if (piece.bounds.intersectsWith(x, z, x+15, z+15)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean canGenerateInChunk(World world, int chunkX, int chunkZ) {
 		int k = chunkX >> 4;
         int l = chunkZ >> 4;

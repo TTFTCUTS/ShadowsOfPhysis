@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
 import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
@@ -25,8 +26,30 @@ public class LayoutNode {
 		this.props = new ArrayList<Prop>();
 	}
 	
-	public LayoutNode placeProps() {
-		this.props.add(new Prop(PropTypes.testRoom, 0,0,0).setData("dx", this.bounds.maxX - this.bounds.minX, "dy", this.bounds.maxY - this.bounds.minY, "dz", this.bounds.maxZ - this.bounds.minZ).updateBounds());
+	public LayoutNode placeProps(LayoutGrid.Room room) {
+		int wallheight = 6;
+		int width = this.bounds.getXSize();
+		int length = this.bounds.getZSize();
+		
+		this.props.add(new Prop(PropTypes.testRoom, 0,0,0).setData("dx", width, "dy", this.bounds.maxY - this.bounds.minY, "dz", length).updateBounds());
+		
+		this.props.add(new Prop(PropTypes.bastionInnerWall, 0,1,1).setData("l", length-2, "h", wallheight).updateBounds());
+		this.props.add(new Prop(PropTypes.bastionInnerWall, width-2,1,0).setData("l", width-2, "h", wallheight).setRotation(1).updateBounds());
+		this.props.add(new Prop(PropTypes.bastionInnerWall, width-1,1,length-2).setData("l", length-2, "h", wallheight).setRotation(2).updateBounds());
+		this.props.add(new Prop(PropTypes.bastionInnerWall, 1,1,length-1).setData("l", width-2, "h", wallheight).setRotation(3).updateBounds());
+		
+		this.props.add(new Prop(PropTypes.cornerFiller, 0,1,0).setData("h", wallheight).updateBounds());
+		this.props.add(new Prop(PropTypes.cornerFiller, width-1,1,0).setData("h", wallheight).updateBounds());
+		this.props.add(new Prop(PropTypes.cornerFiller, width-1,1,length-1).setData("h", wallheight).updateBounds());
+		this.props.add(new Prop(PropTypes.cornerFiller, 0,1,length-1).setData("h", wallheight).updateBounds());
+		
+		for(LayoutGrid.Room.Door door : room.doors) {
+			int offset = 4;
+			int ox = door.dir == 1 ? offset : door.dir == 3 ? -offset : 0;
+			int oz = door.dir == 0 ? -offset : door.dir == 2 ? offset : 0;
+			
+			this.props.add(new Prop(PropTypes.bastionDoorway, door.x * 9 + 4 + ox, 1, door.y * 9 + 4 + oz).setRotation(door.dir).updateBounds());
+		}
 		
 		return this;
 	}

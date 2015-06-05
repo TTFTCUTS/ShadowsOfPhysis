@@ -3,6 +3,7 @@ package ttftcuts.physis.common.worldgen.structure.prop;
 import java.util.HashMap;
 import java.util.Map;
 
+import ttftcuts.physis.common.helper.WorldGenHelper;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
 
@@ -113,7 +114,26 @@ public class Prop {
 	}
 	
 	public void fillFoundation(World world, StructureBoundingBox limit, StructurePiece component, int minx, int minz, int maxx, int maxz, int ylevel, BlockPalette.Entry block, int metaoffset) {
-		int base = 60 - this.y - component.bounds.minY - component.layoutOffsetY;;
+		int top = transformY(x,ylevel,z, component);
+		int base = top;
+		
+		int tx,ty,tz;
+		for (int x = minx; x<=maxx; x++) {
+			for (int z = minz; z<=maxz; z++) {
+				tx = transformX(x,ylevel,z, component);
+				tz = transformZ(x,ylevel,z, component);
+				if (!limit.isVecInside(tx, top, tz)) {
+					continue;
+				}
+				
+				ty = WorldGenHelper.getTopGroundBlockBelowLevel(world, tx, top, tz);
+				if (ty > 0) {
+					base = Math.min(base,ty);
+				}
+			}
+		}
+		base = Math.max(base - 3, 6);
+		base -= this.y + component.bounds.minY + component.layoutOffsetY;		
 		
 		this.fillBlocks(world, limit, component, minx, Math.min(base, ylevel), minz, maxx, ylevel, maxz, block, metaoffset);
 	}

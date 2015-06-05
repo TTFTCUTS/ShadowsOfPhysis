@@ -14,18 +14,18 @@ public class PropTestRoom extends PropType {
 
 	@Override
 	public StructureBoundingBox getBoundingBoxForProp(Prop prop) {
-		int dx = prop.extraData.get("dx");
+		int dx = prop.extraData.get("dx")-1;
 		int dy = prop.extraData.get("dy");
-		int dz = prop.extraData.get("dz");
+		int dz = prop.extraData.get("dz")-1;
 		return new StructureBoundingBox(0, -10, 0, dx, dy, dz);
 	}
 	
 	@Override
 	public void buildProp(StructurePiece component, Prop prop, World world, StructureBoundingBox limit, Random rand) {
 		BlockPalette p = component.blueprintNode.palette;
-		int dx = prop.extraData.get("dx");
+		int dx = prop.extraData.get("dx")-1;
 		int dy = prop.extraData.get("dy");
-		int dz = prop.extraData.get("dz");
+		int dz = prop.extraData.get("dz")-1;
 		
 		prop.fillBlocks(world, limit, component, 0, 0, 0, dx, 0, dz, p.floor2, 0);
 		prop.fillBlocks(world, limit, component, 1, 0, 1, dx-1, 0, dz-1, p.floor1, 0);

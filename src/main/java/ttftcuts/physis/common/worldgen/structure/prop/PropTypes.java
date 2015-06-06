@@ -11,6 +11,7 @@ public class PropTypes {
 	public static PropType testRoom;
 	
 	public static PropType cornerFiller;
+	public static PropType foundation;
 	
 	public static PropType bastionInnerWall;
 	public static PropType bastionDoorway;
@@ -22,6 +23,7 @@ public class PropTypes {
 		testRoom = new PropTestRoom();
 		
 		cornerFiller = new BasicProps.RoomCornerFiller();
+		foundation = new BasicProps.Foundation();
 		
 		bastionInnerWall = new BastionProps.InnerWall();
 		bastionDoorway = new BastionProps.Doorway();

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ttftcuts.physis.Physis;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette;
 import ttftcuts.physis.common.worldgen.structure.BlockPalette.BlockPalettes;
 import ttftcuts.physis.common.worldgen.structure.StructureGenerator.StructurePiece;
@@ -32,6 +31,8 @@ public class LayoutNode {
 		int length = this.bounds.getZSize();
 		
 		this.props.add(new Prop(PropTypes.testRoom, 0,0,0).setData("dx", width, "dy", this.bounds.maxY - this.bounds.minY, "dz", length).updateBounds());
+		
+		this.props.add(new Prop(PropTypes.foundation, 0,-1,0).setData("dx", width, "dz", length, "h", 10).updateBounds());
 		
 		this.props.add(new Prop(PropTypes.bastionInnerWall, 0,1,1).setData("l", length-2, "h", wallheight).updateBounds());
 		this.props.add(new Prop(PropTypes.bastionInnerWall, width-2,1,0).setData("l", width-2, "h", wallheight).setRotation(1).updateBounds());

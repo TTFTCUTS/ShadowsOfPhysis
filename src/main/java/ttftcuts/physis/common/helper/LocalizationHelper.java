@@ -25,6 +25,7 @@ public class LocalizationHelper {
 	public final String titlePrefix = journalPrefix +"title.";
 	public final String articlePrefix = journalPrefix +"text.";	
 	public final String categoryPrefix = journalPrefix +"category.";
+	public final String imagePrefix = journalPrefix + "image.";
 	
 	private static Pattern deepFormatPattern = Pattern.compile("%\\d*\\$s");
 	private static Pattern translatePattern = Pattern.compile("\\$([^\\$]*?)\\$");

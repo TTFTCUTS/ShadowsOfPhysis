@@ -43,6 +43,7 @@ public class PageDefs {
 		
 		storytest = new JournalArticle("racetest", Category.STORY,
 			new JournalPageTitle("race1", "race1"),
+			new JournalPageImage("race1", "textures/gui/journal_paintings/mountainfort.png"),
 			new JournalPageTitle("race2", "race2"),
 			new JournalPageTitle("race3", "race3"),
 			new JournalPageTitle("race4", "race4"),

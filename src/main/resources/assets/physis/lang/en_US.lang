@@ -29,8 +29,8 @@ physis.journal.text.testitem=Text for the test item?
 
 
 
-physis.journal.title.history1=The Ars $physis.themelocal.#themename#$
-physis.journal.text.history1=Ah, Adventurer. So, you begin to discover the roots of the Ars $physis.themelocal.#themename#$. Good. \n\nYou are, of course, only scratching the surface of the wonders my race affected upon the face of this world. Be aware however, friend, that with our power, comes a weight of responsibility you may be unprepared for.\n\n To understand the Great Art, you must first understand it's creation. This world is littered with caches left behind when we... left. Explore these, and I will reward you with the gift of knowledge.
+physis.journal.title.history1=The Ars ^physis.themelocal.#themename#^
+physis.journal.text.history1=Ah, Adventurer. So, you begin to discover the roots of the Ars ^physis.themelocal.#themename#^. Good. \n\nYou are, of course, only scratching the surface of the wonders my race affected upon the face of this world. Be aware however, friend, that with our power, comes a weight of responsibility you may be unprepared for.\n\n To understand the Great Art, you must first understand it's creation. This world is littered with caches left behind when we... left. Explore these, and I will reward you with the gift of knowledge.
 physis.themelocal.0=Artificium
 physis.themelocal.1=Technica
 physis.themelocal.2=Biologica
@@ -40,45 +40,45 @@ physis.journal.title.history2=In The Beginning
 physis.journal.text.history2=Millenia ago, six warring races inhabited this land. \n\nTheir differences were many and varied, and great conflicts raged as each race pursued dominance. As each race dwindled in size, hunted into extinction by fabricated engines of war, one race, the @4@lMawgrim@r@r, fashioned a device capable of the ultimate destruction. \n\nIt would crack the world, annihilating all in the ultimate display of defiance against life itself. \n\nYet, on the eve of the world's death - an Angel descended to earth.
 
 physis.journal.title.history3=Fallen Angel
-physis.journal.text.history3=The reality of what, or whom, the angel was, I cannot say. \n\nIn the fury of it's descent, the @4@lMawgrim@r simply... disappeared. What became of them was never discovered, but in an instant, the spirit of the world was transformed. \n\nOld rivalries were set aside, as the common threat of mutual annihilation was removed, and the Physians, a conglomerate race of five species, walked the earth in harmony. Science, energy and art became one, and the Ars $physis.themelocal.#themename#$ was born.
+physis.journal.text.history3=The reality of what, or whom, the angel was, I cannot say. \n\nIn the fury of it's descent, the @4@lMawgrim@r simply... disappeared. What became of them was never discovered, but in an instant, the spirit of the world was transformed. \n\nOld rivalries were set aside, as the common threat of mutual annihilation was removed, and the Physians, a conglomerate race of five species, walked the earth in harmony. Science, energy and art became one, and the Ars ^physis.themelocal.#themename#^ was born.
 
 physis.journal.title.history4=Prosperity
-physis.journal.text.history4=With renewed peace, the Physians threw their collective minds into the advancement of the Ars $physis.themelocal.#themename#$. $physis.history4.#themename#$ \n\nThis is how we lived. What we lived for. Knowledge. Knowledge and... power.
+physis.journal.text.history4=With renewed peace, the Physians threw their collective minds into the advancement of the Ars ^physis.themelocal.#themename#^. ^physis.history4.#themename#^ \n\nThis is how we lived. What we lived for. Knowledge. Knowledge and... power.
 physis.history4.0=\n\nGreat spires and smoke-stacks dotted the horizon, while vast machines clunked and whirred, encompassing continents - all created to further understand the nature of the universe.
 physis.history4.1=\n\nLaboratories and shining cities swelled out of nothingness, as the Physians strove to explore the fundamental make-up of the universe.
 physis.history4.2=\n\nHabitats grown from lovingly nurtured forests sprang forth from fertile soil, and great trees were bred to pierce the heavens, as the Physians explored the very meaning of life.
 physis.history4.3=\n\nObsidian towers and ritual circles were built in their thousands as the Physians devoured knowledge, hungry for discovery. 
 
 physis.race1=@6@lLi'rael@r
-physis.journal.title.race1=The $physis.race1$
-physis.journal.text.race1=The $physis.race1$ were a race of builders, possessed of a preternatural sense for gravity and design. Their structures grew and soared above the mountain ranges in which they dwelled, seemingly at home amongst the clouds. \n\nIt was the $physis.race1$ who constructed the cities and habitats of the Physians after the Angel fell. During the Wars of Tranquility, it was the $physis.race1$ who constructed the great fortresses and bastions to stand against the foe. \n\nNone of their earthly constructions ever fell. Until they wished them to. 
+physis.journal.title.race1=The ^physis.race1^
+physis.journal.text.race1=The ^physis.race1^ were a race of builders, possessed of a preternatural sense for gravity and design. Their structures grew and soared above the mountain ranges in which they dwelled, seemingly at home amongst the clouds. \n\nIt was the ^physis.race1^ who constructed the cities and habitats of the Physians after the Angel fell. During the Wars of Tranquility, it was the ^physis.race1^ who constructed the great fortresses and bastions to stand against the foe. \n\nNone of their earthly constructions ever fell. Until they wished them to. 
 physis.journal.image.race1=Mountain fortresses
 
 physis.race2=@3@lMa'rael@r
-physis.journal.title.race2=The $physis.race2$
-physis.journal.text.race2=Denizens of the ocean, the $physis.race2$ were rarely seen, preferring instead to spend their time musing on the movements of celestial bodies, spending aeons constructing great omniscopes to peer far into the endless skies. \n\nThe $physis.race2$ were preoccupied with their belief that somewhere, there was a great cosmic message left by the Angel. Whether they ever found it, I do not know, but testimony to their efforts still stands in the deepest recesses of the ocean. 
+physis.journal.title.race2=The ^physis.race2^
+physis.journal.text.race2=Denizens of the ocean, the ^physis.race2^ were rarely seen, preferring instead to spend their time musing on the movements of celestial bodies, spending aeons constructing great omniscopes to peer far into the endless skies. \n\nThe ^physis.race2^ were preoccupied with their belief that somewhere, there was a great cosmic message left by the Angel. Whether they ever found it, I do not know, but testimony to their efforts still stands in the deepest recesses of the ocean. 
 
 physis.race3=@8@lCo'rael@r
-physis.journal.title.race3=The $physis.race3$
-physis.journal.text.race3=Of all the species that made up the Physians, the $physis.race3$ were by far, the most enigmatic, if least numerate. They considered themselves guardians, rather than functional members of society. \n\nCapable of slowing their metabolism to an almost death-like state, the $physis.race3$ awoke only to defend the Physian people against external aggressors. Many of them still stand, now petrified, hidden amongst the ruins of Physis.
+physis.journal.title.race3=The ^physis.race3^
+physis.journal.text.race3=Of all the species that made up the Physians, the ^physis.race3^ were by far, the most enigmatic, if least numerate. They considered themselves guardians, rather than functional members of society. \n\nCapable of slowing their metabolism to an almost death-like state, the ^physis.race3^ awoke only to defend the Physian people against external aggressors. Many of them still stand, now petrified, hidden amongst the ruins of Physis.
 
 physis.race4=@5@lSa'rael@r
-physis.journal.title.race4=The $physis.race4$
-physis.journal.text.race4=The $physis.race4$ made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the $physis.race4$ made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
+physis.journal.title.race4=The ^physis.race4^
+physis.journal.text.race4=The ^physis.race4^ made up most of the active population of the Physians. Their intuition was legendary, as well as their ability almost to know what each other member of their race was thinking. \n\nDue to their un-nerving precognition, the ^physis.race4^ made up the majority of the scientists amongst the Physians. Their inherited racial knowledge made advancement an almost exponential feat. \n\nTheir laboratories are things of wonder, but their fondness for puzzles may fox even you, Adventurer. 
 
 physis.race5=@2@lO'rael@r
-physis.journal.title.race5=The $physis.race5$
-physis.journal.text.race5=In terms you might understand, Adventurer, the $physis.race5$ were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to $physis.race5$ affinity for logistics. \n\nWithout the $physis.race5$, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the $physis.race5$ drove Physis swiftly into a new age of prosperity.
+physis.journal.title.race5=The ^physis.race5^
+physis.journal.text.race5=In terms you might understand, Adventurer, the ^physis.race5^ were an anomaly. An intensely hedonistic and proud race, they considered themselves the nobility of the Physian people. This was a view not always shared by the other races, but tolerated in due course, due to ^physis.race5^ affinity for logistics. \n\nWithout the ^physis.race5^, the grand projects of the Physians would be as nought. Orchestrating every aspect of their society, the ^physis.race5^ drove Physis swiftly into a new age of prosperity.
 
 physis.journal.title.mawgrimsite=Engines of War
-physis.journal.text.mawgrimsite=I had... hoped never to see one of these twisted behemoths again. Even broken and forgotten, the spirit of their creators yet inhabits these machines. \n\nAfter the disappearance of the Mawgrim, it took centuries to finally eliminate the threat of their war engines. The $physis.race3$ eventually hunted them down and disabled them in what we called the 'Wars of Tranquility' - but one cannot destroy the fabricated soul of evil itself. \n\nDark intent still slumbers within their rusting carcasses. Be careful, Adventurer.
+physis.journal.text.mawgrimsite=I had... hoped never to see one of these twisted behemoths again. Even broken and forgotten, the spirit of their creators yet inhabits these machines. \n\nAfter the disappearance of the Mawgrim, it took centuries to finally eliminate the threat of their war engines. The ^physis.race3^ eventually hunted them down and disabled them in what we called the 'Wars of Tranquility' - but one cannot destroy the fabricated soul of evil itself. \n\nDark intent still slumbers within their rusting carcasses. Be careful, Adventurer.
 
 physis.race6=@4@lMawgrim@r
-physis.journal.title.test=The $physis.race6$
-physis.journal.text.test=I implore you to consider carefully, friend. Down this path lies suffering. \n\nEven so... if you wish truly to learn of the $physis.race6$, I will aid you. In knowledge there is power, and we will have need of power. \n\nSearch out more of the hulking monstrosities the $physis.race6$ left behind, and unearth their secrets. If your heart is still set on knowledge, I will grant you it. In time.
+physis.journal.title.test=The ^physis.race6^
+physis.journal.text.test=I implore you to consider carefully, friend. Down this path lies suffering. \n\nEven so... if you wish truly to learn of the ^physis.race6^, I will aid you. In knowledge there is power, and we will have need of power. \n\nSearch out more of the hulking monstrosities the ^physis.race6^ left behind, and unearth their secrets. If your heart is still set on knowledge, I will grant you it. In time.
 
 physis.journal.title.mawgrimreward1=The Broken God
-physis.journal.text.mawgrimreward1=The $physis.race6$ were, to the Physians, the first believers. In a world untouched by the divine, the entire race was visited by a prophetic vision. In a moment, the $physis.race6$ changed. \n\nThe Broken God became a fanatical obsession for their people, and their divine claim to lordship over the world drove them to hideous acts of violence, in the name of subjugation. You will see bloody monuments to their laughing deity within the tombs they left behind.
+physis.journal.text.mawgrimreward1=The ^physis.race6^ were, to the Physians, the first believers. In a world untouched by the divine, the entire race was visited by a prophetic vision. In a moment, the ^physis.race6^ changed. \n\nThe Broken God became a fanatical obsession for their people, and their divine claim to lordship over the world drove them to hideous acts of violence, in the name of subjugation. You will see bloody monuments to their laughing deity within the tombs they left behind.
 
 physis.journal.title.mawgrimreward2=
 physis.journal.text.mawgrimreward2=

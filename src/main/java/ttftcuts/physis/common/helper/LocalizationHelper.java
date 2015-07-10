@@ -28,7 +28,7 @@ public class LocalizationHelper {
 	public final String imagePrefix = journalPrefix + "image.";
 	
 	private static Pattern deepFormatPattern = Pattern.compile("%\\d*\\$s");
-	private static Pattern translatePattern = Pattern.compile("\\$([^\\$]*?)\\$");
+	private static Pattern translatePattern = Pattern.compile("\\^([^\\^]*?)\\^");
 	private static Pattern storyVarPattern = Pattern.compile("\\#([^\\#]*?)\\#");
 	
 	public LocalizationHelper() {
@@ -49,7 +49,7 @@ public class LocalizationHelper {
 			String s = m.group(1);
 			String translated = this.translateInternal(s);
 			
-			output = output.replace("$"+m.group(1)+"$", translated);
+			output = output.replace("^"+m.group(1)+"^", translated);
 		}
 		return output;
 	}
@@ -116,7 +116,7 @@ public class LocalizationHelper {
 	}
 	
 	public String formatArtifactNames(String input, ItemStack stack) {
-		String output = Physis.text.translate(input);
+		String output = this.translate(input);
 		
 		NBTTagCompound tag = stack.stackTagCompound.getCompoundTag(PhysisArtifacts.ARTIFACTTAG);
 		if (tag.hasKey(PhysisArtifacts.TRIGGERTAG) && tag.hasKey(PhysisArtifacts.EFFECTTAG)) {
@@ -126,10 +126,10 @@ public class LocalizationHelper {
 			if (trigger != null && effect != null) {
 				
 				output = this.deepFormat(output, 
-					Physis.text.translate(effect.getUnlocalizedEffectString()), 
-					Physis.text.translate(trigger.getUnlocalizedTargetString()), 
-					Physis.text.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())), 
-					Physis.text.ticksToSeconds2dp(effect.getDuration(trigger.getCooldownCategory())),
+					this.translate(effect.getUnlocalizedEffectString()), 
+					this.translate(trigger.getUnlocalizedTargetString()), 
+					this.ticksToSeconds2dp(effect.getCooldown(trigger.getCooldownCategory())), 
+					this.ticksToSeconds2dp(effect.getDuration(trigger.getCooldownCategory())),
 					trigger.getTooltipInfo(),
 					effect.getTooltipInfo()
 				);

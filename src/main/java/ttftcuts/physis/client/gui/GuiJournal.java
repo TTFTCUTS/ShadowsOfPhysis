@@ -10,9 +10,11 @@ import ttftcuts.physis.Physis;
 import ttftcuts.physis.client.gui.journal.*;
 import ttftcuts.physis.client.gui.button.*;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiJournal extends GuiScreen {
@@ -358,5 +360,81 @@ public class GuiJournal extends GuiScreen {
 	}
 	public void setZLevel(float z) {
 		this.zLevel = z;
+	}
+	
+	public void drawJournalString(FontRenderer font, String text, int x, int y, int colour) {
+		this.drawJournalString(font, text, x, y, colour, false);
+	}
+	
+	public void drawJournalString(FontRenderer font, String text, int x, int y, int colour, boolean forceunicode) {
+		boolean uni = font.getUnicodeFlag();
+		if (forceunicode) {
+			font.setUnicodeFlag(true);
+		}
+
+		if (font.getUnicodeFlag()) {
+			Minecraft mc = Minecraft.getMinecraft();
+			ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+			int scale = res.getScaleFactor();
+			
+			if (scale % 2 == 1) {
+				GL11.glPushMatrix();
+				
+				GL11.glTranslated(-0.25, 0, 0);
+				font.drawString(text, x, y, colour);
+				
+				GL11.glPopMatrix();
+				GL11.glPushMatrix();
+				
+				GL11.glTranslated(0, 0.1, 0);
+				font.drawString(text, x, y, colour);
+				
+				GL11.glPopMatrix();
+			}
+		}
+		
+		font.drawString(text, x, y, colour);
+		
+		if (forceunicode) {
+			font.setUnicodeFlag(uni);
+		}
+	}
+	
+	public void drawJournalSplitString(FontRenderer font, String text, int x, int y, int linewidth, int colour) {
+		this.drawJournalSplitString(font, text, x, y, linewidth, colour, false);
+	}
+	
+	public void drawJournalSplitString(FontRenderer font, String text, int x, int y, int linewidth, int colour, boolean forceunicode) {
+		boolean uni = font.getUnicodeFlag();
+		if (forceunicode) {
+			font.setUnicodeFlag(true);
+		}
+
+		if (font.getUnicodeFlag()) {
+			Minecraft mc = Minecraft.getMinecraft();
+			ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+			int scale = res.getScaleFactor();
+			
+			if (scale % 2 == 1) {
+				GL11.glPushMatrix();
+				
+				GL11.glTranslated(-0.25, 0, 0);
+				font.drawSplitString(text, x, y, linewidth, colour);
+				
+				GL11.glPopMatrix();
+				GL11.glPushMatrix();
+				
+				GL11.glTranslated(0, 0.1, 0);
+				font.drawSplitString(text, x, y, linewidth, colour);
+				
+				GL11.glPopMatrix();
+			}
+		}
+		
+		font.drawSplitString(text, x, y, linewidth, colour);
+		
+		if (forceunicode) {
+			font.setUnicodeFlag(uni);
+		}
 	}
 }

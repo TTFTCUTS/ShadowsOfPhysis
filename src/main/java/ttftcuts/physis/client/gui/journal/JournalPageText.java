@@ -20,13 +20,15 @@ public class JournalPageText extends JournalPage {
 	@SideOnly(Side.CLIENT)
 	public void drawPage(GuiJournal journal, int x, int y, int mousex, int mousey) {
 		FontRenderer renderer = this.getFont();
-		boolean unicode = renderer.getUnicodeFlag();
-		renderer.setUnicodeFlag(true);
+		//boolean unicode = renderer.getUnicodeFlag();
+		//renderer.setUnicodeFlag(true);
 		
 		String text = Physis.text.translate(Physis.text.articlePrefix + pageText);
 
-		renderer.drawSplitString(text, x, y, GuiJournal.pageWidth, 0x000000);
+		//renderer.drawSplitString(text, x, y, GuiJournal.pageWidth, 0x000000);
 
-		renderer.setUnicodeFlag(unicode);
+		//renderer.setUnicodeFlag(unicode);
+		
+		journal.drawJournalSplitString(renderer, text, x, y, GuiJournal.pageWidth, 0x000000, true);
 	}
 }

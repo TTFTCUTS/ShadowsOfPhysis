@@ -15,6 +15,7 @@ public class ItemDestructionHandler {
 	
 	@SubscribeEvent
 	public void OnItemDestruction(PlayerDestroyItemEvent event) {
+		if (event.entity == null) { return; }
 		if (event.entity.worldObj.isRemote) { return; }
 		
 		Random rand = event.entityPlayer.getRNG();

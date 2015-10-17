@@ -51,8 +51,9 @@ public class JournalPageImage extends JournalPage {
 		
 		String text = Physis.text.translate(Physis.text.imagePrefix + this.caption);
 
-		renderer.drawSplitString(text, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(text) / 2), y + GuiJournal.pageHeight - 10, GuiJournal.pageWidth, 0x000000);
-
+		//renderer.drawSplitString(text, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(text) / 2), y + GuiJournal.pageHeight - 10, GuiJournal.pageWidth, 0x000000);
+		journal.drawJournalSplitString(renderer, text, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(text) / 2), y + GuiJournal.pageHeight - 10, GuiJournal.pageWidth, 0x000000, false);
+		
 		renderer.setUnicodeFlag(unicode);
 	}
 }

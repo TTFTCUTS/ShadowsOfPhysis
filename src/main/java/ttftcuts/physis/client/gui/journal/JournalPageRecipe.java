@@ -96,7 +96,8 @@ public class JournalPageRecipe extends JournalPage {
 		RecipeDisplayData recipe = this.displayrecipes.get(this.currentRecipe);
 		
 		String title = recipe.output.getDisplayName();
-		renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
+		//renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
+		journal.drawJournalString(renderer, title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000, false);
 		
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -120,7 +121,8 @@ public class JournalPageRecipe extends JournalPage {
 		renderer.setUnicodeFlag(true);
 		String desc = this.getDescription();
 		if (desc != null && desc.length() > 0) {
-			renderer.drawSplitString(desc, x, y+158, GuiJournal.pageWidth, 0x000000);
+			//renderer.drawSplitString(desc, x, y+158, GuiJournal.pageWidth, 0x000000);
+			journal.drawJournalSplitString(renderer, desc, x, y+158, GuiJournal.pageWidth, 0x000000);
 		}
 		
 		// draw out-of recipe text
@@ -143,7 +145,8 @@ public class JournalPageRecipe extends JournalPage {
 			
 			GL11.glPushMatrix();
 			GL11.glTranslated(0, 0, 50.0);
-			renderer.drawString(recipestring, x+ recipeNumberMiddle - swidth/2, y+ recipeNumberTop, 0x342C0E);
+			//renderer.drawString(recipestring, x+ recipeNumberMiddle - swidth/2, y+ recipeNumberTop, 0x342C0E);
+			journal.drawJournalString(renderer, recipestring, x+ recipeNumberMiddle - swidth/2, y+ recipeNumberTop, 0x342C0E);
 			GL11.glPopMatrix();
 		}
 		

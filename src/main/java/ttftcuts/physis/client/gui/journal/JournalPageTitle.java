@@ -27,7 +27,8 @@ public class JournalPageTitle extends JournalPageText {
 		renderer.setUnicodeFlag(false);
 		
 		String title = Physis.text.translate(Physis.text.titlePrefix + titleText);
-		renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
+		//renderer.drawString(title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
+		journal.drawJournalString(renderer, title, x + (GuiJournal.pageWidth / 2) - (renderer.getStringWidth(title) / 2), y + 6, 0x000000);
 		
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		journal.mc.renderEngine.bindTexture(GuiJournal.bookTextureRight);
@@ -42,7 +43,8 @@ public class JournalPageTitle extends JournalPageText {
 		renderer.setUnicodeFlag(true);
 		
 		String text = Physis.text.translate(Physis.text.articlePrefix + pageText);
-		renderer.drawSplitString(text, x, y + 27, GuiJournal.pageWidth, 0x000000);
+		//renderer.drawSplitString(text, x, y + 27, GuiJournal.pageWidth, 0x000000);
+		journal.drawJournalSplitString(renderer, text, x, y + 27, GuiJournal.pageWidth, 0x000000);
 
 		renderer.setUnicodeFlag(unicode);
 	}
